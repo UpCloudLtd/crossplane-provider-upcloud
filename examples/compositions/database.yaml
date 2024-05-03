@@ -1,0 +1,85 @@
+# This example shows how to bypass the limitation in the provider that allows logical databases and db users
+# to only reference PostrgeSQL databases. In this example, we create a composition with MySQL database and a logical database
+# and use patches to put the MySql database ID into the logical database spec.
+# More info here https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: basic-database
+  labels:
+    type: basic
+    provider: upcloud
+    dbType: mysql
+spec:
+  writeConnectionSecretsToNamespace: default
+  compositeTypeRef:
+    apiVersion: infra.example.org/v1
+    kind: XBasicDatabase
+  resources:
+    - name: main-service
+      base:
+        apiVersion: database.upcloud.io/v1alpha1
+        kind: ManagedDatabaseMysql
+        spec:
+          forProvider:
+            name: main-service
+            plan: 1x1xCPU-2GB-25GB
+            title: main-service
+            zone: fi-hel1
+      patches:
+      - type: FromCompositeFieldPath
+        fromFieldPath: spec.zone
+        toFieldPath: spec.forProvider.zone
+      - type: ToCompositeFieldPath
+        fromFieldPath: status.atProvider.id
+        toFieldPath: status.mainServiceID
+    - name: logical-db
+      base:
+        apiVersion: database.upcloud.io/v1alpha1
+        kind: ManagedDatabaseLogicalDatabase
+        spec:
+          forProvider:
+            serviceRef:
+              name: non-exsitent-service # We have to put something here, but it will be patched as soon as the main-service is created
+      patches:
+      - type: FromCompositeFieldPath
+        fromFieldPath: status.mainServiceID
+        toFieldPath: spec.forProvider.service
+---
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xbasicdatabases.infra.example.org
+spec:
+  group: infra.example.org
+  names:
+    kind: XBasicDatabase
+    plural: xbasicdatabases
+  claimNames:
+    kind: BasicDatabase
+    plural: basicdatabases
+  versions:
+  - name: v1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              zone:
+                type: string
+          status:
+            type: object
+            properties:
+              mainServiceID:
+                type: string
+---
+apiVersion: infra.example.org/v1
+kind: XBasicDatabase
+metadata:
+  name: main-db
+spec:
+  zone: pl-waw1

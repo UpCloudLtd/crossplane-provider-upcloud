@@ -1,0 +1,71 @@
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabasePostgresql
+metadata:
+  name: crossplane-example-postgres
+spec:
+  forProvider:
+    name: crossplane-postgres-1
+    plan: 1x1xCPU-2GB-25GB
+    title: crossplane-example-postgres
+    zone: de-fra1
+    network:
+    - type: private
+      family: IPv4
+      name: somename
+      uuidRef:
+        name: example-2
+---
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseUser
+metadata:
+  name: crossplane-example-user
+spec:
+  forProvider:
+    passwordSecretRef:
+      key: password
+      name: crossplane-examples-postgres-user-secret
+      namespace: default
+    serviceRef:
+      name: crossplane-example-postgres
+---
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseLogicalDatabase
+metadata:
+  name: example
+spec:
+  forProvider:
+    serviceRef:
+      name: crossplane-example-postgres
+---
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseOpensearch
+metadata:
+  name: crossplane-example-opensearch
+spec:
+  forProvider:
+    name: crossplane-opensearch-1
+    plan: 1x2xCPU-4GB-80GB-1D
+    title: crossplane-example-opensearch
+    zone: fi-hel2
+---
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseRedis
+metadata:
+  name: crossplane-example-redis
+spec:
+  forProvider:
+    name: crossplane-redis-1
+    plan: 1x1xCPU-2GB
+    title: crossplane-example-redis
+    zone: fi-hel2
+---
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseMysql
+metadata:
+  name: crossplane-example-mysql
+spec:
+  forProvider:
+    name: crossplane-mysql-1
+    plan: 1x1xCPU-2GB-25GB
+    title: crossplane-example-mysql
+    zone: fi-hel1

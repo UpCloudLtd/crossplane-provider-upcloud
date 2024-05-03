@@ -1,0 +1,47 @@
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseLogicalDatabase
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabaselogicaldatabase
+  labels:
+    testing.upbound.io/example-name: example_db
+  name: example-db
+spec:
+  forProvider:
+    serviceSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+
+---
+
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseMysql
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabaselogicaldatabase
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    name: mysql
+    plan: 1x1xCPU-2GB-25GB
+    title: mysql
+    zone: fi-hel1
+
+---
+
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabasePostgresql
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabaselogicaldatabase
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    name: postgres
+    plan: 1x1xCPU-2GB-25GB
+    title: postgres
+    zone: fi-hel1

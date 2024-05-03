@@ -1,0 +1,29 @@
+apiVersion: objectstorage.upcloud.io/v1alpha1
+kind: ManagedObjectStorageUser
+metadata:
+  annotations:
+    meta.upbound.io/example-id: objectstorage/v1alpha1/managedobjectstorageuser
+  labels:
+    testing.upbound.io/example-name: this
+  name: this
+spec:
+  forProvider:
+    serviceUuidSelector:
+      matchLabels:
+        testing.upbound.io/example-name: this
+
+---
+
+apiVersion: objectstorage.upcloud.io/v1alpha1
+kind: ManagedObjectStorage
+metadata:
+  annotations:
+    meta.upbound.io/example-id: objectstorage/v1alpha1/managedobjectstorageuser
+  labels:
+    testing.upbound.io/example-name: this
+  name: this
+spec:
+  forProvider:
+    configuredStatus: started
+    name: example
+    region: europe-1

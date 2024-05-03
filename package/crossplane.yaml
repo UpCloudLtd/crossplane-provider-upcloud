@@ -1,0 +1,8 @@
+apiVersion: meta.pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-upcloud
+  annotations:
+    meta.crossplane.io/maintainer: UpCloud
+    meta.crossplane.io/source: "https://github.com/UpCloudLtd/provider-upcloud"
+    meta.crossplane.io/description: "Crossplane provider for UpCloud"

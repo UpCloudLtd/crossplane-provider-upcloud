@@ -1,0 +1,60 @@
+apiVersion: uks.upcloud.io/v1alpha1
+kind: KubernetesNodeGroup
+metadata:
+  annotations:
+    meta.upbound.io/example-id: uks/v1alpha1/kubernetesnodegroup
+  labels:
+    testing.upbound.io/example-name: group
+  name: group
+spec:
+  forProvider:
+    clusterSelector:
+      matchLabels:
+        testing.upbound.io/example-name: upcloud_kubernetes_cluster
+    labels:
+      managedBy: terraform
+    nodeCount: 2
+    plan: 2xCPU-4GB
+    taint:
+    - effect: NoExecute
+      key: taintKey
+      value: taintValue
+
+---
+
+apiVersion: uks.upcloud.io/v1alpha1
+kind: KubernetesCluster
+metadata:
+  annotations:
+    meta.upbound.io/example-id: uks/v1alpha1/kubernetesnodegroup
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    controlPlaneIpFilter:
+    - 0.0.0.0/0
+    name: exampleapp
+    networkSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    zone: de-fra1
+
+---
+
+apiVersion: network.upcloud.io/v1alpha1
+kind: Network
+metadata:
+  annotations:
+    meta.upbound.io/example-id: uks/v1alpha1/kubernetesnodegroup
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    ipNetwork:
+    - address: 172.16.1.0/24
+      dhcp: true
+      family: IPv4
+    name: example-network
+    zone: de-fra1

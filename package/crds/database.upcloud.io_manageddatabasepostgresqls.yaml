@@ -1,0 +1,2365 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: manageddatabasepostgresqls.database.upcloud.io
+spec:
+  group: database.upcloud.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - upcloud
+    kind: ManagedDatabasePostgresql
+    listKind: ManagedDatabasePostgresqlList
+    plural: manageddatabasepostgresqls
+    singular: manageddatabasepostgresql
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ManagedDatabasePostgresql is the Schema for the ManagedDatabasePostgresqls
+          API. This resource represents PostgreSQL managed database. See UpCloud Managed
+          Databases https://upcloud.com/products/managed-databases product page for
+          more details about the service.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ManagedDatabasePostgresqlSpec defines the desired state of
+              ManagedDatabasePostgresql
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: |-
+                  DeletionPolicy specifies what will happen to the underlying external
+                  when this managed resource is deleted - either "Delete" or "Orphan" the
+                  external resource.
+                  This field is planned to be deprecated in favor of the ManagementPolicies
+                  field in a future release. Currently, both could be set independently and
+                  non-default values would be honored if the feature flag is enabled.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                properties:
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                        uuidRef:
+                          description: Reference to a Network in network to populate
+                            uuid.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        uuidSelector:
+                          description: Selector for a Network in network to populate
+                            uuid.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for PostgreSQL (see below for nested schema)
+                      Database Engine properties for PostgreSQL
+                    items:
+                      properties:
+                        adminPasswordSecretRef:
+                          description: |-
+                            (String, Sensitive) Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                            Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
+                        adminUsername:
+                          description: |-
+                            (String) Custom username for admin user. This must be set only when a new service is being created.
+                            Custom username for admin user. This must be set only when a new service is being created.
+                          type: string
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        autovacuumAnalyzeScaleFactor:
+                          description: |-
+                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                          type: number
+                        autovacuumAnalyzeThreshold:
+                          description: |-
+                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                          type: number
+                        autovacuumFreezeMaxAge:
+                          description: |-
+                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                          type: number
+                        autovacuumMaxWorkers:
+                          description: |-
+                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                          type: number
+                        autovacuumNaptime:
+                          description: |-
+                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                          type: number
+                        autovacuumVacuumCostDelay:
+                          description: |-
+                            1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                            Specifies the cost delay value that will be used in automatic VACUUM operations. If -1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                          type: number
+                        autovacuumVacuumCostLimit:
+                          description: |-
+                            1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                            Specifies the cost limit value that will be used in automatic VACUUM operations. If -1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                          type: number
+                        autovacuumVacuumScaleFactor:
+                          description: |-
+                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                          type: number
+                        autovacuumVacuumThreshold:
+                          description: |-
+                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                          type: number
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          type: number
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          type: number
+                        bgwriterDelay:
+                          description: |-
+                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                            Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                          type: number
+                        bgwriterFlushAfter:
+                          description: |-
+                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                          type: number
+                        bgwriterLruMaxpages:
+                          description: |-
+                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                          type: number
+                        bgwriterLruMultiplier:
+                          description: |-
+                            (Number) The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                          type: number
+                        deadlockTimeout:
+                          description: |-
+                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                          type: number
+                        defaultToastCompression:
+                          description: |-
+                            (String) Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                            Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                          type: string
+                        idleInTransactionSessionTimeout:
+                          description: |-
+                            (Number) Time out sessions with open transactions after this number of milliseconds.
+                            Time out sessions with open transactions after this number of milliseconds.
+                          type: number
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        jit:
+                          description: |-
+                            wide use of Just-in-Time Compilation (JIT).
+                            Controls system-wide use of Just-in-Time Compilation (JIT).
+                          type: boolean
+                        logAutovacuumMinDuration:
+                          description: |-
+                            one (the default) disables logging autovacuum actions.
+                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
+                          type: number
+                        logErrorVerbosity:
+                          description: |-
+                            (String) Controls the amount of detail written in the server log for each message that is logged.
+                            Controls the amount of detail written in the server log for each message that is logged.
+                          type: string
+                        logLinePrefix:
+                          description: |-
+                            formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                            Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                          type: string
+                        logMinDurationStatement:
+                          description: |-
+                            1 disables.
+                            Log statements that take more than this number of milliseconds to run, -1 disables.
+                          type: number
+                        logTempFiles:
+                          description: |-
+                            1 disables.
+                            Log statements for each temporary file created larger than this number of kilobytes, -1 disables.
+                          type: number
+                        maxFilesPerProcess:
+                          description: |-
+                            (Number) PostgreSQL maximum number of files that can be open per process.
+                            PostgreSQL maximum number of files that can be open per process.
+                          type: number
+                        maxLocksPerTransaction:
+                          description: |-
+                            (Number) PostgreSQL maximum locks per transaction.
+                            PostgreSQL maximum locks per transaction.
+                          type: number
+                        maxLogicalReplicationWorkers:
+                          description: |-
+                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                          type: number
+                        maxParallelWorkers:
+                          description: |-
+                            (Number) Sets the maximum number of workers that the system can support for parallel queries.
+                            Sets the maximum number of workers that the system can support for parallel queries.
+                          type: number
+                        maxParallelWorkersPerGather:
+                          description: |-
+                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                          type: number
+                        maxPredLocksPerTransaction:
+                          description: |-
+                            (Number) PostgreSQL maximum predicate locks per transaction.
+                            PostgreSQL maximum predicate locks per transaction.
+                          type: number
+                        maxPreparedTransactions:
+                          description: |-
+                            (Number) PostgreSQL maximum prepared transactions.
+                            PostgreSQL maximum prepared transactions.
+                          type: number
+                        maxReplicationSlots:
+                          description: |-
+                            (Number) PostgreSQL maximum replication slots.
+                            PostgreSQL maximum replication slots.
+                          type: number
+                        maxSlotWalKeepSize:
+                          description: |-
+                            1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                            PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is -1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                          type: number
+                        maxStackDepth:
+                          description: |-
+                            (Number) Maximum depth of the stack in bytes.
+                            Maximum depth of the stack in bytes.
+                          type: number
+                        maxStandbyArchiveDelay:
+                          description: |-
+                            (Number) Max standby archive delay in milliseconds.
+                            Max standby archive delay in milliseconds.
+                          type: number
+                        maxStandbyStreamingDelay:
+                          description: |-
+                            (Number) Max standby streaming delay in milliseconds.
+                            Max standby streaming delay in milliseconds.
+                          type: number
+                        maxWalSenders:
+                          description: |-
+                            (Number) PostgreSQL maximum WAL senders.
+                            PostgreSQL maximum WAL senders.
+                          type: number
+                        maxWorkerProcesses:
+                          description: |-
+                            (Number) Sets the maximum number of background processes that the system can support.
+                            Sets the maximum number of background processes that the system can support.
+                          type: number
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: Namespace of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                - namespace
+                                type: object
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                type: number
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        pgPartmanBgwInterval:
+                          description: |-
+                            (Number) Sets the time interval to run pg_partman's scheduled tasks.
+                            Sets the time interval to run pg_partman's scheduled tasks.
+                          type: number
+                        pgPartmanBgwRole:
+                          description: |-
+                            (String) Controls which role to use for pg_partman's scheduled background tasks.
+                            Controls which role to use for pg_partman's scheduled background tasks.
+                          type: string
+                        pgStatMonitorEnable:
+                          description: |-
+                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                          type: boolean
+                        pgStatMonitorPgsmEnableQueryPlan:
+                          description: |-
+                            (Boolean) Enables or disables query plan monitoring.
+                            Enables or disables query plan monitoring.
+                          type: boolean
+                        pgStatMonitorPgsmMaxBuckets:
+                          description: |-
+                            (Number) Sets the maximum number of buckets.
+                            Sets the maximum number of buckets.
+                          type: number
+                        pgStatStatementsTrack:
+                          description: |-
+                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                          type: string
+                        pgaudit:
+                          description: |-
+                            wide settings for the pgaudit extension. (see below for nested schema)
+                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          items:
+                            properties:
+                              featureEnabled:
+                                description: |-
+                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                type: boolean
+                              log:
+                                description: |-
+                                  (List of String) Specifies which classes of statements will be logged by session audit logging.
+                                  Specifies which classes of statements will be logged by session audit logging.
+                                items:
+                                  type: string
+                                type: array
+                              logCatalog:
+                                description: |-
+                                  (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                  Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                type: boolean
+                              logClient:
+                                description: |-
+                                  (Boolean) Specifies whether log messages will be visible to a client process such as psql.
+                                  Specifies whether log messages will be visible to a client process such as psql.
+                                type: boolean
+                              logLevel:
+                                description: |-
+                                  (String) Specifies the log level that will be used for log entries.
+                                  Specifies the log level that will be used for log entries.
+                                type: string
+                              logMaxStringLength:
+                                description: |-
+                                  1 disable the truncation.
+                                  Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
+                                type: number
+                              logNestedStatements:
+                                description: |-
+                                  (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                  This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                type: boolean
+                              logParameter:
+                                description: |-
+                                  (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
+                                  Specifies that audit logging should include the parameters that were passed with the statement.
+                                type: boolean
+                              logParameterMaxSize:
+                                description: |-
+                                  (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
+                                  Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
+                                type: number
+                              logRelation:
+                                description: |-
+                                  (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                  Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                type: boolean
+                              logRows:
+                                description: |-
+                                  (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                  Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                type: boolean
+                              logStatement:
+                                description: |-
+                                  (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
+                                  Specifies whether logging will include the statement text and parameters (if enabled).
+                                type: boolean
+                              logStatementOnce:
+                                description: |-
+                                  (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                  Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                type: boolean
+                              role:
+                                description: |-
+                                  (String) Specifies the master role to use for object audit logging.
+                                  Specifies the master role to use for object audit logging.
+                                type: string
+                            type: object
+                          type: array
+                        pgbouncer:
+                          description: |-
+                            wide settings for pgbouncer. (see below for nested schema)
+                            PGBouncer connection pooling settings. System-wide settings for pgbouncer.
+                          items:
+                            properties:
+                              autodbIdleTimeout:
+                                description: |-
+                                  (Number) If the automatically created database pools have been unused this many seconds, they are freed. If 0 then timeout is disabled. [seconds].
+                                  If the automatically created database pools have been unused this many seconds, they are freed. If 0 then timeout is disabled. [seconds].
+                                type: number
+                              autodbMaxDbConnections:
+                                description: |-
+                                  (Number) Do not allow more than this many server connections per database (regardless of user). Setting it to 0 means unlimited.
+                                  Do not allow more than this many server connections per database (regardless of user). Setting it to 0 means unlimited.
+                                type: number
+                              autodbPoolMode:
+                                description: |-
+                                  (String) PGBouncer pool mode.
+                                  PGBouncer pool mode.
+                                type: string
+                              autodbPoolSize:
+                                description: |-
+                                  zero then create automatically a pool of that size per user when a pool doesn't exist.
+                                  If non-zero then create automatically a pool of that size per user when a pool doesn't exist.
+                                type: number
+                              ignoreStartupParameters:
+                                description: |-
+                                  (List of String) List of parameters to ignore when given in startup packet.
+                                  List of parameters to ignore when given in startup packet.
+                                items:
+                                  type: string
+                                type: array
+                              minPoolSize:
+                                description: |-
+                                  (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
+                                  Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
+                                type: number
+                              serverIdleTimeout:
+                                description: |-
+                                  (Number) If a server connection has been idle more than this many seconds it will be dropped. If 0 then timeout is disabled. [seconds].
+                                  If a server connection has been idle more than this many seconds it will be dropped. If 0 then timeout is disabled. [seconds].
+                                type: number
+                              serverLifetime:
+                                description: |-
+                                  (Number) The pooler will close an unused server connection that has been connected longer than this. [seconds].
+                                  The pooler will close an unused server connection that has been connected longer than this. [seconds].
+                                type: number
+                              serverResetQueryAlways:
+                                description: |-
+                                  (Boolean) Run server_reset_query (DISCARD ALL) in all pooling modes.
+                                  Run server_reset_query (DISCARD ALL) in all pooling modes.
+                                type: boolean
+                            type: object
+                          type: array
+                        pglookout:
+                          description: |-
+                            wide settings for pglookout. (see below for nested schema)
+                            PGLookout settings. System-wide settings for pglookout.
+                          items:
+                            properties:
+                              maxFailoverReplicationTimeLag:
+                                description: |-
+                                  (Number) Number of seconds of master unavailability before triggering database failover to standby.
+                                  Number of seconds of master unavailability before triggering database failover to standby.
+                                type: number
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        sharedBuffersPercentage:
+                          description: |-
+                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                          type: number
+                        synchronousReplication:
+                          description: |-
+                            (String) Synchronous replication type. Note that the service plan also needs to support synchronous replication.
+                            Synchronous replication type. Note that the service plan also needs to support synchronous replication.
+                          type: string
+                        tempFileLimit:
+                          description: |-
+                            1 for unlimited.
+                            PostgreSQL temporary file limit in KiB, -1 for unlimited.
+                          type: number
+                        timescaledb:
+                          description: |-
+                            wide settings for the timescaledb extension. (see below for nested schema)
+                            TimescaleDB extension configuration values. System-wide settings for the timescaledb extension.
+                          items:
+                            properties:
+                              maxBackgroundWorkers:
+                                description: |-
+                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                type: number
+                            type: object
+                          type: array
+                        timezone:
+                          description: |-
+                            (String) PostgreSQL service timezone.
+                            PostgreSQL service timezone.
+                          type: string
+                        trackActivityQuerySize:
+                          description: |-
+                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session.
+                            Specifies the number of bytes reserved to track the currently executing command for each active session.
+                          type: number
+                        trackCommitTimestamp:
+                          description: |-
+                            (String) Record commit time of transactions.
+                            Record commit time of transactions.
+                          type: string
+                        trackFunctions:
+                          description: |-
+                            (String) Enables tracking of function call counts and time used.
+                            Enables tracking of function call counts and time used.
+                          type: string
+                        trackIoTiming:
+                          description: |-
+                            (String) Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                          type: string
+                        variant:
+                          description: |-
+                            (String) Variant of the PostgreSQL service, may affect the features that are exposed by default.
+                            Variant of the PostgreSQL service, may affect the features that are exposed by default.
+                          type: string
+                        version:
+                          description: |-
+                            (String) PostgreSQL major version.
+                            PostgreSQL major version.
+                          type: string
+                        walSenderTimeout:
+                          description: |-
+                            (Number) Terminate replication connections that are inactive for longer than this amount of time, in milliseconds. Setting this value to zero disables the timeout.
+                            Terminate replication connections that are inactive for longer than this amount of time, in milliseconds. Setting this value to zero disables the timeout.
+                          type: number
+                        walWriterDelay:
+                          description: |-
+                            (Number) WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                            WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                          type: number
+                        workMem:
+                          description: |-
+                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                          type: number
+                      type: object
+                    type: array
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                        uuidRef:
+                          description: Reference to a Network in network to populate
+                            uuid.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        uuidSelector:
+                          description: Selector for a Network in network to populate
+                            uuid.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for PostgreSQL (see below for nested schema)
+                      Database Engine properties for PostgreSQL
+                    items:
+                      properties:
+                        adminUsername:
+                          description: |-
+                            (String) Custom username for admin user. This must be set only when a new service is being created.
+                            Custom username for admin user. This must be set only when a new service is being created.
+                          type: string
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        autovacuumAnalyzeScaleFactor:
+                          description: |-
+                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                          type: number
+                        autovacuumAnalyzeThreshold:
+                          description: |-
+                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                          type: number
+                        autovacuumFreezeMaxAge:
+                          description: |-
+                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                          type: number
+                        autovacuumMaxWorkers:
+                          description: |-
+                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                          type: number
+                        autovacuumNaptime:
+                          description: |-
+                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                          type: number
+                        autovacuumVacuumCostDelay:
+                          description: |-
+                            1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                            Specifies the cost delay value that will be used in automatic VACUUM operations. If -1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                          type: number
+                        autovacuumVacuumCostLimit:
+                          description: |-
+                            1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                            Specifies the cost limit value that will be used in automatic VACUUM operations. If -1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                          type: number
+                        autovacuumVacuumScaleFactor:
+                          description: |-
+                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                          type: number
+                        autovacuumVacuumThreshold:
+                          description: |-
+                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                          type: number
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          type: number
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          type: number
+                        bgwriterDelay:
+                          description: |-
+                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                            Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                          type: number
+                        bgwriterFlushAfter:
+                          description: |-
+                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                          type: number
+                        bgwriterLruMaxpages:
+                          description: |-
+                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                          type: number
+                        bgwriterLruMultiplier:
+                          description: |-
+                            (Number) The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                          type: number
+                        deadlockTimeout:
+                          description: |-
+                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                          type: number
+                        defaultToastCompression:
+                          description: |-
+                            (String) Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                            Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                          type: string
+                        idleInTransactionSessionTimeout:
+                          description: |-
+                            (Number) Time out sessions with open transactions after this number of milliseconds.
+                            Time out sessions with open transactions after this number of milliseconds.
+                          type: number
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        jit:
+                          description: |-
+                            wide use of Just-in-Time Compilation (JIT).
+                            Controls system-wide use of Just-in-Time Compilation (JIT).
+                          type: boolean
+                        logAutovacuumMinDuration:
+                          description: |-
+                            one (the default) disables logging autovacuum actions.
+                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
+                          type: number
+                        logErrorVerbosity:
+                          description: |-
+                            (String) Controls the amount of detail written in the server log for each message that is logged.
+                            Controls the amount of detail written in the server log for each message that is logged.
+                          type: string
+                        logLinePrefix:
+                          description: |-
+                            formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                            Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                          type: string
+                        logMinDurationStatement:
+                          description: |-
+                            1 disables.
+                            Log statements that take more than this number of milliseconds to run, -1 disables.
+                          type: number
+                        logTempFiles:
+                          description: |-
+                            1 disables.
+                            Log statements for each temporary file created larger than this number of kilobytes, -1 disables.
+                          type: number
+                        maxFilesPerProcess:
+                          description: |-
+                            (Number) PostgreSQL maximum number of files that can be open per process.
+                            PostgreSQL maximum number of files that can be open per process.
+                          type: number
+                        maxLocksPerTransaction:
+                          description: |-
+                            (Number) PostgreSQL maximum locks per transaction.
+                            PostgreSQL maximum locks per transaction.
+                          type: number
+                        maxLogicalReplicationWorkers:
+                          description: |-
+                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                          type: number
+                        maxParallelWorkers:
+                          description: |-
+                            (Number) Sets the maximum number of workers that the system can support for parallel queries.
+                            Sets the maximum number of workers that the system can support for parallel queries.
+                          type: number
+                        maxParallelWorkersPerGather:
+                          description: |-
+                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                          type: number
+                        maxPredLocksPerTransaction:
+                          description: |-
+                            (Number) PostgreSQL maximum predicate locks per transaction.
+                            PostgreSQL maximum predicate locks per transaction.
+                          type: number
+                        maxPreparedTransactions:
+                          description: |-
+                            (Number) PostgreSQL maximum prepared transactions.
+                            PostgreSQL maximum prepared transactions.
+                          type: number
+                        maxReplicationSlots:
+                          description: |-
+                            (Number) PostgreSQL maximum replication slots.
+                            PostgreSQL maximum replication slots.
+                          type: number
+                        maxSlotWalKeepSize:
+                          description: |-
+                            1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                            PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is -1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                          type: number
+                        maxStackDepth:
+                          description: |-
+                            (Number) Maximum depth of the stack in bytes.
+                            Maximum depth of the stack in bytes.
+                          type: number
+                        maxStandbyArchiveDelay:
+                          description: |-
+                            (Number) Max standby archive delay in milliseconds.
+                            Max standby archive delay in milliseconds.
+                          type: number
+                        maxStandbyStreamingDelay:
+                          description: |-
+                            (Number) Max standby streaming delay in milliseconds.
+                            Max standby streaming delay in milliseconds.
+                          type: number
+                        maxWalSenders:
+                          description: |-
+                            (Number) PostgreSQL maximum WAL senders.
+                            PostgreSQL maximum WAL senders.
+                          type: number
+                        maxWorkerProcesses:
+                          description: |-
+                            (Number) Sets the maximum number of background processes that the system can support.
+                            Sets the maximum number of background processes that the system can support.
+                          type: number
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                type: number
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        pgPartmanBgwInterval:
+                          description: |-
+                            (Number) Sets the time interval to run pg_partman's scheduled tasks.
+                            Sets the time interval to run pg_partman's scheduled tasks.
+                          type: number
+                        pgPartmanBgwRole:
+                          description: |-
+                            (String) Controls which role to use for pg_partman's scheduled background tasks.
+                            Controls which role to use for pg_partman's scheduled background tasks.
+                          type: string
+                        pgStatMonitorEnable:
+                          description: |-
+                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                          type: boolean
+                        pgStatMonitorPgsmEnableQueryPlan:
+                          description: |-
+                            (Boolean) Enables or disables query plan monitoring.
+                            Enables or disables query plan monitoring.
+                          type: boolean
+                        pgStatMonitorPgsmMaxBuckets:
+                          description: |-
+                            (Number) Sets the maximum number of buckets.
+                            Sets the maximum number of buckets.
+                          type: number
+                        pgStatStatementsTrack:
+                          description: |-
+                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                          type: string
+                        pgaudit:
+                          description: |-
+                            wide settings for the pgaudit extension. (see below for nested schema)
+                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          items:
+                            properties:
+                              featureEnabled:
+                                description: |-
+                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                type: boolean
+                              log:
+                                description: |-
+                                  (List of String) Specifies which classes of statements will be logged by session audit logging.
+                                  Specifies which classes of statements will be logged by session audit logging.
+                                items:
+                                  type: string
+                                type: array
+                              logCatalog:
+                                description: |-
+                                  (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                  Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                type: boolean
+                              logClient:
+                                description: |-
+                                  (Boolean) Specifies whether log messages will be visible to a client process such as psql.
+                                  Specifies whether log messages will be visible to a client process such as psql.
+                                type: boolean
+                              logLevel:
+                                description: |-
+                                  (String) Specifies the log level that will be used for log entries.
+                                  Specifies the log level that will be used for log entries.
+                                type: string
+                              logMaxStringLength:
+                                description: |-
+                                  1 disable the truncation.
+                                  Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
+                                type: number
+                              logNestedStatements:
+                                description: |-
+                                  (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                  This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                type: boolean
+                              logParameter:
+                                description: |-
+                                  (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
+                                  Specifies that audit logging should include the parameters that were passed with the statement.
+                                type: boolean
+                              logParameterMaxSize:
+                                description: |-
+                                  (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
+                                  Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
+                                type: number
+                              logRelation:
+                                description: |-
+                                  (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                  Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                type: boolean
+                              logRows:
+                                description: |-
+                                  (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                  Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                type: boolean
+                              logStatement:
+                                description: |-
+                                  (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
+                                  Specifies whether logging will include the statement text and parameters (if enabled).
+                                type: boolean
+                              logStatementOnce:
+                                description: |-
+                                  (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                  Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                type: boolean
+                              role:
+                                description: |-
+                                  (String) Specifies the master role to use for object audit logging.
+                                  Specifies the master role to use for object audit logging.
+                                type: string
+                            type: object
+                          type: array
+                        pgbouncer:
+                          description: |-
+                            wide settings for pgbouncer. (see below for nested schema)
+                            PGBouncer connection pooling settings. System-wide settings for pgbouncer.
+                          items:
+                            properties:
+                              autodbIdleTimeout:
+                                description: |-
+                                  (Number) If the automatically created database pools have been unused this many seconds, they are freed. If 0 then timeout is disabled. [seconds].
+                                  If the automatically created database pools have been unused this many seconds, they are freed. If 0 then timeout is disabled. [seconds].
+                                type: number
+                              autodbMaxDbConnections:
+                                description: |-
+                                  (Number) Do not allow more than this many server connections per database (regardless of user). Setting it to 0 means unlimited.
+                                  Do not allow more than this many server connections per database (regardless of user). Setting it to 0 means unlimited.
+                                type: number
+                              autodbPoolMode:
+                                description: |-
+                                  (String) PGBouncer pool mode.
+                                  PGBouncer pool mode.
+                                type: string
+                              autodbPoolSize:
+                                description: |-
+                                  zero then create automatically a pool of that size per user when a pool doesn't exist.
+                                  If non-zero then create automatically a pool of that size per user when a pool doesn't exist.
+                                type: number
+                              ignoreStartupParameters:
+                                description: |-
+                                  (List of String) List of parameters to ignore when given in startup packet.
+                                  List of parameters to ignore when given in startup packet.
+                                items:
+                                  type: string
+                                type: array
+                              minPoolSize:
+                                description: |-
+                                  (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
+                                  Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
+                                type: number
+                              serverIdleTimeout:
+                                description: |-
+                                  (Number) If a server connection has been idle more than this many seconds it will be dropped. If 0 then timeout is disabled. [seconds].
+                                  If a server connection has been idle more than this many seconds it will be dropped. If 0 then timeout is disabled. [seconds].
+                                type: number
+                              serverLifetime:
+                                description: |-
+                                  (Number) The pooler will close an unused server connection that has been connected longer than this. [seconds].
+                                  The pooler will close an unused server connection that has been connected longer than this. [seconds].
+                                type: number
+                              serverResetQueryAlways:
+                                description: |-
+                                  (Boolean) Run server_reset_query (DISCARD ALL) in all pooling modes.
+                                  Run server_reset_query (DISCARD ALL) in all pooling modes.
+                                type: boolean
+                            type: object
+                          type: array
+                        pglookout:
+                          description: |-
+                            wide settings for pglookout. (see below for nested schema)
+                            PGLookout settings. System-wide settings for pglookout.
+                          items:
+                            properties:
+                              maxFailoverReplicationTimeLag:
+                                description: |-
+                                  (Number) Number of seconds of master unavailability before triggering database failover to standby.
+                                  Number of seconds of master unavailability before triggering database failover to standby.
+                                type: number
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        sharedBuffersPercentage:
+                          description: |-
+                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                          type: number
+                        synchronousReplication:
+                          description: |-
+                            (String) Synchronous replication type. Note that the service plan also needs to support synchronous replication.
+                            Synchronous replication type. Note that the service plan also needs to support synchronous replication.
+                          type: string
+                        tempFileLimit:
+                          description: |-
+                            1 for unlimited.
+                            PostgreSQL temporary file limit in KiB, -1 for unlimited.
+                          type: number
+                        timescaledb:
+                          description: |-
+                            wide settings for the timescaledb extension. (see below for nested schema)
+                            TimescaleDB extension configuration values. System-wide settings for the timescaledb extension.
+                          items:
+                            properties:
+                              maxBackgroundWorkers:
+                                description: |-
+                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                type: number
+                            type: object
+                          type: array
+                        timezone:
+                          description: |-
+                            (String) PostgreSQL service timezone.
+                            PostgreSQL service timezone.
+                          type: string
+                        trackActivityQuerySize:
+                          description: |-
+                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session.
+                            Specifies the number of bytes reserved to track the currently executing command for each active session.
+                          type: number
+                        trackCommitTimestamp:
+                          description: |-
+                            (String) Record commit time of transactions.
+                            Record commit time of transactions.
+                          type: string
+                        trackFunctions:
+                          description: |-
+                            (String) Enables tracking of function call counts and time used.
+                            Enables tracking of function call counts and time used.
+                          type: string
+                        trackIoTiming:
+                          description: |-
+                            (String) Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                          type: string
+                        variant:
+                          description: |-
+                            (String) Variant of the PostgreSQL service, may affect the features that are exposed by default.
+                            Variant of the PostgreSQL service, may affect the features that are exposed by default.
+                          type: string
+                        version:
+                          description: |-
+                            (String) PostgreSQL major version.
+                            PostgreSQL major version.
+                          type: string
+                        walSenderTimeout:
+                          description: |-
+                            (Number) Terminate replication connections that are inactive for longer than this amount of time, in milliseconds. Setting this value to zero disables the timeout.
+                            Terminate replication connections that are inactive for longer than this amount of time, in milliseconds. Setting this value to zero disables the timeout.
+                          type: number
+                        walWriterDelay:
+                          description: |-
+                            (Number) WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                            WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                          type: number
+                        workMem:
+                          description: |-
+                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                          type: number
+                      type: object
+                    type: array
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  This field is planned to replace the DeletionPolicy field in a future
+                  release. Currently, both could be set independently and non-default
+                  values would be honored if the feature flag is enabled. If both are
+                  custom, the DeletionPolicy field will be ignored.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                  policy:
+                    description: Policies for referencing.
+                    properties:
+                      resolution:
+                        default: Required
+                        description: |-
+                          Resolution specifies whether resolution of this reference is required.
+                          The default is 'Required', which means the reconcile will fail if the
+                          reference cannot be resolved. 'Optional' means this reference will be
+                          a no-op if it cannot be resolved.
+                        enum:
+                        - Required
+                        - Optional
+                        type: string
+                      resolve:
+                        description: |-
+                          Resolve specifies when this reference should be resolved. The default
+                          is 'IfNotPresent', which will attempt to resolve the reference only when
+                          the corresponding field is not present. Use 'Always' to resolve the
+                          reference on every reconcile.
+                        enum:
+                        - Always
+                        - IfNotPresent
+                        type: string
+                    type: object
+                required:
+                - name
+                type: object
+              publishConnectionDetailsTo:
+                description: |-
+                  PublishConnectionDetailsTo specifies the connection secret config which
+                  contains a name, metadata and a reference to secret store config to
+                  which any connection details for this managed resource should be written.
+                  Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  configRef:
+                    default:
+                      name: default
+                    description: |-
+                      SecretStoreConfigRef specifies which secret store config should be used
+                      for this ConnectionSecret.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  metadata:
+                    description: Metadata is the metadata for connection secret.
+                    properties:
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Annotations are the annotations to be added to connection secret.
+                          - For Kubernetes secrets, this will be used as "metadata.annotations".
+                          - It is up to Secret Store implementation for others store types.
+                        type: object
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Labels are the labels/tags to be added to connection secret.
+                          - For Kubernetes secrets, this will be used as "metadata.labels".
+                          - It is up to Secret Store implementation for others store types.
+                        type: object
+                      type:
+                        description: |-
+                          Type is the SecretType for the connection secret.
+                          - Only valid for Kubernetes Secret Stores.
+                        type: string
+                    type: object
+                  name:
+                    description: Name is the name of the connection secret.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                  This field is planned to be replaced in a future release in favor of
+                  PublishConnectionDetailsTo. Currently, both could be set independently
+                  and connection details would be published to both without affecting
+                  each other.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.plan is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.plan)
+                || (has(self.initProvider) && has(self.initProvider.plan))'
+            - message: spec.forProvider.title is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.title)
+                || (has(self.initProvider) && has(self.initProvider.title))'
+            - message: spec.forProvider.zone is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.zone)
+                || (has(self.initProvider) && has(self.initProvider.zone))'
+          status:
+            description: ManagedDatabasePostgresqlStatus defines the observed state
+              of ManagedDatabasePostgresql.
+            properties:
+              atProvider:
+                properties:
+                  components:
+                    description: |-
+                      (List of Object) Service component information (see below for nested schema)
+                      Service component information
+                    items:
+                      properties:
+                        component:
+                          description: (String)
+                          type: string
+                        host:
+                          description: (String) Hostname or IP address of the server
+                            where to migrate data from.
+                          type: string
+                        port:
+                          description: (Number) Port number of the server where to
+                            migrate data from.
+                          type: number
+                        route:
+                          description: (String)
+                          type: string
+                        usage:
+                          description: (String)
+                          type: string
+                      type: object
+                    type: array
+                  id:
+                    description: (String) The ID of this resource.
+                    type: string
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                      type: object
+                    type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        name:
+                          description: (String) Name of the service. The name is used
+                            as a prefix for the logical hostname. Must be unique within
+                            an account
+                          type: string
+                        role:
+                          description: (String) Specifies the master role to use for
+                            object audit logging.
+                          type: string
+                        state:
+                          description: (String) State of the service
+                          type: string
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  primaryDatabase:
+                    description: |-
+                      (String) Primary database name
+                      Primary database name
+                    type: string
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for PostgreSQL (see below for nested schema)
+                      Database Engine properties for PostgreSQL
+                    items:
+                      properties:
+                        adminUsername:
+                          description: |-
+                            (String) Custom username for admin user. This must be set only when a new service is being created.
+                            Custom username for admin user. This must be set only when a new service is being created.
+                          type: string
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        autovacuumAnalyzeScaleFactor:
+                          description: |-
+                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                          type: number
+                        autovacuumAnalyzeThreshold:
+                          description: |-
+                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                          type: number
+                        autovacuumFreezeMaxAge:
+                          description: |-
+                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                          type: number
+                        autovacuumMaxWorkers:
+                          description: |-
+                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                          type: number
+                        autovacuumNaptime:
+                          description: |-
+                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                          type: number
+                        autovacuumVacuumCostDelay:
+                          description: |-
+                            1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                            Specifies the cost delay value that will be used in automatic VACUUM operations. If -1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                          type: number
+                        autovacuumVacuumCostLimit:
+                          description: |-
+                            1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                            Specifies the cost limit value that will be used in automatic VACUUM operations. If -1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                          type: number
+                        autovacuumVacuumScaleFactor:
+                          description: |-
+                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                          type: number
+                        autovacuumVacuumThreshold:
+                          description: |-
+                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                          type: number
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          type: number
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          type: number
+                        bgwriterDelay:
+                          description: |-
+                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                            Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                          type: number
+                        bgwriterFlushAfter:
+                          description: |-
+                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                          type: number
+                        bgwriterLruMaxpages:
+                          description: |-
+                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                          type: number
+                        bgwriterLruMultiplier:
+                          description: |-
+                            (Number) The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                          type: number
+                        deadlockTimeout:
+                          description: |-
+                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                          type: number
+                        defaultToastCompression:
+                          description: |-
+                            (String) Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                            Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                          type: string
+                        idleInTransactionSessionTimeout:
+                          description: |-
+                            (Number) Time out sessions with open transactions after this number of milliseconds.
+                            Time out sessions with open transactions after this number of milliseconds.
+                          type: number
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        jit:
+                          description: |-
+                            wide use of Just-in-Time Compilation (JIT).
+                            Controls system-wide use of Just-in-Time Compilation (JIT).
+                          type: boolean
+                        logAutovacuumMinDuration:
+                          description: |-
+                            one (the default) disables logging autovacuum actions.
+                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
+                          type: number
+                        logErrorVerbosity:
+                          description: |-
+                            (String) Controls the amount of detail written in the server log for each message that is logged.
+                            Controls the amount of detail written in the server log for each message that is logged.
+                          type: string
+                        logLinePrefix:
+                          description: |-
+                            formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                            Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                          type: string
+                        logMinDurationStatement:
+                          description: |-
+                            1 disables.
+                            Log statements that take more than this number of milliseconds to run, -1 disables.
+                          type: number
+                        logTempFiles:
+                          description: |-
+                            1 disables.
+                            Log statements for each temporary file created larger than this number of kilobytes, -1 disables.
+                          type: number
+                        maxFilesPerProcess:
+                          description: |-
+                            (Number) PostgreSQL maximum number of files that can be open per process.
+                            PostgreSQL maximum number of files that can be open per process.
+                          type: number
+                        maxLocksPerTransaction:
+                          description: |-
+                            (Number) PostgreSQL maximum locks per transaction.
+                            PostgreSQL maximum locks per transaction.
+                          type: number
+                        maxLogicalReplicationWorkers:
+                          description: |-
+                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                          type: number
+                        maxParallelWorkers:
+                          description: |-
+                            (Number) Sets the maximum number of workers that the system can support for parallel queries.
+                            Sets the maximum number of workers that the system can support for parallel queries.
+                          type: number
+                        maxParallelWorkersPerGather:
+                          description: |-
+                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                          type: number
+                        maxPredLocksPerTransaction:
+                          description: |-
+                            (Number) PostgreSQL maximum predicate locks per transaction.
+                            PostgreSQL maximum predicate locks per transaction.
+                          type: number
+                        maxPreparedTransactions:
+                          description: |-
+                            (Number) PostgreSQL maximum prepared transactions.
+                            PostgreSQL maximum prepared transactions.
+                          type: number
+                        maxReplicationSlots:
+                          description: |-
+                            (Number) PostgreSQL maximum replication slots.
+                            PostgreSQL maximum replication slots.
+                          type: number
+                        maxSlotWalKeepSize:
+                          description: |-
+                            1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                            PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is -1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                          type: number
+                        maxStackDepth:
+                          description: |-
+                            (Number) Maximum depth of the stack in bytes.
+                            Maximum depth of the stack in bytes.
+                          type: number
+                        maxStandbyArchiveDelay:
+                          description: |-
+                            (Number) Max standby archive delay in milliseconds.
+                            Max standby archive delay in milliseconds.
+                          type: number
+                        maxStandbyStreamingDelay:
+                          description: |-
+                            (Number) Max standby streaming delay in milliseconds.
+                            Max standby streaming delay in milliseconds.
+                          type: number
+                        maxWalSenders:
+                          description: |-
+                            (Number) PostgreSQL maximum WAL senders.
+                            PostgreSQL maximum WAL senders.
+                          type: number
+                        maxWorkerProcesses:
+                          description: |-
+                            (Number) Sets the maximum number of background processes that the system can support.
+                            Sets the maximum number of background processes that the system can support.
+                          type: number
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                type: number
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        pgPartmanBgwInterval:
+                          description: |-
+                            (Number) Sets the time interval to run pg_partman's scheduled tasks.
+                            Sets the time interval to run pg_partman's scheduled tasks.
+                          type: number
+                        pgPartmanBgwRole:
+                          description: |-
+                            (String) Controls which role to use for pg_partman's scheduled background tasks.
+                            Controls which role to use for pg_partman's scheduled background tasks.
+                          type: string
+                        pgStatMonitorEnable:
+                          description: |-
+                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                          type: boolean
+                        pgStatMonitorPgsmEnableQueryPlan:
+                          description: |-
+                            (Boolean) Enables or disables query plan monitoring.
+                            Enables or disables query plan monitoring.
+                          type: boolean
+                        pgStatMonitorPgsmMaxBuckets:
+                          description: |-
+                            (Number) Sets the maximum number of buckets.
+                            Sets the maximum number of buckets.
+                          type: number
+                        pgStatStatementsTrack:
+                          description: |-
+                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                          type: string
+                        pgaudit:
+                          description: |-
+                            wide settings for the pgaudit extension. (see below for nested schema)
+                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          items:
+                            properties:
+                              featureEnabled:
+                                description: |-
+                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                type: boolean
+                              log:
+                                description: |-
+                                  (List of String) Specifies which classes of statements will be logged by session audit logging.
+                                  Specifies which classes of statements will be logged by session audit logging.
+                                items:
+                                  type: string
+                                type: array
+                              logCatalog:
+                                description: |-
+                                  (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                  Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                type: boolean
+                              logClient:
+                                description: |-
+                                  (Boolean) Specifies whether log messages will be visible to a client process such as psql.
+                                  Specifies whether log messages will be visible to a client process such as psql.
+                                type: boolean
+                              logLevel:
+                                description: |-
+                                  (String) Specifies the log level that will be used for log entries.
+                                  Specifies the log level that will be used for log entries.
+                                type: string
+                              logMaxStringLength:
+                                description: |-
+                                  1 disable the truncation.
+                                  Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
+                                type: number
+                              logNestedStatements:
+                                description: |-
+                                  (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                  This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                type: boolean
+                              logParameter:
+                                description: |-
+                                  (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
+                                  Specifies that audit logging should include the parameters that were passed with the statement.
+                                type: boolean
+                              logParameterMaxSize:
+                                description: |-
+                                  (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
+                                  Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
+                                type: number
+                              logRelation:
+                                description: |-
+                                  (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                  Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                type: boolean
+                              logRows:
+                                description: |-
+                                  (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                  Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                type: boolean
+                              logStatement:
+                                description: |-
+                                  (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
+                                  Specifies whether logging will include the statement text and parameters (if enabled).
+                                type: boolean
+                              logStatementOnce:
+                                description: |-
+                                  (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                  Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                type: boolean
+                              role:
+                                description: |-
+                                  (String) Specifies the master role to use for object audit logging.
+                                  Specifies the master role to use for object audit logging.
+                                type: string
+                            type: object
+                          type: array
+                        pgbouncer:
+                          description: |-
+                            wide settings for pgbouncer. (see below for nested schema)
+                            PGBouncer connection pooling settings. System-wide settings for pgbouncer.
+                          items:
+                            properties:
+                              autodbIdleTimeout:
+                                description: |-
+                                  (Number) If the automatically created database pools have been unused this many seconds, they are freed. If 0 then timeout is disabled. [seconds].
+                                  If the automatically created database pools have been unused this many seconds, they are freed. If 0 then timeout is disabled. [seconds].
+                                type: number
+                              autodbMaxDbConnections:
+                                description: |-
+                                  (Number) Do not allow more than this many server connections per database (regardless of user). Setting it to 0 means unlimited.
+                                  Do not allow more than this many server connections per database (regardless of user). Setting it to 0 means unlimited.
+                                type: number
+                              autodbPoolMode:
+                                description: |-
+                                  (String) PGBouncer pool mode.
+                                  PGBouncer pool mode.
+                                type: string
+                              autodbPoolSize:
+                                description: |-
+                                  zero then create automatically a pool of that size per user when a pool doesn't exist.
+                                  If non-zero then create automatically a pool of that size per user when a pool doesn't exist.
+                                type: number
+                              ignoreStartupParameters:
+                                description: |-
+                                  (List of String) List of parameters to ignore when given in startup packet.
+                                  List of parameters to ignore when given in startup packet.
+                                items:
+                                  type: string
+                                type: array
+                              minPoolSize:
+                                description: |-
+                                  (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
+                                  Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
+                                type: number
+                              serverIdleTimeout:
+                                description: |-
+                                  (Number) If a server connection has been idle more than this many seconds it will be dropped. If 0 then timeout is disabled. [seconds].
+                                  If a server connection has been idle more than this many seconds it will be dropped. If 0 then timeout is disabled. [seconds].
+                                type: number
+                              serverLifetime:
+                                description: |-
+                                  (Number) The pooler will close an unused server connection that has been connected longer than this. [seconds].
+                                  The pooler will close an unused server connection that has been connected longer than this. [seconds].
+                                type: number
+                              serverResetQueryAlways:
+                                description: |-
+                                  (Boolean) Run server_reset_query (DISCARD ALL) in all pooling modes.
+                                  Run server_reset_query (DISCARD ALL) in all pooling modes.
+                                type: boolean
+                            type: object
+                          type: array
+                        pglookout:
+                          description: |-
+                            wide settings for pglookout. (see below for nested schema)
+                            PGLookout settings. System-wide settings for pglookout.
+                          items:
+                            properties:
+                              maxFailoverReplicationTimeLag:
+                                description: |-
+                                  (Number) Number of seconds of master unavailability before triggering database failover to standby.
+                                  Number of seconds of master unavailability before triggering database failover to standby.
+                                type: number
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        sharedBuffersPercentage:
+                          description: |-
+                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                          type: number
+                        synchronousReplication:
+                          description: |-
+                            (String) Synchronous replication type. Note that the service plan also needs to support synchronous replication.
+                            Synchronous replication type. Note that the service plan also needs to support synchronous replication.
+                          type: string
+                        tempFileLimit:
+                          description: |-
+                            1 for unlimited.
+                            PostgreSQL temporary file limit in KiB, -1 for unlimited.
+                          type: number
+                        timescaledb:
+                          description: |-
+                            wide settings for the timescaledb extension. (see below for nested schema)
+                            TimescaleDB extension configuration values. System-wide settings for the timescaledb extension.
+                          items:
+                            properties:
+                              maxBackgroundWorkers:
+                                description: |-
+                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                type: number
+                            type: object
+                          type: array
+                        timezone:
+                          description: |-
+                            (String) PostgreSQL service timezone.
+                            PostgreSQL service timezone.
+                          type: string
+                        trackActivityQuerySize:
+                          description: |-
+                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session.
+                            Specifies the number of bytes reserved to track the currently executing command for each active session.
+                          type: number
+                        trackCommitTimestamp:
+                          description: |-
+                            (String) Record commit time of transactions.
+                            Record commit time of transactions.
+                          type: string
+                        trackFunctions:
+                          description: |-
+                            (String) Enables tracking of function call counts and time used.
+                            Enables tracking of function call counts and time used.
+                          type: string
+                        trackIoTiming:
+                          description: |-
+                            (String) Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                          type: string
+                        variant:
+                          description: |-
+                            (String) Variant of the PostgreSQL service, may affect the features that are exposed by default.
+                            Variant of the PostgreSQL service, may affect the features that are exposed by default.
+                          type: string
+                        version:
+                          description: |-
+                            (String) PostgreSQL major version.
+                            PostgreSQL major version.
+                          type: string
+                        walSenderTimeout:
+                          description: |-
+                            (Number) Terminate replication connections that are inactive for longer than this amount of time, in milliseconds. Setting this value to zero disables the timeout.
+                            Terminate replication connections that are inactive for longer than this amount of time, in milliseconds. Setting this value to zero disables the timeout.
+                          type: number
+                        walWriterDelay:
+                          description: |-
+                            (Number) WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                            WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                          type: number
+                        workMem:
+                          description: |-
+                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                          type: number
+                      type: object
+                    type: array
+                  serviceHost:
+                    description: |-
+                      (String) Hostname to the service instance
+                      Hostname to the service instance
+                    type: string
+                  servicePort:
+                    description: |-
+                      (String) Port to the service instance
+                      Port to the service instance
+                    type: string
+                  serviceUsername:
+                    description: |-
+                      (String) Primary username to the service instance
+                      Primary username to the service instance
+                    type: string
+                  sslmode:
+                    description: |-
+                      (String) SSL Connection Mode for PostgreSQL
+                      SSL Connection Mode for PostgreSQL
+                    type: string
+                  state:
+                    description: |-
+                      (String) State of the service
+                      State of the service
+                    type: string
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  type:
+                    description: |-
+                      (String) Type of the service
+                      Type of the service
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

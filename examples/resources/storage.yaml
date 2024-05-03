@@ -1,0 +1,10 @@
+apiVersion: storage.upcloud.io/v1alpha1
+kind: Storage
+metadata:
+  name: example
+spec:
+  forProvider:
+    size: 10
+    tier: maxiops
+    title: crossplane-example-additional-disk
+    zone: de-fra1

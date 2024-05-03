@@ -1,0 +1,45 @@
+apiVersion: server.upcloud.io/v1alpha1
+kind: FirewallRules
+metadata:
+  annotations:
+    meta.upbound.io/example-id: server/v1alpha1/firewallrules
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    firewallRule:
+    - action: accept
+      comment: Allow SSH from this network
+      destinationPortEnd: "22"
+      destinationPortStart: "22"
+      direction: in
+      family: IPv4
+      protocol: tcp
+      sourceAddressEnd: 192.168.1.255
+      sourceAddressStart: 192.168.1.1
+    serverIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+
+---
+
+apiVersion: server.upcloud.io/v1alpha1
+kind: Server
+metadata:
+  annotations:
+    meta.upbound.io/example-id: server/v1alpha1/firewallrules
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    firewall: true
+    hostname: terraform.example.tld
+    networkInterface:
+    - type: utility
+    plan: 1xCPU-1GB
+    template:
+    - size: 25
+      storage: Ubuntu Server 20.04 LTS (Focal Fossa)
+    zone: de-fra1

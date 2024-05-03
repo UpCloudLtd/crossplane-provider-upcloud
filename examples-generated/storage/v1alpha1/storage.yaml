@@ -1,0 +1,36 @@
+apiVersion: storage.upcloud.io/v1alpha1
+kind: Storage
+metadata:
+  annotations:
+    meta.upbound.io/example-id: storage/v1alpha1/storage
+  labels:
+    testing.upbound.io/example-name: example_storage
+  name: example-storage
+spec:
+  forProvider:
+    size: 10
+    tier: maxiops
+    title: My data collection
+    zone: fi-hel1
+
+---
+
+apiVersion: server.upcloud.io/v1alpha1
+kind: Server
+metadata:
+  annotations:
+    meta.upbound.io/example-id: storage/v1alpha1/storage
+  labels:
+    testing.upbound.io/example-name: example_server
+  name: example-server
+spec:
+  forProvider:
+    hostname: terraform.example.tld
+    networkInterface:
+    - type: public
+    plan: 1xCPU-1GB
+    storageDevices:
+    - storageSelector:
+        matchLabels:
+          testing.upbound.io/example-name: example_storage[0]
+    zone: fi-hel1

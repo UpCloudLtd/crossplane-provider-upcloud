@@ -1,0 +1,14 @@
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseMysql
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabasemysql
+  labels:
+    testing.upbound.io/example-name: example_1
+  name: example-1
+spec:
+  forProvider:
+    name: mysql-1
+    plan: 1x1xCPU-2GB-25GB
+    title: mysql-1-example-1
+    zone: fi-hel1

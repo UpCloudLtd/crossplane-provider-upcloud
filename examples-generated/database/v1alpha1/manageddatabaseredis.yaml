@@ -1,0 +1,14 @@
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseRedis
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabaseredis
+  labels:
+    testing.upbound.io/example-name: example_1
+  name: example-1
+spec:
+  forProvider:
+    name: redis-1
+    plan: 1x1xCPU-2GB
+    title: redis-1-example-2
+    zone: fi-hel2

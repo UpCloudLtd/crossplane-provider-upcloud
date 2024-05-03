@@ -1,0 +1,1166 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: manageddatabaseredis.database.upcloud.io
+spec:
+  group: database.upcloud.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - upcloud
+    kind: ManagedDatabaseRedis
+    listKind: ManagedDatabaseRedisList
+    plural: manageddatabaseredis
+    singular: manageddatabaseredis
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ManagedDatabaseRedis is the Schema for the ManagedDatabaseRediss
+          API. This resource represents Redis managed database. See UpCloud Managed
+          Databases https://upcloud.com/products/managed-databases product page for
+          more details about the service.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ManagedDatabaseRedisSpec defines the desired state of ManagedDatabaseRedis
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: |-
+                  DeletionPolicy specifies what will happen to the underlying external
+                  when this managed resource is deleted - either "Delete" or "Orphan" the
+                  external resource.
+                  This field is planned to be deprecated in favor of the ManagementPolicies
+                  field in a future release. Currently, both could be set independently and
+                  non-default values would be honored if the feature flag is enabled.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                properties:
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                        uuidRef:
+                          description: Reference to a Network in network to populate
+                            uuid.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        uuidSelector:
+                          description: Selector for a Network in network to populate
+                            uuid.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for Redis (see below for nested schema)
+                      Database Engine properties for Redis
+                    items:
+                      properties:
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: Namespace of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                - namespace
+                                type: object
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                type: number
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        redisAclChannelsDefault:
+                          description: |-
+                            pubsub-default.
+                            Default ACL for pub/sub channels used when Redis user is created. Determines default pub/sub channels' ACL for new users if ACL is not supplied. When this option is not defined, all_channels is assumed to keep backward compatibility. This option doesn't affect Redis configuration acl-pubsub-default.
+                          type: string
+                        redisIoThreads:
+                          description: |-
+                            (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
+                            Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
+                          type: number
+                        redisLfuDecayTime:
+                          description: |-
+                            policy counter decay time in minutes.
+                            LFU maxmemory-policy counter decay time in minutes.
+                          type: number
+                        redisLfuLogFactor:
+                          description: |-
+                            lfu and allkeys-lfu maxmemory-policies.
+                            Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
+                          type: number
+                        redisMaxmemoryPolicy:
+                          description: |-
+                            policy.
+                            Redis maxmemory-policy.
+                          type: string
+                        redisNotifyKeyspaceEvents:
+                          description: |-
+                            keyspace-events option.
+                            Set notify-keyspace-events option.
+                          type: string
+                        redisNumberOfDatabases:
+                          description: |-
+                            (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
+                            Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
+                          type: number
+                        redisPersistence:
+                          description: |-
+                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                          type: string
+                        redisPubsubClientOutputBufferLimit:
+                          description: |-
+                            (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                            Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                          type: number
+                        redisSsl:
+                          description: |-
+                            (Boolean) Require SSL to access Redis.
+                            Require SSL to access Redis.
+                          type: boolean
+                        redisTimeout:
+                          description: |-
+                            (Number) Redis idle connection timeout in seconds.
+                            Redis idle connection timeout in seconds.
+                          type: number
+                        redisVersion:
+                          description: |-
+                            (String) Redis major version.
+                            Redis major version.
+                          type: string
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                      type: object
+                    type: array
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                        uuidRef:
+                          description: Reference to a Network in network to populate
+                            uuid.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        uuidSelector:
+                          description: Selector for a Network in network to populate
+                            uuid.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for Redis (see below for nested schema)
+                      Database Engine properties for Redis
+                    items:
+                      properties:
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                type: number
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        redisAclChannelsDefault:
+                          description: |-
+                            pubsub-default.
+                            Default ACL for pub/sub channels used when Redis user is created. Determines default pub/sub channels' ACL for new users if ACL is not supplied. When this option is not defined, all_channels is assumed to keep backward compatibility. This option doesn't affect Redis configuration acl-pubsub-default.
+                          type: string
+                        redisIoThreads:
+                          description: |-
+                            (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
+                            Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
+                          type: number
+                        redisLfuDecayTime:
+                          description: |-
+                            policy counter decay time in minutes.
+                            LFU maxmemory-policy counter decay time in minutes.
+                          type: number
+                        redisLfuLogFactor:
+                          description: |-
+                            lfu and allkeys-lfu maxmemory-policies.
+                            Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
+                          type: number
+                        redisMaxmemoryPolicy:
+                          description: |-
+                            policy.
+                            Redis maxmemory-policy.
+                          type: string
+                        redisNotifyKeyspaceEvents:
+                          description: |-
+                            keyspace-events option.
+                            Set notify-keyspace-events option.
+                          type: string
+                        redisNumberOfDatabases:
+                          description: |-
+                            (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
+                            Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
+                          type: number
+                        redisPersistence:
+                          description: |-
+                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                          type: string
+                        redisPubsubClientOutputBufferLimit:
+                          description: |-
+                            (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                            Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                          type: number
+                        redisSsl:
+                          description: |-
+                            (Boolean) Require SSL to access Redis.
+                            Require SSL to access Redis.
+                          type: boolean
+                        redisTimeout:
+                          description: |-
+                            (Number) Redis idle connection timeout in seconds.
+                            Redis idle connection timeout in seconds.
+                          type: number
+                        redisVersion:
+                          description: |-
+                            (String) Redis major version.
+                            Redis major version.
+                          type: string
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                      type: object
+                    type: array
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  This field is planned to replace the DeletionPolicy field in a future
+                  release. Currently, both could be set independently and non-default
+                  values would be honored if the feature flag is enabled. If both are
+                  custom, the DeletionPolicy field will be ignored.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                  policy:
+                    description: Policies for referencing.
+                    properties:
+                      resolution:
+                        default: Required
+                        description: |-
+                          Resolution specifies whether resolution of this reference is required.
+                          The default is 'Required', which means the reconcile will fail if the
+                          reference cannot be resolved. 'Optional' means this reference will be
+                          a no-op if it cannot be resolved.
+                        enum:
+                        - Required
+                        - Optional
+                        type: string
+                      resolve:
+                        description: |-
+                          Resolve specifies when this reference should be resolved. The default
+                          is 'IfNotPresent', which will attempt to resolve the reference only when
+                          the corresponding field is not present. Use 'Always' to resolve the
+                          reference on every reconcile.
+                        enum:
+                        - Always
+                        - IfNotPresent
+                        type: string
+                    type: object
+                required:
+                - name
+                type: object
+              publishConnectionDetailsTo:
+                description: |-
+                  PublishConnectionDetailsTo specifies the connection secret config which
+                  contains a name, metadata and a reference to secret store config to
+                  which any connection details for this managed resource should be written.
+                  Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  configRef:
+                    default:
+                      name: default
+                    description: |-
+                      SecretStoreConfigRef specifies which secret store config should be used
+                      for this ConnectionSecret.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  metadata:
+                    description: Metadata is the metadata for connection secret.
+                    properties:
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Annotations are the annotations to be added to connection secret.
+                          - For Kubernetes secrets, this will be used as "metadata.annotations".
+                          - It is up to Secret Store implementation for others store types.
+                        type: object
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Labels are the labels/tags to be added to connection secret.
+                          - For Kubernetes secrets, this will be used as "metadata.labels".
+                          - It is up to Secret Store implementation for others store types.
+                        type: object
+                      type:
+                        description: |-
+                          Type is the SecretType for the connection secret.
+                          - Only valid for Kubernetes Secret Stores.
+                        type: string
+                    type: object
+                  name:
+                    description: Name is the name of the connection secret.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                  This field is planned to be replaced in a future release in favor of
+                  PublishConnectionDetailsTo. Currently, both could be set independently
+                  and connection details would be published to both without affecting
+                  each other.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.plan is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.plan)
+                || (has(self.initProvider) && has(self.initProvider.plan))'
+            - message: spec.forProvider.title is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.title)
+                || (has(self.initProvider) && has(self.initProvider.title))'
+            - message: spec.forProvider.zone is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.zone)
+                || (has(self.initProvider) && has(self.initProvider.zone))'
+          status:
+            description: ManagedDatabaseRedisStatus defines the observed state of
+              ManagedDatabaseRedis.
+            properties:
+              atProvider:
+                properties:
+                  components:
+                    description: |-
+                      (List of Object) Service component information (see below for nested schema)
+                      Service component information
+                    items:
+                      properties:
+                        component:
+                          description: (String)
+                          type: string
+                        host:
+                          description: (String) Hostname or IP address of the server
+                            where to migrate data from.
+                          type: string
+                        port:
+                          description: (Number) Port number of the server where to
+                            migrate data from.
+                          type: number
+                        route:
+                          description: (String)
+                          type: string
+                        usage:
+                          description: (String)
+                          type: string
+                      type: object
+                    type: array
+                  id:
+                    description: (String) The ID of this resource.
+                    type: string
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                      type: object
+                    type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        name:
+                          description: (String) Name of the service. The name is used
+                            as a prefix for the logical hostname. Must be unique within
+                            an account
+                          type: string
+                        role:
+                          description: (String)
+                          type: string
+                        state:
+                          description: (String) State of the service
+                          type: string
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  primaryDatabase:
+                    description: |-
+                      (String) Primary database name
+                      Primary database name
+                    type: string
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for Redis (see below for nested schema)
+                      Database Engine properties for Redis
+                    items:
+                      properties:
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                type: number
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        redisAclChannelsDefault:
+                          description: |-
+                            pubsub-default.
+                            Default ACL for pub/sub channels used when Redis user is created. Determines default pub/sub channels' ACL for new users if ACL is not supplied. When this option is not defined, all_channels is assumed to keep backward compatibility. This option doesn't affect Redis configuration acl-pubsub-default.
+                          type: string
+                        redisIoThreads:
+                          description: |-
+                            (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
+                            Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
+                          type: number
+                        redisLfuDecayTime:
+                          description: |-
+                            policy counter decay time in minutes.
+                            LFU maxmemory-policy counter decay time in minutes.
+                          type: number
+                        redisLfuLogFactor:
+                          description: |-
+                            lfu and allkeys-lfu maxmemory-policies.
+                            Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
+                          type: number
+                        redisMaxmemoryPolicy:
+                          description: |-
+                            policy.
+                            Redis maxmemory-policy.
+                          type: string
+                        redisNotifyKeyspaceEvents:
+                          description: |-
+                            keyspace-events option.
+                            Set notify-keyspace-events option.
+                          type: string
+                        redisNumberOfDatabases:
+                          description: |-
+                            (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
+                            Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
+                          type: number
+                        redisPersistence:
+                          description: |-
+                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                          type: string
+                        redisPubsubClientOutputBufferLimit:
+                          description: |-
+                            (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                            Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                          type: number
+                        redisSsl:
+                          description: |-
+                            (Boolean) Require SSL to access Redis.
+                            Require SSL to access Redis.
+                          type: boolean
+                        redisTimeout:
+                          description: |-
+                            (Number) Redis idle connection timeout in seconds.
+                            Redis idle connection timeout in seconds.
+                          type: number
+                        redisVersion:
+                          description: |-
+                            (String) Redis major version.
+                            Redis major version.
+                          type: string
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                      type: object
+                    type: array
+                  serviceHost:
+                    description: |-
+                      (String) Hostname to the service instance
+                      Hostname to the service instance
+                    type: string
+                  servicePort:
+                    description: |-
+                      (String) Port to the service instance
+                      Port to the service instance
+                    type: string
+                  serviceUsername:
+                    description: |-
+                      (String) Primary username to the service instance
+                      Primary username to the service instance
+                    type: string
+                  state:
+                    description: |-
+                      (String) State of the service
+                      State of the service
+                    type: string
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  type:
+                    description: |-
+                      (String) Type of the service
+                      Type of the service
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

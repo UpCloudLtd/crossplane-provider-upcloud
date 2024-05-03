@@ -1,0 +1,11 @@
+apiVersion: provider.upcloud.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: default
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: example-provider-creds
+      namespace: default
+      key: credentials

@@ -1,0 +1,6 @@
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-upcloud
+spec:
+  package: UpCloudLtd/provider-upcloud:v0.1.0

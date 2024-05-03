@@ -1,0 +1,14 @@
+apiVersion: database.upcloud.io/v1alpha1
+kind: ManagedDatabaseOpensearch
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabaseopensearch
+  labels:
+    testing.upbound.io/example-name: example_1
+  name: example-1
+spec:
+  forProvider:
+    name: opensearch-1
+    plan: 1x2xCPU-4GB-80GB-1D
+    title: opensearch-1-example-1
+    zone: fi-hel2

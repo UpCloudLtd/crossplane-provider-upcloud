@@ -1,0 +1,20 @@
+apiVersion: server.upcloud.io/v1alpha1
+kind: ServerGroup
+metadata:
+  annotations:
+    meta.upbound.io/example-id: server/v1alpha1/servergroup
+  labels:
+    testing.upbound.io/example-name: main
+  name: main
+spec:
+  forProvider:
+    antiAffinityPolicy: "yes"
+    labels:
+      key1: val1
+      key2: val2
+      key3: val3
+    membersRefs:
+    - name: example
+    - name: example
+    - name: example
+    title: main_group

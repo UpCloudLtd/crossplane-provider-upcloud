@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: crossplane-examples-postgres-user-secret
+  namespace: default
+data:
+  password: cGFzc3dvcmQxMjMK

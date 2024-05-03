@@ -1,0 +1,56 @@
+apiVersion: objectstorage.upcloud.io/v1alpha1
+kind: ManagedObjectStorage
+metadata:
+  annotations:
+    meta.upbound.io/example-id: objectstorage/v1alpha1/managedobjectstorage
+  labels:
+    testing.upbound.io/example-name: this
+  name: this
+spec:
+  forProvider:
+    configuredStatus: started
+    labels:
+      managed-by: terraform
+    name: example
+    network:
+    - family: IPv4
+      name: example-private-net
+      type: private
+      uuid: ${upcloud_network.this.id}
+    region: europe-1
+
+---
+
+apiVersion: network.upcloud.io/v1alpha1
+kind: Network
+metadata:
+  annotations:
+    meta.upbound.io/example-id: objectstorage/v1alpha1/managedobjectstorage
+  labels:
+    testing.upbound.io/example-name: this
+  name: this
+spec:
+  forProvider:
+    ipNetwork:
+    - address: 172.16.2.0/24
+      dhcp: true
+      family: IPv4
+    name: object-storage-example-net
+    routerSelector:
+      matchLabels:
+        testing.upbound.io/example-name: this
+    zone: fi-hel1
+
+---
+
+apiVersion: network.upcloud.io/v1alpha1
+kind: Router
+metadata:
+  annotations:
+    meta.upbound.io/example-id: objectstorage/v1alpha1/managedobjectstorage
+  labels:
+    testing.upbound.io/example-name: this
+  name: this
+spec:
+  forProvider:
+    name: object-storage-example-router

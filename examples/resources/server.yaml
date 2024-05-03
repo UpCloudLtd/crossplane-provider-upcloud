@@ -1,0 +1,62 @@
+apiVersion: server.upcloud.io/v1alpha1
+kind: Server
+metadata:
+  name: example
+spec:
+  forProvider:
+    hostname: crossplane-examples
+    labels:
+      env: dev
+      production: "false"
+    login:
+    - user: myusername
+    networkInterface:
+    - type: public
+    - type: private
+      networkRef:
+        name: example
+    - type: private
+      networkRef:
+        name: example-2
+    plan: 1xCPU-1GB
+    template:
+    - size: 25
+      storage: Ubuntu Server 20.04 LTS (Focal Fossa)
+    storageDevices:
+    - storageRef:
+        name: example
+    zone: de-fra1
+    firewall: true
+---
+apiVersion: server.upcloud.io/v1alpha1
+kind: ServerGroup
+metadata:
+  name: example
+spec:
+  forProvider:
+    labels:
+      key1: val1
+      key2: val2A
+      key3: val3
+    membersRefs:
+    - name: example
+    title: crossplane-example
+---
+apiVersion: server.upcloud.io/v1alpha1
+kind: FirewallRules
+metadata:
+  name: example
+spec:
+  forProvider:
+    serverIdRef:
+      name: example
+    firewallRule:
+    - action: accept
+      direction: in
+      family: IPv4
+      protocol: tcp
+      sourceAddressStart: "192.168.1.1"
+      sourceAddressEnd: "192.168.1.1"
+      destinationPortStart: "22"
+      destinationPortEnd: "22"
+      comment: "Allow SSH from this network"

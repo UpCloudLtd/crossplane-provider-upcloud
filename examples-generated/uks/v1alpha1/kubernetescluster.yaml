@@ -1,0 +1,73 @@
+apiVersion: uks.upcloud.io/v1alpha1
+kind: KubernetesCluster
+metadata:
+  annotations:
+    meta.upbound.io/example-id: uks/v1alpha1/kubernetescluster
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    controlPlaneIpFilter:
+    - 0.0.0.0/0
+    name: exampleapp
+    networkSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    zone: de-fra1
+
+---
+
+apiVersion: network.upcloud.io/v1alpha1
+kind: Network
+metadata:
+  annotations:
+    meta.upbound.io/example-id: uks/v1alpha1/kubernetescluster
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    ipNetwork:
+    - address: 172.16.1.0/24
+      dhcp: true
+      family: IPv4
+    name: example-network
+    zone: de-fra1
+
+---
+
+apiVersion: network.upcloud.io/v1alpha1
+kind: Network
+metadata:
+  annotations:
+    meta.upbound.io/example-id: uks/v1alpha1/kubernetescluster
+  labels:
+    testing.upbound.io/example-name: example2
+  name: example2
+spec:
+  forProvider:
+    ipNetwork:
+    - address: 10.10.0.0/24
+      dhcp: true
+      dhcpDefaultRoute: true
+      family: IPv4
+    name: example2-network
+    routerSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example2
+    zone: de-fra1
+
+---
+
+apiVersion: network.upcloud.io/v1alpha1
+kind: Router
+metadata:
+  annotations:
+    meta.upbound.io/example-id: uks/v1alpha1/kubernetescluster
+  labels:
+    testing.upbound.io/example-name: example2
+  name: example2
+spec:
+  forProvider:
+    name: example2-router

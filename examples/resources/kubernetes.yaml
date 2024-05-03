@@ -1,0 +1,37 @@
+apiVersion: network.upcloud.io/v1alpha1
+kind: Network
+metadata:
+  name: uks-network
+spec:
+  forProvider:
+    ipNetwork:
+    - address: 172.56.1.0/24
+      dhcp: true
+      family: IPv4
+    name: crossplane-uks-example-network
+    zone: pl-waw1
+---
+apiVersion: uks.upcloud.io/v1alpha1
+kind: KubernetesCluster
+metadata:
+  name: uks-cluster
+spec:
+  forProvider:
+    controlPlaneIpFilter:
+    - 0.0.0.0/0
+    name: crossplane-uks-example-cluster
+    networkRef:
+      name: uks-network
+    zone: pl-waw1
+---
+apiVersion: uks.upcloud.io/v1alpha1
+kind: KubernetesNodeGroup
+metadata:
+  name: uks-main-group
+spec:
+  forProvider:
+    clusterRef:
+      name: uks-cluster
+    nodeCount: 2
+    plan: 2xCPU-4GB
+
