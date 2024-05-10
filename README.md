@@ -56,26 +56,11 @@ Please note that this project is currently in early alpha version, we do not rec
 
 4. And now you can start creating your infra. Check our [examples](examples/resources/) to see what Managed Resources you can use and how. Have fun!
 
-## Developing
-
-Run against a Kubernetes cluster:
-
-```console
-make run
-```
-
-Run end-to-end tests:
-```console
-make e2e
-```
-
-Build binary:
-
-```console
-make build
-```
-
 ## Report a Bug
 
 For filing bugs, suggesting improvements, or requesting new features, please
 open an [issue](https://github.com/UpCloudLtd/provider-upcloud/issues).
+
+## Developing
+
+For development instructions see [DEVELOPING.md](DEVELOPING.md)
