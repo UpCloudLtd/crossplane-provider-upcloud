@@ -121,12 +121,12 @@ Currently the release process is entirely manual and goes as follow:
     ```
     make generate
     ```
-4. Build everything:
+4. Build everything. This command will output all the artifacts to `_output` directory:
     ```
     make build
     ```
 5. Push the package to the repository with the same version as the tag from step 1. You need to have `crossplane.yaml` file in the directory you run the push command:
     ```
-    cd package && up push upcloud/provider-upcloud:v0.0.2
+    cd package && up push upcloud/provider-upcloud:v0.0.2 -f _output/xpkg/linux_amd64/provider-upcloud-vXX.XX.XX.xpkg
     ```
 6. Verify that it is published by going to [Upbound marketplace](https://marketplace.upbound.io/account/upcloud/provider-upcloud).
