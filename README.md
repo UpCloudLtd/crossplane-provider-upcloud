@@ -56,6 +56,15 @@ Please note that this project is currently in early alpha version, we do not rec
 
 4. And now you can start creating your infra. Check our [examples](examples/resources/) to see what Managed Resources you can use and how. Have fun!
 
+## Missing resources
+
+While this provider allows you to manage most of the UpCloud services, support for some is still missing. The missing list includes:
+- [Load Balancers](https://developers.upcloud.com/1.3/17-managed-loadbalancer/)
+- [Network Gateways](https://developers.upcloud.com/1.3/19-network-gateways/)
+- [Floating IP address](https://developers.upcloud.com/1.3/10-ip-addresses/#creating-floating-ips)
+
+We are currently working on adding support for them, thank you for your patience!
+
 ## Report a Bug
 
 For filing bugs, suggesting improvements, or requesting new features, please
