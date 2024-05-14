@@ -39,16 +39,16 @@ spec:
       name: crossplane-example
     usernameRef:
       name: crossplane-example-janusz
----
-apiVersion: objectstorage.upcloud.io/v1alpha1
-kind: ManagedObjectStorageUserPolicy
-metadata:
-  name: crossplane-example
-spec:
-  forProvider:
-    nameRef:
-      name: crossplane-example
-    serviceUuidRef:
-      name: crossplane-example
-    usernameRef:
-      name: crossplane-example-janusz
+# ---
+# apiVersion: objectstorage.upcloud.io/v1alpha1
+# kind: ManagedObjectStorageUserPolicy
+# metadata:
+#   name: crossplane-example
+# spec:
+#   forProvider:
+#     nameRef:
+#       name: crossplane-example
+#     serviceUuidRef:
+#       name: crossplane-example
+#     usernameRef:
+#       name: crossplane-example-janusz

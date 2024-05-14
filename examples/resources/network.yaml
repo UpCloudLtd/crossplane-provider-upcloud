@@ -1,11 +1,11 @@
-apiVersion: network.upcloud.io/v1alpha1
-kind: Router
-metadata:
-  name: example
-spec:
-  forProvider:
-    name: crossplane-example
----
+# apiVersion: network.upcloud.io/v1alpha1
+# kind: Router
+# metadata:
+#   name: example
+# spec:
+#   forProvider:
+#     name: crossplane-example
+# ---
 apiVersion: network.upcloud.io/v1alpha1
 kind: Network
 metadata:
@@ -34,5 +34,5 @@ spec:
       family: IPv4
     name: crossplane_private_net_x_2
     zone: de-fra1
-    routerRef:
-      name: example
+    # routerRef:
+    #   name: example
