@@ -19,18 +19,23 @@ type ManagedDatabaseRedisComponentsInitParameters struct {
 type ManagedDatabaseRedisComponentsObservation struct {
 
 	// (String)
+	// Type of the component
 	Component *string `json:"component,omitempty" tf:"component,omitempty"`
 
 	// (String) Hostname or IP address of the server where to migrate data from.
+	// Hostname of the component
 	Host *string `json:"host,omitempty" tf:"host,omitempty"`
 
 	// (Number) Port number of the server where to migrate data from.
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	// Port number of the component
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (String)
+	// Component network route type
 	Route *string `json:"route,omitempty" tf:"route,omitempty"`
 
 	// (String)
+	// Usage of the component
 	Usage *string `json:"usage,omitempty" tf:"usage,omitempty"`
 }
 
@@ -54,6 +59,10 @@ type ManagedDatabaseRedisInitParameters struct {
 	// (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
 	// Private networks attached to the managed database
 	Network []ManagedDatabaseRedisNetworkInitParameters `json:"network,omitempty" tf:"network,omitempty"`
+
+	// (List of Object) Information about nodes providing the managed service (see below for nested schema)
+	// Information about nodes providing the managed service
+	NodeStates []ManagedDatabaseRedisNodeStatesInitParameters `json:"nodeStates,omitempty" tf:"node_states,omitempty"`
 
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
@@ -156,21 +165,33 @@ type ManagedDatabaseRedisNetworkParameters struct {
 }
 
 type ManagedDatabaseRedisNodeStatesInitParameters struct {
+
+	// (String)
+	// Role of the node
+	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
 
 type ManagedDatabaseRedisNodeStatesObservation struct {
 
 	// (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+	// Name plus a node iteration
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String)
+	// Role of the node
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 
 	// (String) State of the service
+	// State of the node
 	State *string `json:"state,omitempty" tf:"state,omitempty"`
 }
 
 type ManagedDatabaseRedisNodeStatesParameters struct {
+
+	// (String)
+	// Role of the node
+	// +kubebuilder:validation:Optional
+	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
 
 type ManagedDatabaseRedisObservation struct {
@@ -269,6 +290,11 @@ type ManagedDatabaseRedisParameters struct {
 	// +kubebuilder:validation:Optional
 	Network []ManagedDatabaseRedisNetworkParameters `json:"network,omitempty" tf:"network,omitempty"`
 
+	// (List of Object) Information about nodes providing the managed service (see below for nested schema)
+	// Information about nodes providing the managed service
+	// +kubebuilder:validation:Optional
+	NodeStates []ManagedDatabaseRedisNodeStatesParameters `json:"nodeStates,omitempty" tf:"node_states,omitempty"`
+
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
 	// +kubebuilder:validation:Optional
@@ -319,15 +345,15 @@ type ManagedDatabaseRedisPropertiesInitParameters struct {
 
 	// (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
 	// Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
-	RedisIoThreads *float64 `json:"redisIoThreads,omitempty" tf:"redis_io_threads,omitempty"`
+	RedisIoThreads *int64 `json:"redisIoThreads,omitempty" tf:"redis_io_threads,omitempty"`
 
 	// policy counter decay time in minutes.
 	// LFU maxmemory-policy counter decay time in minutes.
-	RedisLfuDecayTime *float64 `json:"redisLfuDecayTime,omitempty" tf:"redis_lfu_decay_time,omitempty"`
+	RedisLfuDecayTime *int64 `json:"redisLfuDecayTime,omitempty" tf:"redis_lfu_decay_time,omitempty"`
 
 	// lfu and allkeys-lfu maxmemory-policies.
 	// Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
-	RedisLfuLogFactor *float64 `json:"redisLfuLogFactor,omitempty" tf:"redis_lfu_log_factor,omitempty"`
+	RedisLfuLogFactor *int64 `json:"redisLfuLogFactor,omitempty" tf:"redis_lfu_log_factor,omitempty"`
 
 	// policy.
 	// Redis maxmemory-policy.
@@ -339,7 +365,7 @@ type ManagedDatabaseRedisPropertiesInitParameters struct {
 
 	// (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
 	// Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
-	RedisNumberOfDatabases *float64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
+	RedisNumberOfDatabases *int64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
 
 	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
 	// Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
@@ -347,7 +373,7 @@ type ManagedDatabaseRedisPropertiesInitParameters struct {
 
 	// (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
 	// Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
-	RedisPubsubClientOutputBufferLimit *float64 `json:"redisPubsubClientOutputBufferLimit,omitempty" tf:"redis_pubsub_client_output_buffer_limit,omitempty"`
+	RedisPubsubClientOutputBufferLimit *int64 `json:"redisPubsubClientOutputBufferLimit,omitempty" tf:"redis_pubsub_client_output_buffer_limit,omitempty"`
 
 	// (Boolean) Require SSL to access Redis.
 	// Require SSL to access Redis.
@@ -355,7 +381,7 @@ type ManagedDatabaseRedisPropertiesInitParameters struct {
 
 	// (Number) Redis idle connection timeout in seconds.
 	// Redis idle connection timeout in seconds.
-	RedisTimeout *float64 `json:"redisTimeout,omitempty" tf:"redis_timeout,omitempty"`
+	RedisTimeout *int64 `json:"redisTimeout,omitempty" tf:"redis_timeout,omitempty"`
 
 	// (String) Redis major version.
 	// Redis major version.
@@ -386,7 +412,7 @@ type ManagedDatabaseRedisPropertiesMigrationInitParameters struct {
 
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (Boolean) The server where to migrate data from is secured with SSL.
 	// The server where to migrate data from is secured with SSL.
@@ -417,7 +443,7 @@ type ManagedDatabaseRedisPropertiesMigrationObservation struct {
 
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (Boolean) The server where to migrate data from is secured with SSL.
 	// The server where to migrate data from is secured with SSL.
@@ -458,7 +484,7 @@ type ManagedDatabaseRedisPropertiesMigrationParameters struct {
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
 	// +kubebuilder:validation:Optional
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (Boolean) The server where to migrate data from is secured with SSL.
 	// The server where to migrate data from is secured with SSL.
@@ -495,15 +521,15 @@ type ManagedDatabaseRedisPropertiesObservation struct {
 
 	// (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
 	// Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
-	RedisIoThreads *float64 `json:"redisIoThreads,omitempty" tf:"redis_io_threads,omitempty"`
+	RedisIoThreads *int64 `json:"redisIoThreads,omitempty" tf:"redis_io_threads,omitempty"`
 
 	// policy counter decay time in minutes.
 	// LFU maxmemory-policy counter decay time in minutes.
-	RedisLfuDecayTime *float64 `json:"redisLfuDecayTime,omitempty" tf:"redis_lfu_decay_time,omitempty"`
+	RedisLfuDecayTime *int64 `json:"redisLfuDecayTime,omitempty" tf:"redis_lfu_decay_time,omitempty"`
 
 	// lfu and allkeys-lfu maxmemory-policies.
 	// Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
-	RedisLfuLogFactor *float64 `json:"redisLfuLogFactor,omitempty" tf:"redis_lfu_log_factor,omitempty"`
+	RedisLfuLogFactor *int64 `json:"redisLfuLogFactor,omitempty" tf:"redis_lfu_log_factor,omitempty"`
 
 	// policy.
 	// Redis maxmemory-policy.
@@ -515,7 +541,7 @@ type ManagedDatabaseRedisPropertiesObservation struct {
 
 	// (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
 	// Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
-	RedisNumberOfDatabases *float64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
+	RedisNumberOfDatabases *int64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
 
 	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
 	// Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
@@ -523,7 +549,7 @@ type ManagedDatabaseRedisPropertiesObservation struct {
 
 	// (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
 	// Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
-	RedisPubsubClientOutputBufferLimit *float64 `json:"redisPubsubClientOutputBufferLimit,omitempty" tf:"redis_pubsub_client_output_buffer_limit,omitempty"`
+	RedisPubsubClientOutputBufferLimit *int64 `json:"redisPubsubClientOutputBufferLimit,omitempty" tf:"redis_pubsub_client_output_buffer_limit,omitempty"`
 
 	// (Boolean) Require SSL to access Redis.
 	// Require SSL to access Redis.
@@ -531,7 +557,7 @@ type ManagedDatabaseRedisPropertiesObservation struct {
 
 	// (Number) Redis idle connection timeout in seconds.
 	// Redis idle connection timeout in seconds.
-	RedisTimeout *float64 `json:"redisTimeout,omitempty" tf:"redis_timeout,omitempty"`
+	RedisTimeout *int64 `json:"redisTimeout,omitempty" tf:"redis_timeout,omitempty"`
 
 	// (String) Redis major version.
 	// Redis major version.
@@ -572,17 +598,17 @@ type ManagedDatabaseRedisPropertiesParameters struct {
 	// (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
 	// Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
 	// +kubebuilder:validation:Optional
-	RedisIoThreads *float64 `json:"redisIoThreads,omitempty" tf:"redis_io_threads,omitempty"`
+	RedisIoThreads *int64 `json:"redisIoThreads,omitempty" tf:"redis_io_threads,omitempty"`
 
 	// policy counter decay time in minutes.
 	// LFU maxmemory-policy counter decay time in minutes.
 	// +kubebuilder:validation:Optional
-	RedisLfuDecayTime *float64 `json:"redisLfuDecayTime,omitempty" tf:"redis_lfu_decay_time,omitempty"`
+	RedisLfuDecayTime *int64 `json:"redisLfuDecayTime,omitempty" tf:"redis_lfu_decay_time,omitempty"`
 
 	// lfu and allkeys-lfu maxmemory-policies.
 	// Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
 	// +kubebuilder:validation:Optional
-	RedisLfuLogFactor *float64 `json:"redisLfuLogFactor,omitempty" tf:"redis_lfu_log_factor,omitempty"`
+	RedisLfuLogFactor *int64 `json:"redisLfuLogFactor,omitempty" tf:"redis_lfu_log_factor,omitempty"`
 
 	// policy.
 	// Redis maxmemory-policy.
@@ -597,7 +623,7 @@ type ManagedDatabaseRedisPropertiesParameters struct {
 	// (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
 	// Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
 	// +kubebuilder:validation:Optional
-	RedisNumberOfDatabases *float64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
+	RedisNumberOfDatabases *int64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
 
 	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
 	// Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
@@ -607,7 +633,7 @@ type ManagedDatabaseRedisPropertiesParameters struct {
 	// (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
 	// Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
 	// +kubebuilder:validation:Optional
-	RedisPubsubClientOutputBufferLimit *float64 `json:"redisPubsubClientOutputBufferLimit,omitempty" tf:"redis_pubsub_client_output_buffer_limit,omitempty"`
+	RedisPubsubClientOutputBufferLimit *int64 `json:"redisPubsubClientOutputBufferLimit,omitempty" tf:"redis_pubsub_client_output_buffer_limit,omitempty"`
 
 	// (Boolean) Require SSL to access Redis.
 	// Require SSL to access Redis.
@@ -617,7 +643,7 @@ type ManagedDatabaseRedisPropertiesParameters struct {
 	// (Number) Redis idle connection timeout in seconds.
 	// Redis idle connection timeout in seconds.
 	// +kubebuilder:validation:Optional
-	RedisTimeout *float64 `json:"redisTimeout,omitempty" tf:"redis_timeout,omitempty"`
+	RedisTimeout *int64 `json:"redisTimeout,omitempty" tf:"redis_timeout,omitempty"`
 
 	// (String) Redis major version.
 	// Redis major version.
@@ -658,8 +684,8 @@ type ManagedDatabaseRedisStatus struct {
 // +kubebuilder:storageversion
 
 // ManagedDatabaseRedis is the Schema for the ManagedDatabaseRediss API. This resource represents Redis managed database. See UpCloud Managed Databases https://upcloud.com/products/managed-databases product page for more details about the service.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}
@@ -667,6 +693,7 @@ type ManagedDatabaseRedis struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.nodeStates) || (has(self.initProvider) && has(self.initProvider.nodeStates))",message="spec.forProvider.nodeStates is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.plan) || (has(self.initProvider) && has(self.initProvider.plan))",message="spec.forProvider.plan is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.title) || (has(self.initProvider) && has(self.initProvider.title))",message="spec.forProvider.title is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.zone) || (has(self.initProvider) && has(self.initProvider.zone))",message="spec.forProvider.zone is a required parameter"

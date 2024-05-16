@@ -80,6 +80,9 @@ func main() {
 	})
 	kingpin.FatalIfError(err, "Cannot create controller manager")
 	kingpin.FatalIfError(apis.AddToScheme(mgr.GetScheme()), "Cannot add UpCloud APIs to scheme")
+
+	provider := config.GetProvider()
+
 	o := tjcontroller.Options{
 		Options: xpcontroller.Options{
 			Logger:                  log,
@@ -88,11 +91,13 @@ func main() {
 			MaxConcurrentReconciles: *maxReconcileRate,
 			Features:                &feature.Flags{},
 		},
-		Provider: config.GetProvider(),
+		Provider: provider,
+
 		// use the following WorkspaceStoreOption to enable the shared gRPC mode
 		// terraform.WithProviderRunner(terraform.NewSharedProvider(log, os.Getenv("TERRAFORM_NATIVE_PROVIDER_PATH"), terraform.WithNativeProviderArgs("-debuggable")))
-		WorkspaceStore: terraform.NewWorkspaceStore(log),
-		SetupFn:        clients.TerraformSetupBuilder(*terraformVersion, *providerSource, *providerVersion),
+		WorkspaceStore:        terraform.NewWorkspaceStore(log),
+		SetupFn:               clients.TerraformSetupBuilder(*terraformVersion, *providerSource, *providerVersion, provider.TerraformPluginFrameworkProvider),
+		OperationTrackerStore: tjcontroller.NewOperationStore(log),
 	}
 
 	if *enableExternalSecretStores {

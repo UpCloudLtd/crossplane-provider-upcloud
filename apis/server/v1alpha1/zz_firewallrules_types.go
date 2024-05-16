@@ -306,8 +306,8 @@ type FirewallRulesStatus struct {
 // +kubebuilder:storageversion
 
 // FirewallRules is the Schema for the FirewallRuless API. This resource represents a generated list of UpCloud firewall rules. Firewall rules are used in conjunction with UpCloud servers. Each server has its own firewall rules. The firewall is enabled on all network interfaces except ones attached to private virtual networks. The maximum number of firewall rules per server is 1000.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

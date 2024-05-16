@@ -7,6 +7,7 @@ package config
 import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
+	"fmt"
 	"slices"
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
@@ -17,6 +18,8 @@ import (
 	"github.com/UpCloudLtd/provider-upcloud/config/objectstorage"
 	"github.com/UpCloudLtd/provider-upcloud/config/server"
 	"github.com/UpCloudLtd/provider-upcloud/config/storage"
+
+	"github.com/UpCloudLtd/terraform-provider-upcloud/upcloud"
 )
 
 const (
@@ -32,9 +35,15 @@ var providerMetadata string
 
 // GetProvider returns provider configuration
 func GetProvider() *ujconfig.Provider {
+	fmt.Printf(upcloud.Provider().TerraformVersion)
+
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithRootGroup("upcloud.io"),
-		ujconfig.WithIncludeList(ResourcesList()),
+		ujconfig.WithIncludeList([]string{}),
+		ujconfig.WithTerraformPluginSDKIncludeList(sdkResourcesList()),
+		ujconfig.WithTerraformProvider(upcloud.Provider()),
+		ujconfig.WithTerraformPluginFrameworkIncludeList(pluginFrameworkResourcesList()),
+		ujconfig.WithTerraformPluginFrameworkProvider(upcloud.New()),
 		ujconfig.WithFeaturesPackage("internal/features"),
 	)
 
@@ -54,11 +63,21 @@ func GetProvider() *ujconfig.Provider {
 	return pc
 }
 
-// ResourcesList returns the list of all resources that should be configured and generated
-func ResourcesList() []string {
+func pluginFrameworkResourcesList() []string {
+	allResources := network.PluginFrameworkResources
+
+	for i, name := range allResources {
+		// $ is added to match the exact string since the format is regex.
+		allResources[i] = name + "$"
+	}
+
+	return allResources
+}
+
+func sdkResourcesList() []string {
 	allResources := slices.Concat(
 		server.Resources,
-		network.Resources,
+		network.SDKResources,
 		storage.Resources,
 		objectstorage.Resources,
 		database.Resources,

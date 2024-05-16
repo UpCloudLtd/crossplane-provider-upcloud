@@ -21,7 +21,7 @@ type BackupRuleInitParameters struct {
 
 	// (Number) The number of days before a backup is automatically deleted
 	// The number of days before a backup is automatically deleted
-	Retention *float64 `json:"retention,omitempty" tf:"retention,omitempty"`
+	Retention *int64 `json:"retention,omitempty" tf:"retention,omitempty"`
 
 	// (String) The time of day when the backup is created
 	// The time of day when the backup is created
@@ -36,7 +36,7 @@ type BackupRuleObservation struct {
 
 	// (Number) The number of days before a backup is automatically deleted
 	// The number of days before a backup is automatically deleted
-	Retention *float64 `json:"retention,omitempty" tf:"retention,omitempty"`
+	Retention *int64 `json:"retention,omitempty" tf:"retention,omitempty"`
 
 	// (String) The time of day when the backup is created
 	// The time of day when the backup is created
@@ -53,7 +53,7 @@ type BackupRuleParameters struct {
 	// (Number) The number of days before a backup is automatically deleted
 	// The number of days before a backup is automatically deleted
 	// +kubebuilder:validation:Optional
-	Retention *float64 `json:"retention" tf:"retention,omitempty"`
+	Retention *int64 `json:"retention" tf:"retention,omitempty"`
 
 	// (String) The time of day when the backup is created
 	// The time of day when the backup is created
@@ -118,7 +118,7 @@ type ImportObservation struct {
 
 	// (Number) Number of bytes imported
 	// Number of bytes imported
-	WrittenBytes *float64 `json:"writtenBytes,omitempty" tf:"written_bytes,omitempty"`
+	WrittenBytes *int64 `json:"writtenBytes,omitempty" tf:"written_bytes,omitempty"`
 }
 
 type ImportParameters struct {
@@ -175,7 +175,7 @@ type StorageInitParameters struct {
 
 	// (Number) The size of the storage in gigabytes
 	// The size of the storage in gigabytes
-	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
+	Size *int64 `json:"size,omitempty" tf:"size,omitempty"`
 
 	// (String) The storage tier to use
 	// The storage tier to use
@@ -229,7 +229,7 @@ type StorageObservation struct {
 
 	// (Number) The size of the storage in gigabytes
 	// The size of the storage in gigabytes
-	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
+	Size *int64 `json:"size,omitempty" tf:"size,omitempty"`
 
 	// (String) The storage tier to use
 	// The storage tier to use
@@ -287,7 +287,7 @@ type StorageParameters struct {
 	// (Number) The size of the storage in gigabytes
 	// The size of the storage in gigabytes
 	// +kubebuilder:validation:Optional
-	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
+	Size *int64 `json:"size,omitempty" tf:"size,omitempty"`
 
 	// (String) The storage tier to use
 	// The storage tier to use
@@ -333,8 +333,8 @@ type StorageStatus struct {
 // +kubebuilder:storageversion
 
 // Storage is the Schema for the Storages API. Manages UpCloud Block Storage https://upcloud.com/products/block-storage devices.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

@@ -66,7 +66,7 @@ type KubernetesNodeGroupInitParameters struct {
 
 	// (Number) Amount of nodes to provision in the node group.
 	// Amount of nodes to provision in the node group.
-	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
+	NodeCount *int64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
 
 	// (String) The server plan used for the node group. You can list available plans with upctl server plans
 	// The server plan used for the node group. You can list available plans with `upctl server plans`
@@ -111,7 +111,7 @@ type KubernetesNodeGroupObservation struct {
 
 	// (Number) Amount of nodes to provision in the node group.
 	// Amount of nodes to provision in the node group.
-	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
+	NodeCount *int64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
 
 	// (String) The server plan used for the node group. You can list available plans with upctl server plans
 	// The server plan used for the node group. You can list available plans with `upctl server plans`
@@ -167,7 +167,7 @@ type KubernetesNodeGroupParameters struct {
 	// (Number) Amount of nodes to provision in the node group.
 	// Amount of nodes to provision in the node group.
 	// +kubebuilder:validation:Optional
-	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
+	NodeCount *int64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
 
 	// (String) The server plan used for the node group. You can list available plans with upctl server plans
 	// The server plan used for the node group. You can list available plans with `upctl server plans`
@@ -267,8 +267,8 @@ type KubernetesNodeGroupStatus struct {
 // +kubebuilder:storageversion
 
 // KubernetesNodeGroup is the Schema for the KubernetesNodeGroups API. This resource represents a node group in a Managed Kubernetes cluster.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

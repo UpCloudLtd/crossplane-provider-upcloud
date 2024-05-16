@@ -60,7 +60,7 @@ type BackupRuleInitParameters struct {
 
 	// (Number) The number of days before a backup is automatically deleted
 	// The number of days before a backup is automatically deleted
-	Retention *float64 `json:"retention,omitempty" tf:"retention,omitempty"`
+	Retention *int64 `json:"retention,omitempty" tf:"retention,omitempty"`
 
 	// (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
 	// The time of day when the backup is created
@@ -75,7 +75,7 @@ type BackupRuleObservation struct {
 
 	// (Number) The number of days before a backup is automatically deleted
 	// The number of days before a backup is automatically deleted
-	Retention *float64 `json:"retention,omitempty" tf:"retention,omitempty"`
+	Retention *int64 `json:"retention,omitempty" tf:"retention,omitempty"`
 
 	// (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
 	// The time of day when the backup is created
@@ -92,7 +92,7 @@ type BackupRuleParameters struct {
 	// (Number) The number of days before a backup is automatically deleted
 	// The number of days before a backup is automatically deleted
 	// +kubebuilder:validation:Optional
-	Retention *float64 `json:"retention" tf:"retention,omitempty"`
+	Retention *int64 `json:"retention" tf:"retention,omitempty"`
 
 	// (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
 	// The time of day when the backup is created
@@ -295,7 +295,7 @@ type ServerInitParameters struct {
 
 	// (Number) The number of CPU for the server
 	// The number of CPU for the server
-	CPU *float64 `json:"cpu,omitempty" tf:"cpu,omitempty"`
+	CPU *int64 `json:"cpu,omitempty" tf:"cpu,omitempty"`
 
 	// (Boolean) Are firewall rules active for the server
 	// Are firewall rules active for the server
@@ -303,7 +303,7 @@ type ServerInitParameters struct {
 
 	// attribute. Only available for private cloud hosts
 	// Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
-	Host *float64 `json:"host,omitempty" tf:"host,omitempty"`
+	Host *int64 `json:"host,omitempty" tf:"host,omitempty"`
 
 	// (String) A valid domain name
 	// A valid domain name
@@ -320,7 +320,7 @@ type ServerInitParameters struct {
 
 	// (Number) The size of memory for the server (in megabytes)
 	// The size of memory for the server (in megabytes)
-	Mem *float64 `json:"mem,omitempty" tf:"mem,omitempty"`
+	Mem *int64 `json:"mem,omitempty" tf:"mem,omitempty"`
 
 	// (Boolean) Is the metadata service active for the server
 	// Is the metadata service active for the server
@@ -391,7 +391,7 @@ type ServerObservation struct {
 
 	// (Number) The number of CPU for the server
 	// The number of CPU for the server
-	CPU *float64 `json:"cpu,omitempty" tf:"cpu,omitempty"`
+	CPU *int64 `json:"cpu,omitempty" tf:"cpu,omitempty"`
 
 	// (Boolean) Are firewall rules active for the server
 	// Are firewall rules active for the server
@@ -399,7 +399,7 @@ type ServerObservation struct {
 
 	// attribute. Only available for private cloud hosts
 	// Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
-	Host *float64 `json:"host,omitempty" tf:"host,omitempty"`
+	Host *int64 `json:"host,omitempty" tf:"host,omitempty"`
 
 	// (String) A valid domain name
 	// A valid domain name
@@ -419,7 +419,7 @@ type ServerObservation struct {
 
 	// (Number) The size of memory for the server (in megabytes)
 	// The size of memory for the server (in megabytes)
-	Mem *float64 `json:"mem,omitempty" tf:"mem,omitempty"`
+	Mem *int64 `json:"mem,omitempty" tf:"mem,omitempty"`
 
 	// (Boolean) Is the metadata service active for the server
 	// Is the metadata service active for the server
@@ -492,7 +492,7 @@ type ServerParameters struct {
 	// (Number) The number of CPU for the server
 	// The number of CPU for the server
 	// +kubebuilder:validation:Optional
-	CPU *float64 `json:"cpu,omitempty" tf:"cpu,omitempty"`
+	CPU *int64 `json:"cpu,omitempty" tf:"cpu,omitempty"`
 
 	// (Boolean) Are firewall rules active for the server
 	// Are firewall rules active for the server
@@ -502,7 +502,7 @@ type ServerParameters struct {
 	// attribute. Only available for private cloud hosts
 	// Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
 	// +kubebuilder:validation:Optional
-	Host *float64 `json:"host,omitempty" tf:"host,omitempty"`
+	Host *int64 `json:"host,omitempty" tf:"host,omitempty"`
 
 	// (String) A valid domain name
 	// A valid domain name
@@ -523,7 +523,7 @@ type ServerParameters struct {
 	// (Number) The size of memory for the server (in megabytes)
 	// The size of memory for the server (in megabytes)
 	// +kubebuilder:validation:Optional
-	Mem *float64 `json:"mem,omitempty" tf:"mem,omitempty"`
+	Mem *int64 `json:"mem,omitempty" tf:"mem,omitempty"`
 
 	// (Boolean) Is the metadata service active for the server
 	// Is the metadata service active for the server
@@ -750,7 +750,7 @@ type TemplateInitParameters struct {
 
 	// (Number) The size of the storage in gigabytes
 	// The size of the storage in gigabytes
-	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
+	Size *int64 `json:"size,omitempty" tf:"size,omitempty"`
 
 	// (String) A valid storage UUID
 	// A valid storage UUID or template name. You can list available public templates with `upctl storage list --public --template` and available private templates with `upctl storage list --template`.
@@ -801,7 +801,7 @@ type TemplateObservation struct {
 
 	// (Number) The size of the storage in gigabytes
 	// The size of the storage in gigabytes
-	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
+	Size *int64 `json:"size,omitempty" tf:"size,omitempty"`
 
 	// (String) A valid storage UUID
 	// A valid storage UUID or template name. You can list available public templates with `upctl storage list --public --template` and available private templates with `upctl storage list --template`.
@@ -859,7 +859,7 @@ type TemplateParameters struct {
 	// (Number) The size of the storage in gigabytes
 	// The size of the storage in gigabytes
 	// +kubebuilder:validation:Optional
-	Size *float64 `json:"size,omitempty" tf:"size,omitempty"`
+	Size *int64 `json:"size,omitempty" tf:"size,omitempty"`
 
 	// (String) A valid storage UUID
 	// A valid storage UUID or template name. You can list available public templates with `upctl storage list --public --template` and available private templates with `upctl storage list --template`.
@@ -900,8 +900,8 @@ type ServerStatus struct {
 // +kubebuilder:storageversion
 
 // Server is the Schema for the Servers API. The UpCloud server resource allows the creation, update and deletion of a cloud server https://upcloud.com/products/cloud-servers.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

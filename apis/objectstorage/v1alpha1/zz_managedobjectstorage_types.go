@@ -19,15 +19,19 @@ type EndpointInitParameters struct {
 type EndpointObservation struct {
 
 	// (String)
+	// Domain name of the endpoint.
 	DomainName *string `json:"domainName,omitempty" tf:"domain_name,omitempty"`
 
 	// (String)
+	// URL for IAM.
 	IAMURL *string `json:"iamUrl,omitempty" tf:"iam_url,omitempty"`
 
 	// (String)
+	// URL for STS.
 	StsURL *string `json:"stsUrl,omitempty" tf:"sts_url,omitempty"`
 
 	// (String) Network type.
+	// Type of the endpoint (`private` / `public`).
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 }
 
@@ -219,8 +223,8 @@ type ManagedObjectStorageStatus struct {
 // +kubebuilder:storageversion
 
 // ManagedObjectStorage is the Schema for the ManagedObjectStorages API. This resource represents an UpCloud Managed Object Storage instance, which provides S3 compatible storage.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -82,7 +82,8 @@ spec:
                     description: |-
                       (Number) The number of CPU for the server
                       The number of CPU for the server
-                    type: number
+                    format: int64
+                    type: integer
                   firewall:
                     description: |-
                       (Boolean) Are firewall rules active for the server
@@ -92,7 +93,8 @@ spec:
                     description: |-
                       attribute. Only available for private cloud hosts
                       Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
-                    type: number
+                    format: int64
+                    type: integer
                   hostname:
                     description: |-
                       (String) A valid domain name
@@ -140,7 +142,8 @@ spec:
                     description: |-
                       (Number) The size of memory for the server (in megabytes)
                       The size of memory for the server (in megabytes)
-                    type: number
+                    format: int64
+                    type: integer
                   metadata:
                     description: |-
                       (Boolean) Is the metadata service active for the server
@@ -459,7 +462,8 @@ spec:
                                 description: |-
                                   (Number) The number of days before a backup is automatically deleted
                                   The number of days before a backup is automatically deleted
-                                type: number
+                                format: int64
+                                type: integer
                               time:
                                 description: |-
                                   (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
@@ -492,7 +496,8 @@ spec:
                           description: |-
                             (Number) The size of the storage in gigabytes
                             The size of the storage in gigabytes
-                          type: number
+                          format: int64
+                          type: integer
                         storage:
                           description: |-
                             (String) A valid storage UUID
@@ -553,7 +558,8 @@ spec:
                     description: |-
                       (Number) The number of CPU for the server
                       The number of CPU for the server
-                    type: number
+                    format: int64
+                    type: integer
                   firewall:
                     description: |-
                       (Boolean) Are firewall rules active for the server
@@ -563,7 +569,8 @@ spec:
                     description: |-
                       attribute. Only available for private cloud hosts
                       Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
-                    type: number
+                    format: int64
+                    type: integer
                   hostname:
                     description: |-
                       (String) A valid domain name
@@ -611,7 +618,8 @@ spec:
                     description: |-
                       (Number) The size of memory for the server (in megabytes)
                       The size of memory for the server (in megabytes)
-                    type: number
+                    format: int64
+                    type: integer
                   metadata:
                     description: |-
                       (Boolean) Is the metadata service active for the server
@@ -930,7 +938,8 @@ spec:
                                 description: |-
                                   (Number) The number of days before a backup is automatically deleted
                                   The number of days before a backup is automatically deleted
-                                type: number
+                                format: int64
+                                type: integer
                               time:
                                 description: |-
                                   (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
@@ -963,7 +972,8 @@ spec:
                           description: |-
                             (Number) The size of the storage in gigabytes
                             The size of the storage in gigabytes
-                          type: number
+                          format: int64
+                          type: integer
                         storage:
                           description: |-
                             (String) A valid storage UUID
@@ -1196,7 +1206,8 @@ spec:
                     description: |-
                       (Number) The number of CPU for the server
                       The number of CPU for the server
-                    type: number
+                    format: int64
+                    type: integer
                   firewall:
                     description: |-
                       (Boolean) Are firewall rules active for the server
@@ -1206,7 +1217,8 @@ spec:
                     description: |-
                       attribute. Only available for private cloud hosts
                       Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
-                    type: number
+                    format: int64
+                    type: integer
                   hostname:
                     description: |-
                       (String) A valid domain name
@@ -1257,7 +1269,8 @@ spec:
                     description: |-
                       (Number) The size of memory for the server (in megabytes)
                       The size of memory for the server (in megabytes)
-                    type: number
+                    format: int64
+                    type: integer
                   metadata:
                     description: |-
                       (Boolean) Is the metadata service active for the server
@@ -1439,7 +1452,8 @@ spec:
                                 description: |-
                                   (Number) The number of days before a backup is automatically deleted
                                   The number of days before a backup is automatically deleted
-                                type: number
+                                format: int64
+                                type: integer
                               time:
                                 description: |-
                                   (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
@@ -1477,7 +1491,8 @@ spec:
                           description: |-
                             (Number) The size of the storage in gigabytes
                             The size of the storage in gigabytes
-                          type: number
+                          format: int64
+                          type: integer
                         storage:
                           description: |-
                             (String) A valid storage UUID
@@ -1537,6 +1552,13 @@ spec:
                         A Message containing details about this condition's last transition from
                         one status to another, if any.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: A Reason for this condition's last transition from
                         one status to another.
@@ -1560,6 +1582,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
             type: object
         required:
         - spec

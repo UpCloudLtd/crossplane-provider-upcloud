@@ -504,7 +504,7 @@ func (in *KubernetesNodeGroupInitParameters) DeepCopyInto(out *KubernetesNodeGro
 	}
 	if in.NodeCount != nil {
 		in, out := &in.NodeCount, &out.NodeCount
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Plan != nil {
@@ -622,7 +622,7 @@ func (in *KubernetesNodeGroupObservation) DeepCopyInto(out *KubernetesNodeGroupO
 	}
 	if in.NodeCount != nil {
 		in, out := &in.NodeCount, &out.NodeCount
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Plan != nil {
@@ -713,7 +713,7 @@ func (in *KubernetesNodeGroupParameters) DeepCopyInto(out *KubernetesNodeGroupPa
 	}
 	if in.NodeCount != nil {
 		in, out := &in.NodeCount, &out.NodeCount
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Plan != nil {

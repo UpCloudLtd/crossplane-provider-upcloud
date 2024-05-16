@@ -9,7 +9,6 @@ Copyright 2022 Upbound Inc.
 package v1alpha1
 
 import (
-	"github.com/crossplane/crossplane-runtime/apis/common/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -246,16 +245,6 @@ func (in *NetworkInitParameters) DeepCopyInto(out *NetworkInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.RouterRef != nil {
-		in, out := &in.RouterRef, &out.RouterRef
-		*out = new(v1.Reference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.RouterSelector != nil {
-		in, out := &in.RouterSelector, &out.RouterSelector
-		*out = new(v1.Selector)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.Zone != nil {
 		in, out := &in.Zone, &out.Zone
 		*out = new(string)
@@ -371,16 +360,6 @@ func (in *NetworkParameters) DeepCopyInto(out *NetworkParameters) {
 		in, out := &in.Router, &out.Router
 		*out = new(string)
 		**out = **in
-	}
-	if in.RouterRef != nil {
-		in, out := &in.RouterRef, &out.RouterRef
-		*out = new(v1.Reference)
-		(*in).DeepCopyInto(*out)
-	}
-	if in.RouterSelector != nil {
-		in, out := &in.RouterSelector, &out.RouterSelector
-		*out = new(v1.Selector)
-		(*in).DeepCopyInto(*out)
 	}
 	if in.Zone != nil {
 		in, out := &in.Zone, &out.Zone

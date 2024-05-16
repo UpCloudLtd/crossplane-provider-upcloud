@@ -121,26 +121,17 @@ type IPNetworkParameters struct {
 
 type NetworkInitParameters struct {
 
-	// (Block List, Min: 1, Max: 1) A list of IP subnets within the network (see below for nested schema)
-	// A list of IP subnets within the network
+	// (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
+	// IP subnet within the network. Network must have exactly one IP subnet.
 	IPNetwork []IPNetworkInitParameters `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
 
-	// (String) A valid name for the network
-	// A valid name for the network
+	// (String) Name of the network.
+	// Name of the network.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (String) The UUID of a router
-	// The UUID of a router
-	// +crossplane:generate:reference:type=Router
+	// (String) UUID of a router to attach to this network.
+	// UUID of a router to attach to this network.
 	Router *string `json:"router,omitempty" tf:"router,omitempty"`
-
-	// Reference to a Router to populate router.
-	// +kubebuilder:validation:Optional
-	RouterRef *v1.Reference `json:"routerRef,omitempty" tf:"-"`
-
-	// Selector for a Router to populate router.
-	// +kubebuilder:validation:Optional
-	RouterSelector *v1.Selector `json:"routerSelector,omitempty" tf:"-"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
@@ -149,19 +140,19 @@ type NetworkInitParameters struct {
 
 type NetworkObservation struct {
 
-	// (String) The ID of this resource.
+	// (String) UUID of the network.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// (Block List, Min: 1, Max: 1) A list of IP subnets within the network (see below for nested schema)
-	// A list of IP subnets within the network
+	// (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
+	// IP subnet within the network. Network must have exactly one IP subnet.
 	IPNetwork []IPNetworkObservation `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
 
-	// (String) A valid name for the network
-	// A valid name for the network
+	// (String) Name of the network.
+	// Name of the network.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (String) The UUID of a router
-	// The UUID of a router
+	// (String) UUID of a router to attach to this network.
+	// UUID of a router to attach to this network.
 	Router *string `json:"router,omitempty" tf:"router,omitempty"`
 
 	// (String) The network type
@@ -175,29 +166,20 @@ type NetworkObservation struct {
 
 type NetworkParameters struct {
 
-	// (Block List, Min: 1, Max: 1) A list of IP subnets within the network (see below for nested schema)
-	// A list of IP subnets within the network
+	// (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
+	// IP subnet within the network. Network must have exactly one IP subnet.
 	// +kubebuilder:validation:Optional
 	IPNetwork []IPNetworkParameters `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
 
-	// (String) A valid name for the network
-	// A valid name for the network
+	// (String) Name of the network.
+	// Name of the network.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (String) The UUID of a router
-	// The UUID of a router
-	// +crossplane:generate:reference:type=Router
+	// (String) UUID of a router to attach to this network.
+	// UUID of a router to attach to this network.
 	// +kubebuilder:validation:Optional
 	Router *string `json:"router,omitempty" tf:"router,omitempty"`
-
-	// Reference to a Router to populate router.
-	// +kubebuilder:validation:Optional
-	RouterRef *v1.Reference `json:"routerRef,omitempty" tf:"-"`
-
-	// Selector for a Router to populate router.
-	// +kubebuilder:validation:Optional
-	RouterSelector *v1.Selector `json:"routerSelector,omitempty" tf:"-"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
@@ -232,16 +214,15 @@ type NetworkStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// Network is the Schema for the Networks API. This resource represents an SDN private network that cloud servers from the same zone can be attached to.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
+// Network is the Schema for the Networks API. This resource represents an SDN private network that cloud servers and other resources from the same zone can be attached to.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}
 type Network struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.ipNetwork) || (has(self.initProvider) && has(self.initProvider.ipNetwork))",message="spec.forProvider.ipNetwork is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.zone) || (has(self.initProvider) && has(self.initProvider.zone))",message="spec.forProvider.zone is a required parameter"
 	Spec   NetworkSpec   `json:"spec"`

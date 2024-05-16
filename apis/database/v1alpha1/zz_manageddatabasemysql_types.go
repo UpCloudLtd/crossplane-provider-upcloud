@@ -19,18 +19,23 @@ type ComponentsInitParameters struct {
 type ComponentsObservation struct {
 
 	// (String)
+	// Type of the component
 	Component *string `json:"component,omitempty" tf:"component,omitempty"`
 
 	// (String) Hostname or IP address of the server where to migrate data from.
+	// Hostname of the component
 	Host *string `json:"host,omitempty" tf:"host,omitempty"`
 
 	// (Number) Port number of the server where to migrate data from.
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	// Port number of the component
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (String)
+	// Component network route type
 	Route *string `json:"route,omitempty" tf:"route,omitempty"`
 
 	// (String)
+	// Usage of the component
 	Usage *string `json:"usage,omitempty" tf:"usage,omitempty"`
 }
 
@@ -54,6 +59,10 @@ type ManagedDatabaseMysqlInitParameters struct {
 	// (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
 	// Private networks attached to the managed database
 	Network []NetworkInitParameters `json:"network,omitempty" tf:"network,omitempty"`
+
+	// (List of Object) Information about nodes providing the managed service (see below for nested schema)
+	// Information about nodes providing the managed service
+	NodeStates []NodeStatesInitParameters `json:"nodeStates,omitempty" tf:"node_states,omitempty"`
 
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
@@ -172,6 +181,11 @@ type ManagedDatabaseMysqlParameters struct {
 	// +kubebuilder:validation:Optional
 	Network []NetworkParameters `json:"network,omitempty" tf:"network,omitempty"`
 
+	// (List of Object) Information about nodes providing the managed service (see below for nested schema)
+	// Information about nodes providing the managed service
+	// +kubebuilder:validation:Optional
+	NodeStates []NodeStatesParameters `json:"nodeStates,omitempty" tf:"node_states,omitempty"`
+
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
 	// +kubebuilder:validation:Optional
@@ -218,7 +232,7 @@ type MigrationInitParameters struct {
 
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (Boolean) The server where to migrate data from is secured with SSL.
 	// The server where to migrate data from is secured with SSL.
@@ -249,7 +263,7 @@ type MigrationObservation struct {
 
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (Boolean) The server where to migrate data from is secured with SSL.
 	// The server where to migrate data from is secured with SSL.
@@ -290,7 +304,7 @@ type MigrationParameters struct {
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
 	// +kubebuilder:validation:Optional
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (Boolean) The server where to migrate data from is secured with SSL.
 	// The server where to migrate data from is secured with SSL.
@@ -383,21 +397,33 @@ type NetworkParameters struct {
 }
 
 type NodeStatesInitParameters struct {
+
+	// (String)
+	// Role of the node
+	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
 
 type NodeStatesObservation struct {
 
 	// (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+	// Name plus a node iteration
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String)
+	// Role of the node
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 
 	// (String) State of the service
+	// State of the node
 	State *string `json:"state,omitempty" tf:"state,omitempty"`
 }
 
 type NodeStatesParameters struct {
+
+	// (String)
+	// Role of the node
+	// +kubebuilder:validation:Optional
+	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
 
 type PropertiesInitParameters struct {
@@ -412,19 +438,19 @@ type PropertiesInitParameters struct {
 
 	// (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
 	// The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
-	BackupHour *float64 `json:"backupHour,omitempty" tf:"backup_hour,omitempty"`
+	BackupHour *int64 `json:"backupHour,omitempty" tf:"backup_hour,omitempty"`
 
 	// (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
 	// The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
-	BackupMinute *float64 `json:"backupMinute,omitempty" tf:"backup_minute,omitempty"`
+	BackupMinute *int64 `json:"backupMinute,omitempty" tf:"backup_minute,omitempty"`
 
 	// (Number) The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
 	// The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
-	BinlogRetentionPeriod *float64 `json:"binlogRetentionPeriod,omitempty" tf:"binlog_retention_period,omitempty"`
+	BinlogRetentionPeriod *int64 `json:"binlogRetentionPeriod,omitempty" tf:"binlog_retention_period,omitempty"`
 
 	// (Number) The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
 	// The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
-	ConnectTimeout *float64 `json:"connectTimeout,omitempty" tf:"connect_timeout,omitempty"`
+	ConnectTimeout *int64 `json:"connectTimeout,omitempty" tf:"connect_timeout,omitempty"`
 
 	// 12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
 	// Default server time zone as an offset from UTC (from -12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
@@ -432,7 +458,7 @@ type PropertiesInitParameters struct {
 
 	// (Number) The maximum permitted result length in bytes for the GROUP_CONCAT() function.
 	// The maximum permitted result length in bytes for the GROUP_CONCAT() function.
-	GroupConcatMaxLen *float64 `json:"groupConcatMaxLen,omitempty" tf:"group_concat_max_len,omitempty"`
+	GroupConcatMaxLen *int64 `json:"groupConcatMaxLen,omitempty" tf:"group_concat_max_len,omitempty"`
 
 	// (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
 	// IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -440,19 +466,19 @@ type PropertiesInitParameters struct {
 
 	// (Number) The time, in seconds, before cached statistics expire.
 	// The time, in seconds, before cached statistics expire.
-	InformationSchemaStatsExpiry *float64 `json:"informationSchemaStatsExpiry,omitempty" tf:"information_schema_stats_expiry,omitempty"`
+	InformationSchemaStatsExpiry *int64 `json:"informationSchemaStatsExpiry,omitempty" tf:"information_schema_stats_expiry,omitempty"`
 
 	// (Number) Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
 	// Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
-	InnodbChangeBufferMaxSize *float64 `json:"innodbChangeBufferMaxSize,omitempty" tf:"innodb_change_buffer_max_size,omitempty"`
+	InnodbChangeBufferMaxSize *int64 `json:"innodbChangeBufferMaxSize,omitempty" tf:"innodb_change_buffer_max_size,omitempty"`
 
 	// dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
 	// Specifies whether flushing a page from the InnoDB buffer pool also flushes other dirty pages in the same extent (default is 1): 0 - dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
-	InnodbFlushNeighbors *float64 `json:"innodbFlushNeighbors,omitempty" tf:"innodb_flush_neighbors,omitempty"`
+	InnodbFlushNeighbors *int64 `json:"innodbFlushNeighbors,omitempty" tf:"innodb_flush_neighbors,omitempty"`
 
 	// (Number) Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
 	// Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
-	InnodbFtMinTokenSize *float64 `json:"innodbFtMinTokenSize,omitempty" tf:"innodb_ft_min_token_size,omitempty"`
+	InnodbFtMinTokenSize *int64 `json:"innodbFtMinTokenSize,omitempty" tf:"innodb_ft_min_token_size,omitempty"`
 
 	// (String) This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
 	// This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
@@ -460,15 +486,15 @@ type PropertiesInitParameters struct {
 
 	// (Number) The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
 	// The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
-	InnodbLockWaitTimeout *float64 `json:"innodbLockWaitTimeout,omitempty" tf:"innodb_lock_wait_timeout,omitempty"`
+	InnodbLockWaitTimeout *int64 `json:"innodbLockWaitTimeout,omitempty" tf:"innodb_lock_wait_timeout,omitempty"`
 
 	// (Number) The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
 	// The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
-	InnodbLogBufferSize *float64 `json:"innodbLogBufferSize,omitempty" tf:"innodb_log_buffer_size,omitempty"`
+	InnodbLogBufferSize *int64 `json:"innodbLogBufferSize,omitempty" tf:"innodb_log_buffer_size,omitempty"`
 
 	// (Number) The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
 	// The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
-	InnodbOnlineAlterLogMaxSize *float64 `json:"innodbOnlineAlterLogMaxSize,omitempty" tf:"innodb_online_alter_log_max_size,omitempty"`
+	InnodbOnlineAlterLogMaxSize *int64 `json:"innodbOnlineAlterLogMaxSize,omitempty" tf:"innodb_online_alter_log_max_size,omitempty"`
 
 	// (Boolean) When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
 	// When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
@@ -476,7 +502,7 @@ type PropertiesInitParameters struct {
 
 	// (Number) The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
 	// The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
-	InnodbReadIoThreads *float64 `json:"innodbReadIoThreads,omitempty" tf:"innodb_read_io_threads,omitempty"`
+	InnodbReadIoThreads *int64 `json:"innodbReadIoThreads,omitempty" tf:"innodb_read_io_threads,omitempty"`
 
 	// (Boolean) When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
 	// When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
@@ -484,15 +510,15 @@ type PropertiesInitParameters struct {
 
 	// no limit).
 	// Defines the maximum number of threads permitted inside of InnoDB. Default is 0 (infinite concurrency - no limit).
-	InnodbThreadConcurrency *float64 `json:"innodbThreadConcurrency,omitempty" tf:"innodb_thread_concurrency,omitempty"`
+	InnodbThreadConcurrency *int64 `json:"innodbThreadConcurrency,omitempty" tf:"innodb_thread_concurrency,omitempty"`
 
 	// (Number) The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
 	// The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
-	InnodbWriteIoThreads *float64 `json:"innodbWriteIoThreads,omitempty" tf:"innodb_write_io_threads,omitempty"`
+	InnodbWriteIoThreads *int64 `json:"innodbWriteIoThreads,omitempty" tf:"innodb_write_io_threads,omitempty"`
 
 	// (Number) The number of seconds the server waits for activity on an interactive connection before closing it.
 	// The number of seconds the server waits for activity on an interactive connection before closing it.
-	InteractiveTimeout *float64 `json:"interactiveTimeout,omitempty" tf:"interactive_timeout,omitempty"`
+	InteractiveTimeout *int64 `json:"interactiveTimeout,omitempty" tf:"interactive_timeout,omitempty"`
 
 	// memory internal temporary tables.
 	// The storage engine for in-memory internal temporary tables.
@@ -504,11 +530,11 @@ type PropertiesInitParameters struct {
 
 	// (Number) Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
 	// Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
-	MaxAllowedPacket *float64 `json:"maxAllowedPacket,omitempty" tf:"max_allowed_packet,omitempty"`
+	MaxAllowedPacket *int64 `json:"maxAllowedPacket,omitempty" tf:"max_allowed_packet,omitempty"`
 
 	// memory tables. Also set tmp_table_size. Default is 16777216 (16M).
 	// Limits the size of internal in-memory tables. Also set tmp_table_size. Default is 16777216 (16M).
-	MaxHeapTableSize *float64 `json:"maxHeapTableSize,omitempty" tf:"max_heap_table_size,omitempty"`
+	MaxHeapTableSize *int64 `json:"maxHeapTableSize,omitempty" tf:"max_heap_table_size,omitempty"`
 
 	// (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
 	// Migrate data from existing server.
@@ -516,15 +542,15 @@ type PropertiesInitParameters struct {
 
 	// (Number) Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
 	// Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
-	NetBufferLength *float64 `json:"netBufferLength,omitempty" tf:"net_buffer_length,omitempty"`
+	NetBufferLength *int64 `json:"netBufferLength,omitempty" tf:"net_buffer_length,omitempty"`
 
 	// (Number) The number of seconds to wait for more data from a connection before aborting the read.
 	// The number of seconds to wait for more data from a connection before aborting the read.
-	NetReadTimeout *float64 `json:"netReadTimeout,omitempty" tf:"net_read_timeout,omitempty"`
+	NetReadTimeout *int64 `json:"netReadTimeout,omitempty" tf:"net_read_timeout,omitempty"`
 
 	// (Number) The number of seconds to wait for a block to be written to a connection before aborting the write.
 	// The number of seconds to wait for a block to be written to a connection before aborting the write.
-	NetWriteTimeout *float64 `json:"netWriteTimeout,omitempty" tf:"net_write_timeout,omitempty"`
+	NetWriteTimeout *int64 `json:"netWriteTimeout,omitempty" tf:"net_write_timeout,omitempty"`
 
 	// (Boolean) Public Access. Allow access to the service from the public Internet.
 	// Public Access. Allow access to the service from the public Internet.
@@ -548,11 +574,11 @@ type PropertiesInitParameters struct {
 
 	// (Number) Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
 	// Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
-	SortBufferSize *float64 `json:"sortBufferSize,omitempty" tf:"sort_buffer_size,omitempty"`
+	SortBufferSize *int64 `json:"sortBufferSize,omitempty" tf:"sort_buffer_size,omitempty"`
 
 	// memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
 	// Limits the size of internal in-memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
-	TmpTableSize *float64 `json:"tmpTableSize,omitempty" tf:"tmp_table_size,omitempty"`
+	TmpTableSize *int64 `json:"tmpTableSize,omitempty" tf:"tmp_table_size,omitempty"`
 
 	// (String) MySQL major version.
 	// MySQL major version.
@@ -560,7 +586,7 @@ type PropertiesInitParameters struct {
 
 	// (Number) The number of seconds the server waits for activity on a noninteractive connection before closing it.
 	// The number of seconds the server waits for activity on a noninteractive connection before closing it.
-	WaitTimeout *float64 `json:"waitTimeout,omitempty" tf:"wait_timeout,omitempty"`
+	WaitTimeout *int64 `json:"waitTimeout,omitempty" tf:"wait_timeout,omitempty"`
 }
 
 type PropertiesObservation struct {
@@ -575,19 +601,19 @@ type PropertiesObservation struct {
 
 	// (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
 	// The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
-	BackupHour *float64 `json:"backupHour,omitempty" tf:"backup_hour,omitempty"`
+	BackupHour *int64 `json:"backupHour,omitempty" tf:"backup_hour,omitempty"`
 
 	// (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
 	// The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
-	BackupMinute *float64 `json:"backupMinute,omitempty" tf:"backup_minute,omitempty"`
+	BackupMinute *int64 `json:"backupMinute,omitempty" tf:"backup_minute,omitempty"`
 
 	// (Number) The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
 	// The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
-	BinlogRetentionPeriod *float64 `json:"binlogRetentionPeriod,omitempty" tf:"binlog_retention_period,omitempty"`
+	BinlogRetentionPeriod *int64 `json:"binlogRetentionPeriod,omitempty" tf:"binlog_retention_period,omitempty"`
 
 	// (Number) The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
 	// The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
-	ConnectTimeout *float64 `json:"connectTimeout,omitempty" tf:"connect_timeout,omitempty"`
+	ConnectTimeout *int64 `json:"connectTimeout,omitempty" tf:"connect_timeout,omitempty"`
 
 	// 12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
 	// Default server time zone as an offset from UTC (from -12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
@@ -595,7 +621,7 @@ type PropertiesObservation struct {
 
 	// (Number) The maximum permitted result length in bytes for the GROUP_CONCAT() function.
 	// The maximum permitted result length in bytes for the GROUP_CONCAT() function.
-	GroupConcatMaxLen *float64 `json:"groupConcatMaxLen,omitempty" tf:"group_concat_max_len,omitempty"`
+	GroupConcatMaxLen *int64 `json:"groupConcatMaxLen,omitempty" tf:"group_concat_max_len,omitempty"`
 
 	// (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
 	// IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -603,19 +629,19 @@ type PropertiesObservation struct {
 
 	// (Number) The time, in seconds, before cached statistics expire.
 	// The time, in seconds, before cached statistics expire.
-	InformationSchemaStatsExpiry *float64 `json:"informationSchemaStatsExpiry,omitempty" tf:"information_schema_stats_expiry,omitempty"`
+	InformationSchemaStatsExpiry *int64 `json:"informationSchemaStatsExpiry,omitempty" tf:"information_schema_stats_expiry,omitempty"`
 
 	// (Number) Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
 	// Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
-	InnodbChangeBufferMaxSize *float64 `json:"innodbChangeBufferMaxSize,omitempty" tf:"innodb_change_buffer_max_size,omitempty"`
+	InnodbChangeBufferMaxSize *int64 `json:"innodbChangeBufferMaxSize,omitempty" tf:"innodb_change_buffer_max_size,omitempty"`
 
 	// dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
 	// Specifies whether flushing a page from the InnoDB buffer pool also flushes other dirty pages in the same extent (default is 1): 0 - dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
-	InnodbFlushNeighbors *float64 `json:"innodbFlushNeighbors,omitempty" tf:"innodb_flush_neighbors,omitempty"`
+	InnodbFlushNeighbors *int64 `json:"innodbFlushNeighbors,omitempty" tf:"innodb_flush_neighbors,omitempty"`
 
 	// (Number) Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
 	// Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
-	InnodbFtMinTokenSize *float64 `json:"innodbFtMinTokenSize,omitempty" tf:"innodb_ft_min_token_size,omitempty"`
+	InnodbFtMinTokenSize *int64 `json:"innodbFtMinTokenSize,omitempty" tf:"innodb_ft_min_token_size,omitempty"`
 
 	// (String) This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
 	// This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
@@ -623,15 +649,15 @@ type PropertiesObservation struct {
 
 	// (Number) The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
 	// The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
-	InnodbLockWaitTimeout *float64 `json:"innodbLockWaitTimeout,omitempty" tf:"innodb_lock_wait_timeout,omitempty"`
+	InnodbLockWaitTimeout *int64 `json:"innodbLockWaitTimeout,omitempty" tf:"innodb_lock_wait_timeout,omitempty"`
 
 	// (Number) The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
 	// The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
-	InnodbLogBufferSize *float64 `json:"innodbLogBufferSize,omitempty" tf:"innodb_log_buffer_size,omitempty"`
+	InnodbLogBufferSize *int64 `json:"innodbLogBufferSize,omitempty" tf:"innodb_log_buffer_size,omitempty"`
 
 	// (Number) The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
 	// The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
-	InnodbOnlineAlterLogMaxSize *float64 `json:"innodbOnlineAlterLogMaxSize,omitempty" tf:"innodb_online_alter_log_max_size,omitempty"`
+	InnodbOnlineAlterLogMaxSize *int64 `json:"innodbOnlineAlterLogMaxSize,omitempty" tf:"innodb_online_alter_log_max_size,omitempty"`
 
 	// (Boolean) When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
 	// When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
@@ -639,7 +665,7 @@ type PropertiesObservation struct {
 
 	// (Number) The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
 	// The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
-	InnodbReadIoThreads *float64 `json:"innodbReadIoThreads,omitempty" tf:"innodb_read_io_threads,omitempty"`
+	InnodbReadIoThreads *int64 `json:"innodbReadIoThreads,omitempty" tf:"innodb_read_io_threads,omitempty"`
 
 	// (Boolean) When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
 	// When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
@@ -647,15 +673,15 @@ type PropertiesObservation struct {
 
 	// no limit).
 	// Defines the maximum number of threads permitted inside of InnoDB. Default is 0 (infinite concurrency - no limit).
-	InnodbThreadConcurrency *float64 `json:"innodbThreadConcurrency,omitempty" tf:"innodb_thread_concurrency,omitempty"`
+	InnodbThreadConcurrency *int64 `json:"innodbThreadConcurrency,omitempty" tf:"innodb_thread_concurrency,omitempty"`
 
 	// (Number) The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
 	// The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
-	InnodbWriteIoThreads *float64 `json:"innodbWriteIoThreads,omitempty" tf:"innodb_write_io_threads,omitempty"`
+	InnodbWriteIoThreads *int64 `json:"innodbWriteIoThreads,omitempty" tf:"innodb_write_io_threads,omitempty"`
 
 	// (Number) The number of seconds the server waits for activity on an interactive connection before closing it.
 	// The number of seconds the server waits for activity on an interactive connection before closing it.
-	InteractiveTimeout *float64 `json:"interactiveTimeout,omitempty" tf:"interactive_timeout,omitempty"`
+	InteractiveTimeout *int64 `json:"interactiveTimeout,omitempty" tf:"interactive_timeout,omitempty"`
 
 	// memory internal temporary tables.
 	// The storage engine for in-memory internal temporary tables.
@@ -667,11 +693,11 @@ type PropertiesObservation struct {
 
 	// (Number) Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
 	// Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
-	MaxAllowedPacket *float64 `json:"maxAllowedPacket,omitempty" tf:"max_allowed_packet,omitempty"`
+	MaxAllowedPacket *int64 `json:"maxAllowedPacket,omitempty" tf:"max_allowed_packet,omitempty"`
 
 	// memory tables. Also set tmp_table_size. Default is 16777216 (16M).
 	// Limits the size of internal in-memory tables. Also set tmp_table_size. Default is 16777216 (16M).
-	MaxHeapTableSize *float64 `json:"maxHeapTableSize,omitempty" tf:"max_heap_table_size,omitempty"`
+	MaxHeapTableSize *int64 `json:"maxHeapTableSize,omitempty" tf:"max_heap_table_size,omitempty"`
 
 	// (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
 	// Migrate data from existing server.
@@ -679,15 +705,15 @@ type PropertiesObservation struct {
 
 	// (Number) Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
 	// Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
-	NetBufferLength *float64 `json:"netBufferLength,omitempty" tf:"net_buffer_length,omitempty"`
+	NetBufferLength *int64 `json:"netBufferLength,omitempty" tf:"net_buffer_length,omitempty"`
 
 	// (Number) The number of seconds to wait for more data from a connection before aborting the read.
 	// The number of seconds to wait for more data from a connection before aborting the read.
-	NetReadTimeout *float64 `json:"netReadTimeout,omitempty" tf:"net_read_timeout,omitempty"`
+	NetReadTimeout *int64 `json:"netReadTimeout,omitempty" tf:"net_read_timeout,omitempty"`
 
 	// (Number) The number of seconds to wait for a block to be written to a connection before aborting the write.
 	// The number of seconds to wait for a block to be written to a connection before aborting the write.
-	NetWriteTimeout *float64 `json:"netWriteTimeout,omitempty" tf:"net_write_timeout,omitempty"`
+	NetWriteTimeout *int64 `json:"netWriteTimeout,omitempty" tf:"net_write_timeout,omitempty"`
 
 	// (Boolean) Public Access. Allow access to the service from the public Internet.
 	// Public Access. Allow access to the service from the public Internet.
@@ -711,11 +737,11 @@ type PropertiesObservation struct {
 
 	// (Number) Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
 	// Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
-	SortBufferSize *float64 `json:"sortBufferSize,omitempty" tf:"sort_buffer_size,omitempty"`
+	SortBufferSize *int64 `json:"sortBufferSize,omitempty" tf:"sort_buffer_size,omitempty"`
 
 	// memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
 	// Limits the size of internal in-memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
-	TmpTableSize *float64 `json:"tmpTableSize,omitempty" tf:"tmp_table_size,omitempty"`
+	TmpTableSize *int64 `json:"tmpTableSize,omitempty" tf:"tmp_table_size,omitempty"`
 
 	// (String) MySQL major version.
 	// MySQL major version.
@@ -723,7 +749,7 @@ type PropertiesObservation struct {
 
 	// (Number) The number of seconds the server waits for activity on a noninteractive connection before closing it.
 	// The number of seconds the server waits for activity on a noninteractive connection before closing it.
-	WaitTimeout *float64 `json:"waitTimeout,omitempty" tf:"wait_timeout,omitempty"`
+	WaitTimeout *int64 `json:"waitTimeout,omitempty" tf:"wait_timeout,omitempty"`
 }
 
 type PropertiesParameters struct {
@@ -746,22 +772,22 @@ type PropertiesParameters struct {
 	// (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
 	// The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
 	// +kubebuilder:validation:Optional
-	BackupHour *float64 `json:"backupHour,omitempty" tf:"backup_hour,omitempty"`
+	BackupHour *int64 `json:"backupHour,omitempty" tf:"backup_hour,omitempty"`
 
 	// (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
 	// The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
 	// +kubebuilder:validation:Optional
-	BackupMinute *float64 `json:"backupMinute,omitempty" tf:"backup_minute,omitempty"`
+	BackupMinute *int64 `json:"backupMinute,omitempty" tf:"backup_minute,omitempty"`
 
 	// (Number) The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
 	// The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
 	// +kubebuilder:validation:Optional
-	BinlogRetentionPeriod *float64 `json:"binlogRetentionPeriod,omitempty" tf:"binlog_retention_period,omitempty"`
+	BinlogRetentionPeriod *int64 `json:"binlogRetentionPeriod,omitempty" tf:"binlog_retention_period,omitempty"`
 
 	// (Number) The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
 	// The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
 	// +kubebuilder:validation:Optional
-	ConnectTimeout *float64 `json:"connectTimeout,omitempty" tf:"connect_timeout,omitempty"`
+	ConnectTimeout *int64 `json:"connectTimeout,omitempty" tf:"connect_timeout,omitempty"`
 
 	// 12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
 	// Default server time zone as an offset from UTC (from -12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
@@ -771,7 +797,7 @@ type PropertiesParameters struct {
 	// (Number) The maximum permitted result length in bytes for the GROUP_CONCAT() function.
 	// The maximum permitted result length in bytes for the GROUP_CONCAT() function.
 	// +kubebuilder:validation:Optional
-	GroupConcatMaxLen *float64 `json:"groupConcatMaxLen,omitempty" tf:"group_concat_max_len,omitempty"`
+	GroupConcatMaxLen *int64 `json:"groupConcatMaxLen,omitempty" tf:"group_concat_max_len,omitempty"`
 
 	// (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
 	// IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -781,22 +807,22 @@ type PropertiesParameters struct {
 	// (Number) The time, in seconds, before cached statistics expire.
 	// The time, in seconds, before cached statistics expire.
 	// +kubebuilder:validation:Optional
-	InformationSchemaStatsExpiry *float64 `json:"informationSchemaStatsExpiry,omitempty" tf:"information_schema_stats_expiry,omitempty"`
+	InformationSchemaStatsExpiry *int64 `json:"informationSchemaStatsExpiry,omitempty" tf:"information_schema_stats_expiry,omitempty"`
 
 	// (Number) Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
 	// Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
 	// +kubebuilder:validation:Optional
-	InnodbChangeBufferMaxSize *float64 `json:"innodbChangeBufferMaxSize,omitempty" tf:"innodb_change_buffer_max_size,omitempty"`
+	InnodbChangeBufferMaxSize *int64 `json:"innodbChangeBufferMaxSize,omitempty" tf:"innodb_change_buffer_max_size,omitempty"`
 
 	// dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
 	// Specifies whether flushing a page from the InnoDB buffer pool also flushes other dirty pages in the same extent (default is 1): 0 - dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
 	// +kubebuilder:validation:Optional
-	InnodbFlushNeighbors *float64 `json:"innodbFlushNeighbors,omitempty" tf:"innodb_flush_neighbors,omitempty"`
+	InnodbFlushNeighbors *int64 `json:"innodbFlushNeighbors,omitempty" tf:"innodb_flush_neighbors,omitempty"`
 
 	// (Number) Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
 	// Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
 	// +kubebuilder:validation:Optional
-	InnodbFtMinTokenSize *float64 `json:"innodbFtMinTokenSize,omitempty" tf:"innodb_ft_min_token_size,omitempty"`
+	InnodbFtMinTokenSize *int64 `json:"innodbFtMinTokenSize,omitempty" tf:"innodb_ft_min_token_size,omitempty"`
 
 	// (String) This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
 	// This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
@@ -806,17 +832,17 @@ type PropertiesParameters struct {
 	// (Number) The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
 	// The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
 	// +kubebuilder:validation:Optional
-	InnodbLockWaitTimeout *float64 `json:"innodbLockWaitTimeout,omitempty" tf:"innodb_lock_wait_timeout,omitempty"`
+	InnodbLockWaitTimeout *int64 `json:"innodbLockWaitTimeout,omitempty" tf:"innodb_lock_wait_timeout,omitempty"`
 
 	// (Number) The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
 	// The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
 	// +kubebuilder:validation:Optional
-	InnodbLogBufferSize *float64 `json:"innodbLogBufferSize,omitempty" tf:"innodb_log_buffer_size,omitempty"`
+	InnodbLogBufferSize *int64 `json:"innodbLogBufferSize,omitempty" tf:"innodb_log_buffer_size,omitempty"`
 
 	// (Number) The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
 	// The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
 	// +kubebuilder:validation:Optional
-	InnodbOnlineAlterLogMaxSize *float64 `json:"innodbOnlineAlterLogMaxSize,omitempty" tf:"innodb_online_alter_log_max_size,omitempty"`
+	InnodbOnlineAlterLogMaxSize *int64 `json:"innodbOnlineAlterLogMaxSize,omitempty" tf:"innodb_online_alter_log_max_size,omitempty"`
 
 	// (Boolean) When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
 	// When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
@@ -826,7 +852,7 @@ type PropertiesParameters struct {
 	// (Number) The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
 	// The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
 	// +kubebuilder:validation:Optional
-	InnodbReadIoThreads *float64 `json:"innodbReadIoThreads,omitempty" tf:"innodb_read_io_threads,omitempty"`
+	InnodbReadIoThreads *int64 `json:"innodbReadIoThreads,omitempty" tf:"innodb_read_io_threads,omitempty"`
 
 	// (Boolean) When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
 	// When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
@@ -836,17 +862,17 @@ type PropertiesParameters struct {
 	// no limit).
 	// Defines the maximum number of threads permitted inside of InnoDB. Default is 0 (infinite concurrency - no limit).
 	// +kubebuilder:validation:Optional
-	InnodbThreadConcurrency *float64 `json:"innodbThreadConcurrency,omitempty" tf:"innodb_thread_concurrency,omitempty"`
+	InnodbThreadConcurrency *int64 `json:"innodbThreadConcurrency,omitempty" tf:"innodb_thread_concurrency,omitempty"`
 
 	// (Number) The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
 	// The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
 	// +kubebuilder:validation:Optional
-	InnodbWriteIoThreads *float64 `json:"innodbWriteIoThreads,omitempty" tf:"innodb_write_io_threads,omitempty"`
+	InnodbWriteIoThreads *int64 `json:"innodbWriteIoThreads,omitempty" tf:"innodb_write_io_threads,omitempty"`
 
 	// (Number) The number of seconds the server waits for activity on an interactive connection before closing it.
 	// The number of seconds the server waits for activity on an interactive connection before closing it.
 	// +kubebuilder:validation:Optional
-	InteractiveTimeout *float64 `json:"interactiveTimeout,omitempty" tf:"interactive_timeout,omitempty"`
+	InteractiveTimeout *int64 `json:"interactiveTimeout,omitempty" tf:"interactive_timeout,omitempty"`
 
 	// memory internal temporary tables.
 	// The storage engine for in-memory internal temporary tables.
@@ -861,12 +887,12 @@ type PropertiesParameters struct {
 	// (Number) Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
 	// Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
 	// +kubebuilder:validation:Optional
-	MaxAllowedPacket *float64 `json:"maxAllowedPacket,omitempty" tf:"max_allowed_packet,omitempty"`
+	MaxAllowedPacket *int64 `json:"maxAllowedPacket,omitempty" tf:"max_allowed_packet,omitempty"`
 
 	// memory tables. Also set tmp_table_size. Default is 16777216 (16M).
 	// Limits the size of internal in-memory tables. Also set tmp_table_size. Default is 16777216 (16M).
 	// +kubebuilder:validation:Optional
-	MaxHeapTableSize *float64 `json:"maxHeapTableSize,omitempty" tf:"max_heap_table_size,omitempty"`
+	MaxHeapTableSize *int64 `json:"maxHeapTableSize,omitempty" tf:"max_heap_table_size,omitempty"`
 
 	// (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
 	// Migrate data from existing server.
@@ -876,17 +902,17 @@ type PropertiesParameters struct {
 	// (Number) Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
 	// Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
 	// +kubebuilder:validation:Optional
-	NetBufferLength *float64 `json:"netBufferLength,omitempty" tf:"net_buffer_length,omitempty"`
+	NetBufferLength *int64 `json:"netBufferLength,omitempty" tf:"net_buffer_length,omitempty"`
 
 	// (Number) The number of seconds to wait for more data from a connection before aborting the read.
 	// The number of seconds to wait for more data from a connection before aborting the read.
 	// +kubebuilder:validation:Optional
-	NetReadTimeout *float64 `json:"netReadTimeout,omitempty" tf:"net_read_timeout,omitempty"`
+	NetReadTimeout *int64 `json:"netReadTimeout,omitempty" tf:"net_read_timeout,omitempty"`
 
 	// (Number) The number of seconds to wait for a block to be written to a connection before aborting the write.
 	// The number of seconds to wait for a block to be written to a connection before aborting the write.
 	// +kubebuilder:validation:Optional
-	NetWriteTimeout *float64 `json:"netWriteTimeout,omitempty" tf:"net_write_timeout,omitempty"`
+	NetWriteTimeout *int64 `json:"netWriteTimeout,omitempty" tf:"net_write_timeout,omitempty"`
 
 	// (Boolean) Public Access. Allow access to the service from the public Internet.
 	// Public Access. Allow access to the service from the public Internet.
@@ -916,12 +942,12 @@ type PropertiesParameters struct {
 	// (Number) Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
 	// Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
 	// +kubebuilder:validation:Optional
-	SortBufferSize *float64 `json:"sortBufferSize,omitempty" tf:"sort_buffer_size,omitempty"`
+	SortBufferSize *int64 `json:"sortBufferSize,omitempty" tf:"sort_buffer_size,omitempty"`
 
 	// memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
 	// Limits the size of internal in-memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
 	// +kubebuilder:validation:Optional
-	TmpTableSize *float64 `json:"tmpTableSize,omitempty" tf:"tmp_table_size,omitempty"`
+	TmpTableSize *int64 `json:"tmpTableSize,omitempty" tf:"tmp_table_size,omitempty"`
 
 	// (String) MySQL major version.
 	// MySQL major version.
@@ -931,7 +957,7 @@ type PropertiesParameters struct {
 	// (Number) The number of seconds the server waits for activity on a noninteractive connection before closing it.
 	// The number of seconds the server waits for activity on a noninteractive connection before closing it.
 	// +kubebuilder:validation:Optional
-	WaitTimeout *float64 `json:"waitTimeout,omitempty" tf:"wait_timeout,omitempty"`
+	WaitTimeout *int64 `json:"waitTimeout,omitempty" tf:"wait_timeout,omitempty"`
 }
 
 // ManagedDatabaseMysqlSpec defines the desired state of ManagedDatabaseMysql
@@ -962,8 +988,8 @@ type ManagedDatabaseMysqlStatus struct {
 // +kubebuilder:storageversion
 
 // ManagedDatabaseMysql is the Schema for the ManagedDatabaseMysqls API. This resource represents MySQL managed database. See UpCloud Managed Databases https://upcloud.com/products/managed-databases product page for more details about the service.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}
@@ -971,6 +997,7 @@ type ManagedDatabaseMysql struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.nodeStates) || (has(self.initProvider) && has(self.initProvider.nodeStates))",message="spec.forProvider.nodeStates is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.plan) || (has(self.initProvider) && has(self.initProvider.plan))",message="spec.forProvider.plan is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.title) || (has(self.initProvider) && has(self.initProvider.title))",message="spec.forProvider.title is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.zone) || (has(self.initProvider) && has(self.initProvider.zone))",message="spec.forProvider.zone is a required parameter"

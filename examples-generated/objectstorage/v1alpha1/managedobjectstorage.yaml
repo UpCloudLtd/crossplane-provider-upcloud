@@ -36,9 +36,7 @@ spec:
       dhcp: true
       family: IPv4
     name: object-storage-example-net
-    routerSelector:
-      matchLabels:
-        testing.upbound.io/example-name: this
+    router: ${upcloud_router.this.id}
     zone: fi-hel1
 
 ---

@@ -8,7 +8,7 @@ export TERRAFORM_VERSION ?= 1.7.5
 
 export TERRAFORM_PROVIDER_SOURCE ?= UpCloudLtd/upcloud
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/UpCloudLtd/terraform-provider-upcloud
-export TERRAFORM_PROVIDER_VERSION ?= 5.2.3
+export TERRAFORM_PROVIDER_VERSION ?= 5.3.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-upcloud
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://github.com/UpCloudLtd/terraform-provider-upcloud/releases/download/v${TERRAFORM_PROVIDER_VERSION}
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-upcloud_v${TERRAFORM_PROVIDER_VERSION}
