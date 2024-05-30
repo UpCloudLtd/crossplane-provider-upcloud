@@ -6,7 +6,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -83,11 +82,6 @@ func main() {
 	kingpin.FatalIfError(apis.AddToScheme(mgr.GetScheme()), "Cannot add UpCloud APIs to scheme")
 
 	provider := config.GetProvider()
-
-	meta := provider.TerraformProvider.Meta()
-	if meta == nil {
-		fmt.Println("dupa")
-	}
 
 	o := tjcontroller.Options{
 		Options: xpcontroller.Options{
