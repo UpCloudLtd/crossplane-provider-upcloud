@@ -12,19 +12,19 @@ spec:
     - user: myusername
     networkInterface:
     - type: public
-    - type: private
-      networkRef:
-        name: example
-    - type: private
-      networkRef:
-        name: example-2
+    # - type: private
+    #   networkRef:
+    #     name: example
+    # - type: private
+    #   networkRef:
+    #     name: example-2
     plan: 1xCPU-1GB
     template:
     - size: 25
       storage: Ubuntu Server 20.04 LTS (Focal Fossa)
-    storageDevices:
-    - storageRef:
-        name: example
+    # storageDevices:
+    # - storageRef:
+    #     name: example
     zone: de-fra1
     firewall: true
 ---

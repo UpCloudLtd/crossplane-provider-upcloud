@@ -6,6 +6,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -83,6 +84,11 @@ func main() {
 
 	provider := config.GetProvider()
 
+	meta := provider.TerraformProvider.Meta()
+	if meta == nil {
+		fmt.Println("dupa")
+	}
+
 	o := tjcontroller.Options{
 		Options: xpcontroller.Options{
 			Logger:                  log,
@@ -96,7 +102,7 @@ func main() {
 		// use the following WorkspaceStoreOption to enable the shared gRPC mode
 		// terraform.WithProviderRunner(terraform.NewSharedProvider(log, os.Getenv("TERRAFORM_NATIVE_PROVIDER_PATH"), terraform.WithNativeProviderArgs("-debuggable")))
 		WorkspaceStore:        terraform.NewWorkspaceStore(log),
-		SetupFn:               clients.TerraformSetupBuilder(*terraformVersion, *providerSource, *providerVersion, provider.TerraformPluginFrameworkProvider),
+		SetupFn:               clients.TerraformSetupBuilder(*terraformVersion, *providerSource, *providerVersion, provider),
 		OperationTrackerStore: tjcontroller.NewOperationStore(log),
 	}
 

@@ -7,7 +7,6 @@ package config
 import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
-	"fmt"
 	"slices"
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
@@ -35,8 +34,6 @@ var providerMetadata string
 
 // GetProvider returns provider configuration
 func GetProvider() *ujconfig.Provider {
-	fmt.Printf(upcloud.Provider().TerraformVersion)
-
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithRootGroup("upcloud.io"),
 		ujconfig.WithIncludeList([]string{}),
