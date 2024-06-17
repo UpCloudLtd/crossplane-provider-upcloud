@@ -4,7 +4,11 @@
 PROJECT_NAME ?= provider-upcloud
 PROJECT_REPO ?= github.com/UpCloudLtd/$(PROJECT_NAME)
 
-export TERRAFORM_VERSION ?= 1.7.5
+export TERRAFORM_VERSION ?= 1.5.7
+
+# Do not allow a version of terraform greater than 1.5.x, due to versions 1.6+ being
+# licensed under BSL, which is not permitted.
+TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAFORM_VERSION)\n1.6" | sort -V | head -n1`" ] && echo 1 || echo 0)
 
 export TERRAFORM_PROVIDER_SOURCE ?= UpCloudLtd/upcloud
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/UpCloudLtd/terraform-provider-upcloud
@@ -50,10 +54,10 @@ GO_SUBDIRS += cmd internal apis
 # ====================================================================================
 # Setup Kubernetes tools
 
-KIND_VERSION = v0.22.0
-UP_VERSION = v0.28.0
+KIND_VERSION = v0.15.0
+UP_VERSION = v0.18.0
 UP_CHANNEL = stable
-UPTEST_VERSION = v0.11.1
+UPTEST_VERSION = v0.5.0
 -include build/makelib/k8s_tools.mk
 
 # ====================================================================================
@@ -93,7 +97,7 @@ xpkg.build.provider-upcloud: do.build.images
 
 # NOTE(hasheddan): we ensure up is installed prior to running platform-specific
 # build steps in parallel to avoid encountering an installation race condition.
-build.init: $(UP)
+build.init: $(UP) check-terraform-version
 
 # ====================================================================================
 # Setup Terraform for fetching provider schema
@@ -101,7 +105,12 @@ TERRAFORM := $(TOOLS_HOST_DIR)/terraform-$(TERRAFORM_VERSION)
 TERRAFORM_WORKDIR := $(WORK_DIR)/terraform
 TERRAFORM_PROVIDER_SCHEMA := config/schema.json
 
-$(TERRAFORM):
+check-terraform-version:
+ifneq ($(TERRAFORM_VERSION_VALID),1)
+	$(error invalid TERRAFORM_VERSION $(TERRAFORM_VERSION), must be less than 1.6.0 since that version introduced a not permitted BSL license))
+endif
+
+$(TERRAFORM): check-terraform-version
 	@$(INFO) installing terraform $(HOSTOS)-$(HOSTARCH)
 	@mkdir -p $(TOOLS_HOST_DIR)/tmp-terraform
 	@curl -fsSL https://releases.hashicorp.com/terraform/$(TERRAFORM_VERSION)/terraform_$(TERRAFORM_VERSION)_$(SAFEHOST_PLATFORM).zip -o $(TOOLS_HOST_DIR)/tmp-terraform/terraform.zip
@@ -127,7 +136,7 @@ pull-docs:
 
 generate.init: $(TERRAFORM_PROVIDER_SCHEMA) pull-docs
 
-.PHONY: $(TERRAFORM_PROVIDER_SCHEMA) pull-docs
+.PHONY: $(TERRAFORM_PROVIDER_SCHEMA) pull-docs check-terraform-version
 # ====================================================================================
 # Targets
 
@@ -162,6 +171,7 @@ run: go.build
 
 # ====================================================================================
 # End to End Testing
+CROSSPLANE_VERSION = 1.16.0
 CROSSPLANE_NAMESPACE = upbound-system
 -include build/makelib/local.xpkg.mk
 -include build/makelib/controlplane.mk
@@ -169,7 +179,7 @@ CROSSPLANE_NAMESPACE = upbound-system
 # This target requires the following environment variables to be set:
 # - UPCLOUD_USERNAME - username of the account that will be used for testing
 # - UPCLOUD_PASSWORD - password of the account that will be used for testing
-# - UPTEST_DATASOURCE_PATH (optional), see https://github.com/upbound/uptest#injecting-dynamic-values-and-datasource
+# - UPTEST_DATASOURCE_PATH (optional), please see https://github.com/upbound/uptest#injecting-dynamic-values-and-datasource
 uptest: $(UPTEST) $(KUBECTL) $(KUTTL)
 	@$(INFO) running automated tests
 	@KUBECTL=$(KUBECTL) KUTTL=$(KUTTL) CROSSPLANE_NAMESPACE=${CROSSPLANE_NAMESPACE} RESOURCE_CONFIG="$(shell pwd)/examples/resourceconfig" $(UPTEST) e2e $(shell find examples/resources/*.yaml | tr '\n' ',') --data-source="${UPTEST_DATASOURCE_PATH}" --setup-script=cluster/test/setup.sh --default-timeout=2400 --default-conditions="Ready" || $(FAIL)
@@ -233,6 +243,9 @@ help-special: crossplane.help
 
 .PHONY: crossplane.help help-special
 
+vendor: modules.download
+vendor.check: modules.check
+
 # ====================================================================================
 # Local development
 
@@ -257,3 +270,23 @@ deploy-examples: $(KUBECTL)
 delete-examples: $(KUBECTL)
 	@$(KUBECTL) delete --ignore-not-found=true -f examples/resources/
 	@$(KUBECTL) delete --ignore-not-found=true -f examples/resourceconfig/
+
+.PHONY: test-local
+test-local: check-test-env
+	go test ./... -parallel 8
+
+.PHONY: lint-local
+lint-local:
+	golangci-lint run
+
+check-test-env:
+ifndef UPCLOUD_GO_SDK_TEST_USER
+	$(error UPCLOUD_GO_SDK_TEST_USER is undefined)
+endif
+ifndef UPCLOUD_GO_SDK_TEST_PASSWORD
+	$(error UPCLOUD_GO_SDK_TEST_PASSWORD is undefined)
+endif
+
+.PHONY: version
+version:
+	@echo $(VERSION)

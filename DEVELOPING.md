@@ -7,7 +7,8 @@ This is a quick guide on how to develop this provider. For general info about de
 1. To run provider locally you will need:
     - Go version 1.22 or higher
     - goimports tool (can be installed with `go install golang.org/x/tools/cmd/goimports@latest`)
-    - Terraform 1.7.5 or higher (not strictly necessary, but recommended)
+    - Terraform version 1.5.7
+    - unzip
 
 2. Create a local cluster using Kind:
     ```
