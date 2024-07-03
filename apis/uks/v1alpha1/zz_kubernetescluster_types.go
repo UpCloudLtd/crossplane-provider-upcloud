@@ -50,8 +50,12 @@ type KubernetesClusterInitParameters struct {
 	// Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
 	PrivateNodeGroups *bool `json:"privateNodeGroups,omitempty" tf:"private_node_groups,omitempty"`
 
-	// (String) Kubernetes version ID, e.g. 1.27. You can list available version IDs with upctl kubernetes versions.
-	// Kubernetes version ID, e.g. `1.27`. You can list available version IDs with `upctl kubernetes versions`.
+	// (String) Set default storage encryption strategy for all nodes in the cluster.
+	// Set default storage encryption strategy for all nodes in the cluster.
+	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
+
+	// (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+	// Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
@@ -66,7 +70,7 @@ type KubernetesClusterObservation struct {
 	// +listType=set
 	ControlPlaneIPFilter []*string `json:"controlPlaneIpFilter,omitempty" tf:"control_plane_ip_filter,omitempty"`
 
-	// (String) The ID of this resource.
+	// (String) UUID of the cluster.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// value pairs to classify the cluster.
@@ -102,8 +106,12 @@ type KubernetesClusterObservation struct {
 	// Operational state of the cluster.
 	State *string `json:"state,omitempty" tf:"state,omitempty"`
 
-	// (String) Kubernetes version ID, e.g. 1.27. You can list available version IDs with upctl kubernetes versions.
-	// Kubernetes version ID, e.g. `1.27`. You can list available version IDs with `upctl kubernetes versions`.
+	// (String) Set default storage encryption strategy for all nodes in the cluster.
+	// Set default storage encryption strategy for all nodes in the cluster.
+	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
+
+	// (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+	// Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
@@ -117,24 +125,24 @@ type KubernetesClusterParameters struct {
 	// IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use `["0.0.0.0/0"]`. To deny access from all sources, use `[]`. Values set here do not restrict access to node groups or exposed Kubernetes services.
 	// +kubebuilder:validation:Optional
 	// +listType=set
-	ControlPlaneIPFilter []*string `json:"controlPlaneIpFilter,omitempty" tf:"control_plane_ip_filter,omitempty"`
+	ControlPlaneIPFilter []*string `json:"controlPlaneIpFilter" tf:"control_plane_ip_filter,omitempty"`
 
 	// value pairs to classify the cluster.
 	// Key-value pairs to classify the cluster.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
-	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+	Labels map[string]*string `json:"labels" tf:"labels,omitempty"`
 
 	// (String) Cluster name. Needs to be unique within the account.
 	// Cluster name. Needs to be unique within the account.
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (String) Network ID for the cluster to run in.
 	// Network ID for the cluster to run in.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network
 	// +kubebuilder:validation:Optional
-	Network *string `json:"network,omitempty" tf:"network,omitempty"`
+	Network *string `json:"network" tf:"network,omitempty"`
 
 	// Reference to a Network in network to populate network.
 	// +kubebuilder:validation:Optional
@@ -154,15 +162,20 @@ type KubernetesClusterParameters struct {
 	// +kubebuilder:validation:Optional
 	PrivateNodeGroups *bool `json:"privateNodeGroups,omitempty" tf:"private_node_groups,omitempty"`
 
-	// (String) Kubernetes version ID, e.g. 1.27. You can list available version IDs with upctl kubernetes versions.
-	// Kubernetes version ID, e.g. `1.27`. You can list available version IDs with `upctl kubernetes versions`.
+	// (String) Set default storage encryption strategy for all nodes in the cluster.
+	// Set default storage encryption strategy for all nodes in the cluster.
+	// +kubebuilder:validation:Optional
+	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
+
+	// (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+	// Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
 	// +kubebuilder:validation:Optional
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// Zone in which the Kubernetes cluster will be hosted, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 // KubernetesClusterSpec defines the desired state of KubernetesCluster
@@ -193,8 +206,8 @@ type KubernetesClusterStatus struct {
 // +kubebuilder:storageversion
 
 // KubernetesCluster is the Schema for the KubernetesClusters API. This resource represents a Managed Kubernetes https://upcloud.com/products/managed-kubernetes cluster.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}
@@ -202,6 +215,7 @@ type KubernetesCluster struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.controlPlaneIpFilter) || (has(self.initProvider) && has(self.initProvider.controlPlaneIpFilter))",message="spec.forProvider.controlPlaneIpFilter is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.labels) || (has(self.initProvider) && has(self.initProvider.labels))",message="spec.forProvider.labels is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.zone) || (has(self.initProvider) && has(self.initProvider.zone))",message="spec.forProvider.zone is a required parameter"
 	Spec   KubernetesClusterSpec   `json:"spec"`

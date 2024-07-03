@@ -15,53 +15,69 @@ import (
 
 type RouterInitParameters struct {
 
-	// (String) Name of the router
-	// Name of the router
+	// value pairs to classify the router.
+	// Key-value pairs to classify the router.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
+	// (String) Name of the router.
+	// Name of the router.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (Block Set) A collection of static routes for this router (see below for nested schema)
-	// A collection of static routes for this router
+	// (Block Set) A collection of static routes for this router. (see below for nested schema)
+	// A collection of static routes for this router.
 	StaticRoute []StaticRouteInitParameters `json:"staticRoute,omitempty" tf:"static_route,omitempty"`
 }
 
 type RouterObservation struct {
 
-	// (List of String) A collection of UUID representing networks attached to this router
-	// A collection of UUID representing networks attached to this router
+	// (List of String) List of UUIDs representing networks attached to this router.
+	// List of UUIDs representing networks attached to this router.
 	AttachedNetworks []*string `json:"attachedNetworks,omitempty" tf:"attached_networks,omitempty"`
 
-	// (String) The ID of this resource.
+	// (String) UUID of the router.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	// (String) Name of the router
-	// Name of the router
+	// value pairs to classify the router.
+	// Key-value pairs to classify the router.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
+	// (String) Name of the router.
+	// Name of the router.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (Block Set) A collection of static routes for this router (see below for nested schema)
-	// A collection of static routes for this router
+	// (Block Set) A collection of static routes for this router. (see below for nested schema)
+	// A collection of static routes for this router.
 	StaticRoute []StaticRouteObservation `json:"staticRoute,omitempty" tf:"static_route,omitempty"`
 
-	// (String) The type of router
-	// The type of router
+	// (String) Type of the router
+	// Type of the router
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 }
 
 type RouterParameters struct {
 
-	// (String) Name of the router
-	// Name of the router
+	// value pairs to classify the router.
+	// Key-value pairs to classify the router.
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	// +mapType=granular
+	Labels map[string]*string `json:"labels" tf:"labels,omitempty"`
 
-	// (Block Set) A collection of static routes for this router (see below for nested schema)
-	// A collection of static routes for this router
+	// (String) Name of the router.
+	// Name of the router.
 	// +kubebuilder:validation:Optional
-	StaticRoute []StaticRouteParameters `json:"staticRoute,omitempty" tf:"static_route,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
+
+	// (Block Set) A collection of static routes for this router. (see below for nested schema)
+	// A collection of static routes for this router.
+	// +kubebuilder:validation:Optional
+	StaticRoute []StaticRouteParameters `json:"staticRoute" tf:"static_route,omitempty"`
 }
 
 type StaticRouteInitParameters struct {
 
-	// (String) Name of the router
+	// (String) Name of the router.
 	// Name or description of the route.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -76,7 +92,7 @@ type StaticRouteInitParameters struct {
 
 type StaticRouteObservation struct {
 
-	// (String) Name of the router
+	// (String) Name of the router.
 	// Name or description of the route.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
@@ -91,7 +107,7 @@ type StaticRouteObservation struct {
 
 type StaticRouteParameters struct {
 
-	// (String) Name of the router
+	// (String) Name of the router.
 	// Name or description of the route.
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -134,16 +150,18 @@ type RouterStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// Router is the Schema for the Routers API. This resource represents a generated UpCloud router resource. Routers can be used to connect multiple Private Networks. UpCloud Servers on any attached network can communicate directly with each other.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
+// Router is the Schema for the Routers API. Routers can be used to connect multiple Private Networks. UpCloud Servers on any attached network can communicate directly with each other.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}
 type Router struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.labels) || (has(self.initProvider) && has(self.initProvider.labels))",message="spec.forProvider.labels is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.staticRoute) || (has(self.initProvider) && has(self.initProvider.staticRoute))",message="spec.forProvider.staticRoute is a required parameter"
 	Spec   RouterSpec   `json:"spec"`
 	Status RouterStatus `json:"status,omitempty"`
 }

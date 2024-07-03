@@ -9,7 +9,7 @@ Please note that this project is currently in early alpha version, we do not rec
 
 ## Quickstart
 
-1. You will need a Kubernetes cluster to start using a provider. Any cluster will do, for testing and development purposes Kind cluster will do:
+1. You will need a Kubernetes cluster to start using a provider. You can use any Kubernetes cluster, but for testing and development purposes, a Kind cluster is recommended:
     ```
     kind create cluster -n crossplane-test
     ```
@@ -24,37 +24,37 @@ Please note that this project is currently in early alpha version, we do not rec
       package: xpkg.upbound.io/upcloud/provider-upcloud:v0.0.4
     ```
 
-	Make sure to change the version to the latest one.
+ Make sure to change the version to the latest one.
 
-3. Next, you need to create a a `Secret` with your UpCloud API credentiqals and a `ProviderConfig` that will use them to provision your infra. Just apply this yaml:
+3. Next, you need to create a `Secret` with your UpCloud API credentials and a `ProviderConfig` that will use them to provision your infrastructure. Just apply this yaml:
     ```
-		apiVersion: v1
-		kind: Secret
-		metadata:
-			name: example-provider-creds
-			namespace: default
-		type: Opaque
-		stringData:
-			credentials: |
-				{
-					"username": "username",
-					"password": "password123"
-				}
-		---
-		apiVersion: provider.upcloud.io/v1beta1
-		kind: ProviderConfig
-		metadata:
-			name: default
-		spec:
-			credentials:
-				source: Secret
-				secretRef:
-					name: example-provider-creds
-					namespace: default
-					key: credentials
-		```
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: example-provider-creds
+      namespace: default
+    type: Opaque
+    stringData:
+      credentials: |
+        {
+          "username": "username",
+          "password": "password123"
+        }
+    ---
+    apiVersion: provider.upcloud.io/v1beta1
+    kind: ProviderConfig
+    metadata:
+      name: default
+    spec:
+      credentials:
+        source: Secret
+        secretRef:
+          name: example-provider-creds
+          namespace: default
+          key: credentials
+    ```
 
-4. And now you can start creating your infra. Check our [examples](examples/resources/) to see what Managed Resources you can use and how. Have fun!
+4. And now you can start creating your infrastructure. Check our [examples](examples/resources/) to see what Managed Resources you can use and how. Have fun!
 
 ## Missing resources
 

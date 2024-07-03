@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -35,8 +35,8 @@ spec:
     schema:
       openAPIV3Schema:
         description: Network is the Schema for the Networks API. This resource represents
-          an SDN private network that cloud servers from the same zone can be attached
-          to.
+          an SDN private network that cloud servers and other resources from the same
+          zone can be attached to.
         properties:
           apiVersion:
             description: |-
@@ -76,8 +76,8 @@ spec:
                 properties:
                   ipNetwork:
                     description: |-
-                      (Block List, Min: 1, Max: 1) A list of IP subnets within the network (see below for nested schema)
-                      A list of IP subnets within the network
+                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
+                      IP subnet within the network. Network must have exactly one IP subnet.
                     items:
                       properties:
                         address:
@@ -123,18 +123,26 @@ spec:
                           type: string
                       type: object
                     type: array
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the network.
+                      Key-value pairs to classify the network.
+                    type: object
+                    x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) A valid name for the network
-                      A valid name for the network
+                      (String) Name of the network.
+                      Name of the network.
                     type: string
                   router:
                     description: |-
-                      (String) The UUID of a router
-                      The UUID of a router
+                      (String) UUID of a router to attach to this network.
+                      UUID of a router to attach to this network.
                     type: string
                   routerRef:
-                    description: Reference to a Router to populate router.
+                    description: Reference to a Router in network to populate router.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -168,7 +176,7 @@ spec:
                     - name
                     type: object
                   routerSelector:
-                    description: Selector for a Router to populate router.
+                    description: Selector for a Router in network to populate router.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -228,8 +236,8 @@ spec:
                 properties:
                   ipNetwork:
                     description: |-
-                      (Block List, Min: 1, Max: 1) A list of IP subnets within the network (see below for nested schema)
-                      A list of IP subnets within the network
+                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
+                      IP subnet within the network. Network must have exactly one IP subnet.
                     items:
                       properties:
                         address:
@@ -275,18 +283,26 @@ spec:
                           type: string
                       type: object
                     type: array
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the network.
+                      Key-value pairs to classify the network.
+                    type: object
+                    x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) A valid name for the network
-                      A valid name for the network
+                      (String) Name of the network.
+                      Name of the network.
                     type: string
                   router:
                     description: |-
-                      (String) The UUID of a router
-                      The UUID of a router
+                      (String) UUID of a router to attach to this network.
+                      UUID of a router to attach to this network.
                     type: string
                   routerRef:
-                    description: Reference to a Router to populate router.
+                    description: Reference to a Router in network to populate router.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -320,7 +336,7 @@ spec:
                     - name
                     type: object
                   routerSelector:
-                    description: Selector for a Router to populate router.
+                    description: Selector for a Router in network to populate router.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -533,10 +549,6 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.ipNetwork is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.ipNetwork)
-                || (has(self.initProvider) && has(self.initProvider.ipNetwork))'
             - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
@@ -551,12 +563,12 @@ spec:
               atProvider:
                 properties:
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) UUID of the network.
                     type: string
                   ipNetwork:
                     description: |-
-                      (Block List, Min: 1, Max: 1) A list of IP subnets within the network (see below for nested schema)
-                      A list of IP subnets within the network
+                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
+                      IP subnet within the network. Network must have exactly one IP subnet.
                     items:
                       properties:
                         address:
@@ -602,15 +614,23 @@ spec:
                           type: string
                       type: object
                     type: array
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the network.
+                      Key-value pairs to classify the network.
+                    type: object
+                    x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) A valid name for the network
-                      A valid name for the network
+                      (String) Name of the network.
+                      Name of the network.
                     type: string
                   router:
                     description: |-
-                      (String) The UUID of a router
-                      The UUID of a router
+                      (String) UUID of a router to attach to this network.
+                      UUID of a router to attach to this network.
                     type: string
                   type:
                     description: |-
@@ -639,6 +659,13 @@ spec:
                         A Message containing details about this condition's last transition from
                         one status to another, if any.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: A Reason for this condition's last transition from
                         one status to another.
@@ -662,6 +689,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
             type: object
         required:
         - spec

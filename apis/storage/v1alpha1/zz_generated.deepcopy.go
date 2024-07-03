@@ -22,7 +22,7 @@ func (in *BackupRuleInitParameters) DeepCopyInto(out *BackupRuleInitParameters) 
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -52,7 +52,7 @@ func (in *BackupRuleObservation) DeepCopyInto(out *BackupRuleObservation) {
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -82,7 +82,7 @@ func (in *BackupRuleParameters) DeepCopyInto(out *BackupRuleParameters) {
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -217,7 +217,7 @@ func (in *ImportObservation) DeepCopyInto(out *ImportObservation) {
 	}
 	if in.WrittenBytes != nil {
 		in, out := &in.WrittenBytes, &out.WrittenBytes
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 }
@@ -330,7 +330,7 @@ func (in *StorageInitParameters) DeepCopyInto(out *StorageInitParameters) {
 	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Tier != nil {
@@ -438,7 +438,7 @@ func (in *StorageObservation) DeepCopyInto(out *StorageObservation) {
 	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Tier != nil {
@@ -509,7 +509,7 @@ func (in *StorageParameters) DeepCopyInto(out *StorageParameters) {
 	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Tier != nil {

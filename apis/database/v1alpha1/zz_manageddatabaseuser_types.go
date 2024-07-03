@@ -23,6 +23,10 @@ type ManagedDatabaseUserInitParameters struct {
 	// OpenSearch access control object.
 	OpensearchAccessControl []OpensearchAccessControlInitParameters `json:"opensearchAccessControl,omitempty" tf:"opensearch_access_control,omitempty"`
 
+	// (String, Sensitive) Password for the database user. Defaults to a random value
+	// Password for the database user. Defaults to a random value
+	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
+
 	// (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
 	// PostgreSQL access control object.
 	PgAccessControl []PgAccessControlInitParameters `json:"pgAccessControl,omitempty" tf:"pg_access_control,omitempty"`
@@ -91,15 +95,15 @@ type ManagedDatabaseUserParameters struct {
 
 	// (String) Service's UUID for which this user belongs to
 	// The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to database user `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
-	// +crossplane:generate:reference:type=ManagedDatabasePostgresql
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/database/v1alpha1.ManagedDatabasePostgresql
 	// +kubebuilder:validation:Optional
-	Service *string `json:"service,omitempty" tf:"service,omitempty"`
+	Service *string `json:"service" tf:"service,omitempty"`
 
-	// Reference to a ManagedDatabasePostgresql to populate service.
+	// Reference to a ManagedDatabasePostgresql in database to populate service.
 	// +kubebuilder:validation:Optional
 	ServiceRef *v1.Reference `json:"serviceRef,omitempty" tf:"-"`
 
-	// Selector for a ManagedDatabasePostgresql to populate service.
+	// Selector for a ManagedDatabasePostgresql in database to populate service.
 	// +kubebuilder:validation:Optional
 	ServiceSelector *v1.Selector `json:"serviceSelector,omitempty" tf:"-"`
 }
@@ -272,8 +276,8 @@ type ManagedDatabaseUserStatus struct {
 // +kubebuilder:storageversion
 
 // ManagedDatabaseUser is the Schema for the ManagedDatabaseUsers API. This resource represents a user in managed database
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

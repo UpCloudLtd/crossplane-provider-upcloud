@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -205,6 +205,19 @@ spec:
                           type: object
                       type: object
                     type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                      type: object
+                    type: array
                   plan:
                     description: |-
                       (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
@@ -246,7 +259,8 @@ spec:
                                       description: |-
                                         (Number) The number of login attempts allowed before login is blocked.
                                         The number of login attempts allowed before login is blocked.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     authenticationBackend:
                                       description: |-
                                         (String) The internal backend. Enter internal.
@@ -256,22 +270,26 @@ spec:
                                       description: |-
                                         (Number) The duration of time that login remains blocked after a failed login.
                                         The duration of time that login remains blocked after a failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxBlockedClients:
                                       description: |-
                                         (Number) The maximum number of blocked IP addresses.
                                         The maximum number of blocked IP addresses.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxTrackedClients:
                                       description: |-
                                         (Number) The maximum number of tracked IP addresses that have failed login.
                                         The maximum number of tracked IP addresses that have failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     timeWindowSeconds:
                                       description: |-
                                         (Number) The window of time in which the value for allowed_tries is enforced.
                                         The window of time in which the value for `allowed_tries` is enforced.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     type:
                                       description: |-
                                         (String) Type of the service
@@ -289,27 +307,32 @@ spec:
                                       description: |-
                                         (Number) The number of login attempts allowed before login is blocked.
                                         The number of login attempts allowed before login is blocked.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     blockExpirySeconds:
                                       description: |-
                                         (Number) The duration of time that login remains blocked after a failed login.
                                         The duration of time that login remains blocked after a failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxBlockedClients:
                                       description: |-
                                         (Number) The maximum number of blocked IP addresses.
                                         The maximum number of blocked IP addresses.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxTrackedClients:
                                       description: |-
                                         (Number) The maximum number of tracked IP addresses that have failed login.
                                         The maximum number of tracked IP addresses that have failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     timeWindowSeconds:
                                       description: |-
                                         (Number) The window of time in which the value for allowed_tries is enforced.
                                         The window of time in which the value for `allowed_tries` is enforced.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     type:
                                       description: |-
                                         (String) Type of the service
@@ -328,12 +351,14 @@ spec:
                           description: |-
                             (Number) Controls the number of shards allowed in the cluster per data node.
                             Controls the number of shards allowed in the cluster per data node.
-                          type: number
+                          format: int64
+                          type: integer
                         clusterRoutingAllocationNodeConcurrentRecoveries:
                           description: |-
                             (Number) Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
                             Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
-                          type: number
+                          format: int64
+                          type: integer
                         customDomain:
                           description: |-
                             (String) Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
@@ -377,17 +402,20 @@ spec:
                           description: |-
                             (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
                             Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         httpMaxHeaderSize:
                           description: |-
                             (Number) The max size of allowed headers, in bytes.
                             The max size of allowed headers, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         httpMaxInitialLineLength:
                           description: |-
                             (Number) The max length of an HTTP URL, in bytes.
                             The max length of an HTTP URL, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         indexPatterns:
                           description: |-
                             (List of String) Index patterns.
@@ -405,59 +433,70 @@ spec:
                                 description: |-
                                   (Number) index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
                                   index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
-                                type: number
+                                format: int64
+                                type: integer
                               numberOfReplicas:
                                 description: |-
                                   (Number) The number of replicas each primary shard has.
                                   The number of replicas each primary shard has.
-                                type: number
+                                format: int64
+                                type: integer
                               numberOfShards:
                                 description: |-
                                   (Number) The number of primary shards that an index should have.
                                   The number of primary shards that an index should have.
-                                type: number
+                                format: int64
+                                type: integer
                             type: object
                           type: array
                         indicesFielddataCacheSize:
                           description: |-
                             (Number) Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
                             Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryIndexBufferSize:
                           description: |-
                             (Number) Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
                             Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryMaxIndexBufferSize:
                           description: |-
                             (Number) Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
                             Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryMinIndexBufferSize:
                           description: |-
                             (Number) Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
                             Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesQueriesCacheSize:
                           description: |-
                             (Number) Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
                             Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesQueryBoolMaxClauseCount:
                           description: |-
                             (Number) Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
                             Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesRecoveryMaxBytesPerSec:
                           description: |-
                             (Number) Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
                             Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesRecoveryMaxConcurrentFileChunks:
                           description: |-
                             (Number) Number of file chunks sent in parallel for each recovery. Defaults to 2.
                             Number of file chunks sent in parallel for each recovery. Defaults to 2.
-                          type: number
+                          format: int64
+                          type: integer
                         ipFilter:
                           description: |-
                             (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -479,32 +518,31 @@ spec:
                           description: |-
                             (Number) The maximum age before rolling over the audit history index in hours.
                             The maximum age before rolling over the audit history index in hours.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryMaxDocs:
                           description: |-
                             (Number) The maximum number of documents before rolling over the audit history index.
                             The maximum number of documents before rolling over the audit history index.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryRolloverCheckPeriod:
                           description: |-
                             (Number) The time between rollover checks for the audit history index in hours.
                             The time between rollover checks for the audit history index in hours.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryRolloverRetentionPeriod:
                           description: |-
                             (Number) How long audit history indices are kept in days.
                             How long audit history indices are kept in days.
-                          type: number
+                          format: int64
+                          type: integer
                         keepIndexRefreshInterval:
                           description: |-
                             (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                             Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                           type: boolean
-                        maxIndexCount:
-                          description: |-
-                            (Number) Maximum index count. DEPRECATED: use index_patterns instead.
-                            Maximum index count. DEPRECATED: use index_patterns instead.
-                          type: number
                         openid:
                           description: |-
                             (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
@@ -550,12 +588,14 @@ spec:
                                 description: |-
                                   (Number) The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
                                   The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
-                                type: number
+                                format: int64
+                                type: integer
                               refreshRateLimitTimeWindowMs:
                                 description: |-
                                   (Number) The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
                                   The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
-                                type: number
+                                format: int64
+                                type: integer
                               rolesKey:
                                 description: |-
                                   separated list of roles. Required only if you want to use roles in the JWT.
@@ -588,12 +628,14 @@ spec:
                                 description: |-
                                   (Number) Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
                                   Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
-                                type: number
+                                format: int64
+                                type: integer
                               opensearchRequestTimeout:
                                 description: |-
                                   (Number) Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
                                   Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
-                                type: number
+                                format: int64
+                                type: integer
                             type: object
                           type: array
                         overrideMainResponseVersion:
@@ -670,7 +712,8 @@ spec:
                           description: |-
                             (Number) Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
                             Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
-                          type: number
+                          format: int64
+                          type: integer
                         serviceLog:
                           description: |-
                             (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
@@ -680,57 +723,68 @@ spec:
                           description: |-
                             (Number) analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolAnalyzeSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             analyze thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolForceMergeSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             force_merge thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolGetQueueSize:
                           description: |-
                             (Number) get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolGetSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             get thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchQueueSize:
                           description: |-
                             (Number) search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             search thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchThrottledQueueSize:
                           description: |-
                             (Number) search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchThrottledSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             search_throttled thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolWriteQueueSize:
                           description: |-
                             (Number) write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolWriteSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             write thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         version:
                           description: |-
                             (String) OpenSearch major version.
@@ -891,6 +945,19 @@ spec:
                           type: object
                       type: object
                     type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                      type: object
+                    type: array
                   plan:
                     description: |-
                       (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
@@ -932,7 +999,8 @@ spec:
                                       description: |-
                                         (Number) The number of login attempts allowed before login is blocked.
                                         The number of login attempts allowed before login is blocked.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     authenticationBackend:
                                       description: |-
                                         (String) The internal backend. Enter internal.
@@ -942,22 +1010,26 @@ spec:
                                       description: |-
                                         (Number) The duration of time that login remains blocked after a failed login.
                                         The duration of time that login remains blocked after a failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxBlockedClients:
                                       description: |-
                                         (Number) The maximum number of blocked IP addresses.
                                         The maximum number of blocked IP addresses.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxTrackedClients:
                                       description: |-
                                         (Number) The maximum number of tracked IP addresses that have failed login.
                                         The maximum number of tracked IP addresses that have failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     timeWindowSeconds:
                                       description: |-
                                         (Number) The window of time in which the value for allowed_tries is enforced.
                                         The window of time in which the value for `allowed_tries` is enforced.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     type:
                                       description: |-
                                         (String) Type of the service
@@ -975,27 +1047,32 @@ spec:
                                       description: |-
                                         (Number) The number of login attempts allowed before login is blocked.
                                         The number of login attempts allowed before login is blocked.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     blockExpirySeconds:
                                       description: |-
                                         (Number) The duration of time that login remains blocked after a failed login.
                                         The duration of time that login remains blocked after a failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxBlockedClients:
                                       description: |-
                                         (Number) The maximum number of blocked IP addresses.
                                         The maximum number of blocked IP addresses.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxTrackedClients:
                                       description: |-
                                         (Number) The maximum number of tracked IP addresses that have failed login.
                                         The maximum number of tracked IP addresses that have failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     timeWindowSeconds:
                                       description: |-
                                         (Number) The window of time in which the value for allowed_tries is enforced.
                                         The window of time in which the value for `allowed_tries` is enforced.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     type:
                                       description: |-
                                         (String) Type of the service
@@ -1014,12 +1091,14 @@ spec:
                           description: |-
                             (Number) Controls the number of shards allowed in the cluster per data node.
                             Controls the number of shards allowed in the cluster per data node.
-                          type: number
+                          format: int64
+                          type: integer
                         clusterRoutingAllocationNodeConcurrentRecoveries:
                           description: |-
                             (Number) Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
                             Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
-                          type: number
+                          format: int64
+                          type: integer
                         customDomain:
                           description: |-
                             (String) Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
@@ -1030,6 +1109,25 @@ spec:
                             (String) Sender name placeholder to be used in Opensearch Dashboards and Opensearch keystore. This should be identical to the Sender name defined in Opensearch dashboards.
                             Sender name placeholder to be used in Opensearch Dashboards and Opensearch keystore. This should be identical to the Sender name defined in Opensearch dashboards.
                           type: string
+                        emailSenderPasswordSecretRef:
+                          description: |-
+                            (String, Sensitive) Sender password for Opensearch alerts to authenticate with SMTP server. Sender password for Opensearch alerts to authenticate with SMTP server.
+                            Sender password for Opensearch alerts to authenticate with SMTP server. Sender password for Opensearch alerts to authenticate with SMTP server.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
                         emailSenderUsername:
                           description: |-
                             (String) Sender username for Opensearch alerts.
@@ -1044,17 +1142,20 @@ spec:
                           description: |-
                             (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
                             Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         httpMaxHeaderSize:
                           description: |-
                             (Number) The max size of allowed headers, in bytes.
                             The max size of allowed headers, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         httpMaxInitialLineLength:
                           description: |-
                             (Number) The max length of an HTTP URL, in bytes.
                             The max length of an HTTP URL, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         indexPatterns:
                           description: |-
                             (List of String) Index patterns.
@@ -1072,59 +1173,70 @@ spec:
                                 description: |-
                                   (Number) index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
                                   index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
-                                type: number
+                                format: int64
+                                type: integer
                               numberOfReplicas:
                                 description: |-
                                   (Number) The number of replicas each primary shard has.
                                   The number of replicas each primary shard has.
-                                type: number
+                                format: int64
+                                type: integer
                               numberOfShards:
                                 description: |-
                                   (Number) The number of primary shards that an index should have.
                                   The number of primary shards that an index should have.
-                                type: number
+                                format: int64
+                                type: integer
                             type: object
                           type: array
                         indicesFielddataCacheSize:
                           description: |-
                             (Number) Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
                             Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryIndexBufferSize:
                           description: |-
                             (Number) Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
                             Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryMaxIndexBufferSize:
                           description: |-
                             (Number) Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
                             Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryMinIndexBufferSize:
                           description: |-
                             (Number) Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
                             Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesQueriesCacheSize:
                           description: |-
                             (Number) Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
                             Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesQueryBoolMaxClauseCount:
                           description: |-
                             (Number) Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
                             Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesRecoveryMaxBytesPerSec:
                           description: |-
                             (Number) Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
                             Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesRecoveryMaxConcurrentFileChunks:
                           description: |-
                             (Number) Number of file chunks sent in parallel for each recovery. Defaults to 2.
                             Number of file chunks sent in parallel for each recovery. Defaults to 2.
-                          type: number
+                          format: int64
+                          type: integer
                         ipFilter:
                           description: |-
                             (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -1146,32 +1258,31 @@ spec:
                           description: |-
                             (Number) The maximum age before rolling over the audit history index in hours.
                             The maximum age before rolling over the audit history index in hours.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryMaxDocs:
                           description: |-
                             (Number) The maximum number of documents before rolling over the audit history index.
                             The maximum number of documents before rolling over the audit history index.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryRolloverCheckPeriod:
                           description: |-
                             (Number) The time between rollover checks for the audit history index in hours.
                             The time between rollover checks for the audit history index in hours.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryRolloverRetentionPeriod:
                           description: |-
                             (Number) How long audit history indices are kept in days.
                             How long audit history indices are kept in days.
-                          type: number
+                          format: int64
+                          type: integer
                         keepIndexRefreshInterval:
                           description: |-
                             (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                             Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                           type: boolean
-                        maxIndexCount:
-                          description: |-
-                            (Number) Maximum index count. DEPRECATED: use index_patterns instead.
-                            Maximum index count. DEPRECATED: use index_patterns instead.
-                          type: number
                         openid:
                           description: |-
                             (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
@@ -1217,12 +1328,14 @@ spec:
                                 description: |-
                                   (Number) The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
                                   The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
-                                type: number
+                                format: int64
+                                type: integer
                               refreshRateLimitTimeWindowMs:
                                 description: |-
                                   (Number) The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
                                   The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
-                                type: number
+                                format: int64
+                                type: integer
                               rolesKey:
                                 description: |-
                                   separated list of roles. Required only if you want to use roles in the JWT.
@@ -1255,12 +1368,14 @@ spec:
                                 description: |-
                                   (Number) Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
                                   Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
-                                type: number
+                                format: int64
+                                type: integer
                               opensearchRequestTimeout:
                                 description: |-
                                   (Number) Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
                                   Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
-                                type: number
+                                format: int64
+                                type: integer
                             type: object
                           type: array
                         overrideMainResponseVersion:
@@ -1337,7 +1452,8 @@ spec:
                           description: |-
                             (Number) Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
                             Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
-                          type: number
+                          format: int64
+                          type: integer
                         serviceLog:
                           description: |-
                             (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
@@ -1347,57 +1463,68 @@ spec:
                           description: |-
                             (Number) analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolAnalyzeSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             analyze thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolForceMergeSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             force_merge thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolGetQueueSize:
                           description: |-
                             (Number) get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolGetSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             get thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchQueueSize:
                           description: |-
                             (Number) search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             search thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchThrottledQueueSize:
                           description: |-
                             (Number) search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchThrottledSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             search_throttled thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolWriteQueueSize:
                           description: |-
                             (Number) write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolWriteSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             write thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         version:
                           description: |-
                             (String) OpenSearch major version.
@@ -1618,19 +1745,30 @@ spec:
                     items:
                       properties:
                         component:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Type of the component
                           type: string
                         host:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Hostname of the component
                           type: string
                         port:
-                          description: (Number)
-                          type: number
+                          description: |-
+                            (Number)
+                            Port number of the component
+                          format: int64
+                          type: integer
                         route:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Component network route type
                           type: string
                         usage:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Usage of the component
                           type: string
                       type: object
                     type: array
@@ -1692,15 +1830,19 @@ spec:
                     items:
                       properties:
                         name:
-                          description: (String) Name of the service. The name is used
-                            as a prefix for the logical hostname. Must be unique within
-                            an account
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            Name plus a node iteration
                           type: string
                         role:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Role of the node
                           type: string
                         state:
-                          description: (String) State of the service
+                          description: |-
+                            (String) State of the service
+                            State of the node
                           type: string
                       type: object
                     type: array
@@ -1750,7 +1892,8 @@ spec:
                                       description: |-
                                         (Number) The number of login attempts allowed before login is blocked.
                                         The number of login attempts allowed before login is blocked.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     authenticationBackend:
                                       description: |-
                                         (String) The internal backend. Enter internal.
@@ -1760,22 +1903,26 @@ spec:
                                       description: |-
                                         (Number) The duration of time that login remains blocked after a failed login.
                                         The duration of time that login remains blocked after a failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxBlockedClients:
                                       description: |-
                                         (Number) The maximum number of blocked IP addresses.
                                         The maximum number of blocked IP addresses.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxTrackedClients:
                                       description: |-
                                         (Number) The maximum number of tracked IP addresses that have failed login.
                                         The maximum number of tracked IP addresses that have failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     timeWindowSeconds:
                                       description: |-
                                         (Number) The window of time in which the value for allowed_tries is enforced.
                                         The window of time in which the value for `allowed_tries` is enforced.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     type:
                                       description: |-
                                         (String) Type of the service
@@ -1793,27 +1940,32 @@ spec:
                                       description: |-
                                         (Number) The number of login attempts allowed before login is blocked.
                                         The number of login attempts allowed before login is blocked.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     blockExpirySeconds:
                                       description: |-
                                         (Number) The duration of time that login remains blocked after a failed login.
                                         The duration of time that login remains blocked after a failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxBlockedClients:
                                       description: |-
                                         (Number) The maximum number of blocked IP addresses.
                                         The maximum number of blocked IP addresses.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     maxTrackedClients:
                                       description: |-
                                         (Number) The maximum number of tracked IP addresses that have failed login.
                                         The maximum number of tracked IP addresses that have failed login.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     timeWindowSeconds:
                                       description: |-
                                         (Number) The window of time in which the value for allowed_tries is enforced.
                                         The window of time in which the value for `allowed_tries` is enforced.
-                                      type: number
+                                      format: int64
+                                      type: integer
                                     type:
                                       description: |-
                                         (String) Type of the service
@@ -1832,12 +1984,14 @@ spec:
                           description: |-
                             (Number) Controls the number of shards allowed in the cluster per data node.
                             Controls the number of shards allowed in the cluster per data node.
-                          type: number
+                          format: int64
+                          type: integer
                         clusterRoutingAllocationNodeConcurrentRecoveries:
                           description: |-
                             (Number) Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
                             Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
-                          type: number
+                          format: int64
+                          type: integer
                         customDomain:
                           description: |-
                             (String) Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
@@ -1862,17 +2016,20 @@ spec:
                           description: |-
                             (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
                             Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         httpMaxHeaderSize:
                           description: |-
                             (Number) The max size of allowed headers, in bytes.
                             The max size of allowed headers, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         httpMaxInitialLineLength:
                           description: |-
                             (Number) The max length of an HTTP URL, in bytes.
                             The max length of an HTTP URL, in bytes.
-                          type: number
+                          format: int64
+                          type: integer
                         indexPatterns:
                           description: |-
                             (List of String) Index patterns.
@@ -1890,59 +2047,70 @@ spec:
                                 description: |-
                                   (Number) index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
                                   index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
-                                type: number
+                                format: int64
+                                type: integer
                               numberOfReplicas:
                                 description: |-
                                   (Number) The number of replicas each primary shard has.
                                   The number of replicas each primary shard has.
-                                type: number
+                                format: int64
+                                type: integer
                               numberOfShards:
                                 description: |-
                                   (Number) The number of primary shards that an index should have.
                                   The number of primary shards that an index should have.
-                                type: number
+                                format: int64
+                                type: integer
                             type: object
                           type: array
                         indicesFielddataCacheSize:
                           description: |-
                             (Number) Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
                             Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryIndexBufferSize:
                           description: |-
                             (Number) Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
                             Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryMaxIndexBufferSize:
                           description: |-
                             (Number) Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
                             Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesMemoryMinIndexBufferSize:
                           description: |-
                             (Number) Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
                             Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesQueriesCacheSize:
                           description: |-
                             (Number) Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
                             Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesQueryBoolMaxClauseCount:
                           description: |-
                             (Number) Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
                             Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesRecoveryMaxBytesPerSec:
                           description: |-
                             (Number) Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
                             Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
-                          type: number
+                          format: int64
+                          type: integer
                         indicesRecoveryMaxConcurrentFileChunks:
                           description: |-
                             (Number) Number of file chunks sent in parallel for each recovery. Defaults to 2.
                             Number of file chunks sent in parallel for each recovery. Defaults to 2.
-                          type: number
+                          format: int64
+                          type: integer
                         ipFilter:
                           description: |-
                             (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -1964,32 +2132,31 @@ spec:
                           description: |-
                             (Number) The maximum age before rolling over the audit history index in hours.
                             The maximum age before rolling over the audit history index in hours.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryMaxDocs:
                           description: |-
                             (Number) The maximum number of documents before rolling over the audit history index.
                             The maximum number of documents before rolling over the audit history index.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryRolloverCheckPeriod:
                           description: |-
                             (Number) The time between rollover checks for the audit history index in hours.
                             The time between rollover checks for the audit history index in hours.
-                          type: number
+                          format: int64
+                          type: integer
                         ismHistoryRolloverRetentionPeriod:
                           description: |-
                             (Number) How long audit history indices are kept in days.
                             How long audit history indices are kept in days.
-                          type: number
+                          format: int64
+                          type: integer
                         keepIndexRefreshInterval:
                           description: |-
                             (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                             Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                           type: boolean
-                        maxIndexCount:
-                          description: |-
-                            (Number) Maximum index count. DEPRECATED: use index_patterns instead.
-                            Maximum index count. DEPRECATED: use index_patterns instead.
-                          type: number
                         openid:
                           description: |-
                             (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
@@ -2035,12 +2202,14 @@ spec:
                                 description: |-
                                   (Number) The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
                                   The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
-                                type: number
+                                format: int64
+                                type: integer
                               refreshRateLimitTimeWindowMs:
                                 description: |-
                                   (Number) The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
                                   The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
-                                type: number
+                                format: int64
+                                type: integer
                               rolesKey:
                                 description: |-
                                   separated list of roles. Required only if you want to use roles in the JWT.
@@ -2073,12 +2242,14 @@ spec:
                                 description: |-
                                   (Number) Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
                                   Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
-                                type: number
+                                format: int64
+                                type: integer
                               opensearchRequestTimeout:
                                 description: |-
                                   (Number) Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
                                   Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
-                                type: number
+                                format: int64
+                                type: integer
                             type: object
                           type: array
                         overrideMainResponseVersion:
@@ -2155,7 +2326,8 @@ spec:
                           description: |-
                             (Number) Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
                             Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
-                          type: number
+                          format: int64
+                          type: integer
                         serviceLog:
                           description: |-
                             (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
@@ -2165,57 +2337,68 @@ spec:
                           description: |-
                             (Number) analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolAnalyzeSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             analyze thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolForceMergeSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             force_merge thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolGetQueueSize:
                           description: |-
                             (Number) get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolGetSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             get thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchQueueSize:
                           description: |-
                             (Number) search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             search thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchThrottledQueueSize:
                           description: |-
                             (Number) search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolSearchThrottledSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             search_throttled thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolWriteQueueSize:
                           description: |-
                             (Number) write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
                             write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-                          type: number
+                          format: int64
+                          type: integer
                         threadPoolWriteSize:
                           description: |-
                             value is automatically lowered if set to higher than maximum value.
                             write thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-                          type: number
+                          format: int64
+                          type: integer
                         version:
                           description: |-
                             (String) OpenSearch major version.
@@ -2275,6 +2458,13 @@ spec:
                         A Message containing details about this condition's last transition from
                         one status to another, if any.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: A Reason for this condition's last transition from
                         one status to another.
@@ -2298,6 +2488,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
             type: object
         required:
         - spec

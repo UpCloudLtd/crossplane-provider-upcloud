@@ -25,7 +25,12 @@ func Configure(p *config.Provider) {
 		r.UseAsync = true
 
 		r.References["network.uuid"] = config.Reference{
-			Type: "github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network",
+			TerraformName: "upcloud_network",
+		}
+
+		if s, ok := r.TerraformResource.Schema["node_states"]; ok {
+			s.Optional = true
+			s.Computed = true
 		}
 	})
 
@@ -35,7 +40,12 @@ func Configure(p *config.Provider) {
 		r.UseAsync = true
 
 		r.References["network.uuid"] = config.Reference{
-			Type: "github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network",
+			TerraformName: "upcloud_network",
+		}
+
+		if s, ok := r.TerraformResource.Schema["node_states"]; ok {
+			s.Optional = true
+			s.Computed = true
 		}
 	})
 
@@ -45,7 +55,12 @@ func Configure(p *config.Provider) {
 		r.UseAsync = true
 
 		r.References["network.uuid"] = config.Reference{
-			Type: "github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network",
+			TerraformName: "upcloud_network",
+		}
+
+		if s, ok := r.TerraformResource.Schema["node_states"]; ok {
+			s.Optional = true
+			s.Computed = true
 		}
 	})
 
@@ -55,7 +70,12 @@ func Configure(p *config.Provider) {
 		r.UseAsync = true
 
 		r.References["network.uuid"] = config.Reference{
-			Type: "github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network",
+			TerraformName: "upcloud_network",
+		}
+
+		if s, ok := r.TerraformResource.Schema["node_states"]; ok {
+			s.Optional = true
+			s.Computed = true
 		}
 	})
 
@@ -66,7 +86,7 @@ func Configure(p *config.Provider) {
 		// TODO: use generic reference type if that's ever implemented in upjet
 		// https://github.com/crossplane/upjet/issues/95
 		r.References["service"] = config.Reference{
-			Type: "ManagedDatabasePostgresql",
+			TerraformName: "upcloud_managed_database_postgresql",
 		}
 
 		if schema, ok := r.TerraformResource.Schema["service"]; ok {
@@ -79,7 +99,7 @@ func Configure(p *config.Provider) {
 		r.Kind = "ManagedDatabaseUser"
 
 		r.References["service"] = config.Reference{
-			Type: "ManagedDatabasePostgresql",
+			TerraformName: "upcloud_managed_database_postgresql",
 		}
 
 		if schema, ok := r.TerraformResource.Schema["service"]; ok {

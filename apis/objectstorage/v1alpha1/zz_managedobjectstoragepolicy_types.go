@@ -32,7 +32,7 @@ type ManagedObjectStoragePolicyObservation struct {
 
 	// (Number) Attachment count.
 	// Attachment count.
-	AttachmentCount *float64 `json:"attachmentCount,omitempty" tf:"attachment_count,omitempty"`
+	AttachmentCount *int64 `json:"attachmentCount,omitempty" tf:"attachment_count,omitempty"`
 
 	// (String) Creation time.
 	// Creation time.
@@ -76,19 +76,19 @@ type ManagedObjectStoragePolicyParameters struct {
 	// encoded compliant with RFC 3986.
 	// Policy document, URL-encoded compliant with RFC 3986.
 	// +kubebuilder:validation:Optional
-	Document *string `json:"document,omitempty" tf:"document,omitempty"`
+	Document *string `json:"document" tf:"document,omitempty"`
 
 	// (String) Managed Object Storage service UUID.
 	// Managed Object Storage service UUID.
-	// +crossplane:generate:reference:type=ManagedObjectStorage
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorage
 	// +kubebuilder:validation:Optional
-	ServiceUUID *string `json:"serviceUuid,omitempty" tf:"service_uuid,omitempty"`
+	ServiceUUID *string `json:"serviceUuid" tf:"service_uuid,omitempty"`
 
-	// Reference to a ManagedObjectStorage to populate serviceUuid.
+	// Reference to a ManagedObjectStorage in objectstorage to populate serviceUuid.
 	// +kubebuilder:validation:Optional
 	ServiceUUIDRef *v1.Reference `json:"serviceUuidRef,omitempty" tf:"-"`
 
-	// Selector for a ManagedObjectStorage to populate serviceUuid.
+	// Selector for a ManagedObjectStorage in objectstorage to populate serviceUuid.
 	// +kubebuilder:validation:Optional
 	ServiceUUIDSelector *v1.Selector `json:"serviceUuidSelector,omitempty" tf:"-"`
 }
@@ -121,8 +121,8 @@ type ManagedObjectStoragePolicyStatus struct {
 // +kubebuilder:storageversion
 
 // ManagedObjectStoragePolicy is the Schema for the ManagedObjectStoragePolicys API. This resource represents an UpCloud Managed Object Storage policy.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

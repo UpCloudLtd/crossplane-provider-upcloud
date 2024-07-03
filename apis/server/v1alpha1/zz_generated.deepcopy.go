@@ -103,7 +103,7 @@ func (in *BackupRuleInitParameters) DeepCopyInto(out *BackupRuleInitParameters) 
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -133,7 +133,7 @@ func (in *BackupRuleObservation) DeepCopyInto(out *BackupRuleObservation) {
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -163,7 +163,7 @@ func (in *BackupRuleParameters) DeepCopyInto(out *BackupRuleParameters) {
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -1278,7 +1278,7 @@ func (in *ServerInitParameters) DeepCopyInto(out *ServerInitParameters) {
 	}
 	if in.CPU != nil {
 		in, out := &in.CPU, &out.CPU
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Firewall != nil {
@@ -1288,7 +1288,7 @@ func (in *ServerInitParameters) DeepCopyInto(out *ServerInitParameters) {
 	}
 	if in.Host != nil {
 		in, out := &in.Host, &out.Host
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Hostname != nil {
@@ -1321,7 +1321,7 @@ func (in *ServerInitParameters) DeepCopyInto(out *ServerInitParameters) {
 	}
 	if in.Mem != nil {
 		in, out := &in.Mem, &out.Mem
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Metadata != nil {
@@ -1462,7 +1462,7 @@ func (in *ServerObservation) DeepCopyInto(out *ServerObservation) {
 	}
 	if in.CPU != nil {
 		in, out := &in.CPU, &out.CPU
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Firewall != nil {
@@ -1472,7 +1472,7 @@ func (in *ServerObservation) DeepCopyInto(out *ServerObservation) {
 	}
 	if in.Host != nil {
 		in, out := &in.Host, &out.Host
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Hostname != nil {
@@ -1510,7 +1510,7 @@ func (in *ServerObservation) DeepCopyInto(out *ServerObservation) {
 	}
 	if in.Mem != nil {
 		in, out := &in.Mem, &out.Mem
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Metadata != nil {
@@ -1619,7 +1619,7 @@ func (in *ServerParameters) DeepCopyInto(out *ServerParameters) {
 	}
 	if in.CPU != nil {
 		in, out := &in.CPU, &out.CPU
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Firewall != nil {
@@ -1629,7 +1629,7 @@ func (in *ServerParameters) DeepCopyInto(out *ServerParameters) {
 	}
 	if in.Host != nil {
 		in, out := &in.Host, &out.Host
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Hostname != nil {
@@ -1662,7 +1662,7 @@ func (in *ServerParameters) DeepCopyInto(out *ServerParameters) {
 	}
 	if in.Mem != nil {
 		in, out := &in.Mem, &out.Mem
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Metadata != nil {
@@ -2033,7 +2033,7 @@ func (in *TemplateInitParameters) DeepCopyInto(out *TemplateInitParameters) {
 	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Storage != nil {
@@ -2100,7 +2100,7 @@ func (in *TemplateObservation) DeepCopyInto(out *TemplateObservation) {
 	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Storage != nil {
@@ -2167,7 +2167,7 @@ func (in *TemplateParameters) DeepCopyInto(out *TemplateParameters) {
 	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(float64)
+		*out = new(int64)
 		**out = **in
 	}
 	if in.Storage != nil {

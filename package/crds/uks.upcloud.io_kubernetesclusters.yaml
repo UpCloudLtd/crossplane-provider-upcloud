@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -184,10 +184,15 @@ spec:
                       (Boolean) Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
                       Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
                     type: boolean
+                  storageEncryption:
+                    description: |-
+                      (String) Set default storage encryption strategy for all nodes in the cluster.
+                      Set default storage encryption strategy for all nodes in the cluster.
+                    type: string
                   version:
                     description: |-
-                      (String) Kubernetes version ID, e.g. 1.27. You can list available version IDs with upctl kubernetes versions.
-                      Kubernetes version ID, e.g. `1.27`. You can list available version IDs with `upctl kubernetes versions`.
+                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
                     type: string
                   zone:
                     description: |-
@@ -318,10 +323,15 @@ spec:
                       (Boolean) Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
                       Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
                     type: boolean
+                  storageEncryption:
+                    description: |-
+                      (String) Set default storage encryption strategy for all nodes in the cluster.
+                      Set default storage encryption strategy for all nodes in the cluster.
+                    type: string
                   version:
                     description: |-
-                      (String) Kubernetes version ID, e.g. 1.27. You can list available version IDs with upctl kubernetes versions.
-                      Kubernetes version ID, e.g. `1.27`. You can list available version IDs with `upctl kubernetes versions`.
+                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
                     type: string
                   zone:
                     description: |-
@@ -501,6 +511,10 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.controlPlaneIpFilter)
                 || (has(self.initProvider) && has(self.initProvider.controlPlaneIpFilter))'
+            - message: spec.forProvider.labels is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.labels)
+                || (has(self.initProvider) && has(self.initProvider.labels))'
             - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
@@ -523,7 +537,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) UUID of the cluster.
                     type: string
                   labels:
                     additionalProperties:
@@ -570,10 +584,15 @@ spec:
                       (String) Operational state of the cluster.
                       Operational state of the cluster.
                     type: string
+                  storageEncryption:
+                    description: |-
+                      (String) Set default storage encryption strategy for all nodes in the cluster.
+                      Set default storage encryption strategy for all nodes in the cluster.
+                    type: string
                   version:
                     description: |-
-                      (String) Kubernetes version ID, e.g. 1.27. You can list available version IDs with upctl kubernetes versions.
-                      Kubernetes version ID, e.g. `1.27`. You can list available version IDs with `upctl kubernetes versions`.
+                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
                     type: string
                   zone:
                     description: |-
@@ -597,6 +616,13 @@ spec:
                         A Message containing details about this condition's last transition from
                         one status to another, if any.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: A Reason for this condition's last transition from
                         one status to another.
@@ -620,6 +646,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
             type: object
         required:
         - spec

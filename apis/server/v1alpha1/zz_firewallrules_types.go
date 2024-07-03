@@ -218,14 +218,14 @@ type FirewallRulesInitParameters struct {
 
 	// (String) The unique id of the server to be protected the firewall rules
 	// The unique id of the server to be protected the firewall rules
-	// +crossplane:generate:reference:type=Server
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/server/v1alpha1.Server
 	ServerID *string `json:"serverId,omitempty" tf:"server_id,omitempty"`
 
-	// Reference to a Server to populate serverId.
+	// Reference to a Server in server to populate serverId.
 	// +kubebuilder:validation:Optional
 	ServerIDRef *v1.Reference `json:"serverIdRef,omitempty" tf:"-"`
 
-	// Selector for a Server to populate serverId.
+	// Selector for a Server in server to populate serverId.
 	// +kubebuilder:validation:Optional
 	ServerIDSelector *v1.Selector `json:"serverIdSelector,omitempty" tf:"-"`
 }
@@ -261,19 +261,19 @@ type FirewallRulesParameters struct {
 	// Typical firewall rule should have "action", "direction", "protocol", "family" and at least one destination/source-address/port range.
 	// The default rule can be created by providing only "action" and "direction" attributes. Default rule should be defined last.
 	// +kubebuilder:validation:Optional
-	FirewallRule []FirewallRuleParameters `json:"firewallRule,omitempty" tf:"firewall_rule,omitempty"`
+	FirewallRule []FirewallRuleParameters `json:"firewallRule" tf:"firewall_rule,omitempty"`
 
 	// (String) The unique id of the server to be protected the firewall rules
 	// The unique id of the server to be protected the firewall rules
-	// +crossplane:generate:reference:type=Server
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/server/v1alpha1.Server
 	// +kubebuilder:validation:Optional
-	ServerID *string `json:"serverId,omitempty" tf:"server_id,omitempty"`
+	ServerID *string `json:"serverId" tf:"server_id,omitempty"`
 
-	// Reference to a Server to populate serverId.
+	// Reference to a Server in server to populate serverId.
 	// +kubebuilder:validation:Optional
 	ServerIDRef *v1.Reference `json:"serverIdRef,omitempty" tf:"-"`
 
-	// Selector for a Server to populate serverId.
+	// Selector for a Server in server to populate serverId.
 	// +kubebuilder:validation:Optional
 	ServerIDSelector *v1.Selector `json:"serverIdSelector,omitempty" tf:"-"`
 }
@@ -306,8 +306,8 @@ type FirewallRulesStatus struct {
 // +kubebuilder:storageversion
 
 // FirewallRules is the Schema for the FirewallRuless API. This resource represents a generated list of UpCloud firewall rules. Firewall rules are used in conjunction with UpCloud servers. Each server has its own firewall rules. The firewall is enabled on all network interfaces except ones attached to private virtual networks. The maximum number of firewall rules per server is 1000.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

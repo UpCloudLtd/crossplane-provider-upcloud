@@ -1,11 +1,13 @@
-# apiVersion: network.upcloud.io/v1alpha1
-# kind: Router
-# metadata:
-#   name: example
-# spec:
-#   forProvider:
-#     name: crossplane-example
-# ---
+ apiVersion: network.upcloud.io/v1alpha1
+ kind: Router
+ metadata:
+   name: example
+ spec:
+   forProvider:
+     name: crossplane-example
+     labels: {}
+     staticRoute: []
+---
 apiVersion: network.upcloud.io/v1alpha1
 kind: Network
 metadata:
@@ -24,15 +26,15 @@ spec:
 apiVersion: network.upcloud.io/v1alpha1
 kind: Network
 metadata:
-  name: example-2
+ name: example-2
 spec:
-  forProvider:
-    ipNetwork:
-    - address: 10.12.0.0/24
-      dhcp: true
-      dhcpDefaultRoute: false
-      family: IPv4
-    name: crossplane_private_net_x_2
-    zone: de-fra1
-    # routerRef:
-    #   name: example
+ forProvider:
+   ipNetwork:
+   - address: 10.12.0.0/24
+     dhcp: true
+     dhcpDefaultRoute: false
+     family: IPv4
+   name: crossplane_private_net_x_2
+   zone: de-fra1
+   routerRef:
+     name: example

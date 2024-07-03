@@ -49,23 +49,23 @@ type IPRateLimitingInitParameters struct {
 
 	// (Number) The number of login attempts allowed before login is blocked.
 	// The number of login attempts allowed before login is blocked.
-	AllowedTries *float64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
+	AllowedTries *int64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
 
 	// (Number) The duration of time that login remains blocked after a failed login.
 	// The duration of time that login remains blocked after a failed login.
-	BlockExpirySeconds *float64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
+	BlockExpirySeconds *int64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
 
 	// (Number) The maximum number of blocked IP addresses.
 	// The maximum number of blocked IP addresses.
-	MaxBlockedClients *float64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
+	MaxBlockedClients *int64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
 
 	// (Number) The maximum number of tracked IP addresses that have failed login.
 	// The maximum number of tracked IP addresses that have failed login.
-	MaxTrackedClients *float64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
+	MaxTrackedClients *int64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
 
 	// (Number) The window of time in which the value for allowed_tries is enforced.
 	// The window of time in which the value for `allowed_tries` is enforced.
-	TimeWindowSeconds *float64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
+	TimeWindowSeconds *int64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
 
 	// (String) Type of the service
 	// The type of rate limiting.
@@ -76,23 +76,23 @@ type IPRateLimitingObservation struct {
 
 	// (Number) The number of login attempts allowed before login is blocked.
 	// The number of login attempts allowed before login is blocked.
-	AllowedTries *float64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
+	AllowedTries *int64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
 
 	// (Number) The duration of time that login remains blocked after a failed login.
 	// The duration of time that login remains blocked after a failed login.
-	BlockExpirySeconds *float64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
+	BlockExpirySeconds *int64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
 
 	// (Number) The maximum number of blocked IP addresses.
 	// The maximum number of blocked IP addresses.
-	MaxBlockedClients *float64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
+	MaxBlockedClients *int64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
 
 	// (Number) The maximum number of tracked IP addresses that have failed login.
 	// The maximum number of tracked IP addresses that have failed login.
-	MaxTrackedClients *float64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
+	MaxTrackedClients *int64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
 
 	// (Number) The window of time in which the value for allowed_tries is enforced.
 	// The window of time in which the value for `allowed_tries` is enforced.
-	TimeWindowSeconds *float64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
+	TimeWindowSeconds *int64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
 
 	// (String) Type of the service
 	// The type of rate limiting.
@@ -104,27 +104,27 @@ type IPRateLimitingParameters struct {
 	// (Number) The number of login attempts allowed before login is blocked.
 	// The number of login attempts allowed before login is blocked.
 	// +kubebuilder:validation:Optional
-	AllowedTries *float64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
+	AllowedTries *int64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
 
 	// (Number) The duration of time that login remains blocked after a failed login.
 	// The duration of time that login remains blocked after a failed login.
 	// +kubebuilder:validation:Optional
-	BlockExpirySeconds *float64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
+	BlockExpirySeconds *int64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
 
 	// (Number) The maximum number of blocked IP addresses.
 	// The maximum number of blocked IP addresses.
 	// +kubebuilder:validation:Optional
-	MaxBlockedClients *float64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
+	MaxBlockedClients *int64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
 
 	// (Number) The maximum number of tracked IP addresses that have failed login.
 	// The maximum number of tracked IP addresses that have failed login.
 	// +kubebuilder:validation:Optional
-	MaxTrackedClients *float64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
+	MaxTrackedClients *int64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
 
 	// (Number) The window of time in which the value for allowed_tries is enforced.
 	// The window of time in which the value for `allowed_tries` is enforced.
 	// +kubebuilder:validation:Optional
-	TimeWindowSeconds *float64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
+	TimeWindowSeconds *int64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
 
 	// (String) Type of the service
 	// The type of rate limiting.
@@ -136,30 +136,30 @@ type IndexTemplateInitParameters struct {
 
 	// (Number) index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
 	// index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
-	MappingNestedObjectsLimit *float64 `json:"mappingNestedObjectsLimit,omitempty" tf:"mapping_nested_objects_limit,omitempty"`
+	MappingNestedObjectsLimit *int64 `json:"mappingNestedObjectsLimit,omitempty" tf:"mapping_nested_objects_limit,omitempty"`
 
 	// (Number) The number of replicas each primary shard has.
 	// The number of replicas each primary shard has.
-	NumberOfReplicas *float64 `json:"numberOfReplicas,omitempty" tf:"number_of_replicas,omitempty"`
+	NumberOfReplicas *int64 `json:"numberOfReplicas,omitempty" tf:"number_of_replicas,omitempty"`
 
 	// (Number) The number of primary shards that an index should have.
 	// The number of primary shards that an index should have.
-	NumberOfShards *float64 `json:"numberOfShards,omitempty" tf:"number_of_shards,omitempty"`
+	NumberOfShards *int64 `json:"numberOfShards,omitempty" tf:"number_of_shards,omitempty"`
 }
 
 type IndexTemplateObservation struct {
 
 	// (Number) index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
 	// index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
-	MappingNestedObjectsLimit *float64 `json:"mappingNestedObjectsLimit,omitempty" tf:"mapping_nested_objects_limit,omitempty"`
+	MappingNestedObjectsLimit *int64 `json:"mappingNestedObjectsLimit,omitempty" tf:"mapping_nested_objects_limit,omitempty"`
 
 	// (Number) The number of replicas each primary shard has.
 	// The number of replicas each primary shard has.
-	NumberOfReplicas *float64 `json:"numberOfReplicas,omitempty" tf:"number_of_replicas,omitempty"`
+	NumberOfReplicas *int64 `json:"numberOfReplicas,omitempty" tf:"number_of_replicas,omitempty"`
 
 	// (Number) The number of primary shards that an index should have.
 	// The number of primary shards that an index should have.
-	NumberOfShards *float64 `json:"numberOfShards,omitempty" tf:"number_of_shards,omitempty"`
+	NumberOfShards *int64 `json:"numberOfShards,omitempty" tf:"number_of_shards,omitempty"`
 }
 
 type IndexTemplateParameters struct {
@@ -167,24 +167,24 @@ type IndexTemplateParameters struct {
 	// (Number) index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
 	// index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
 	// +kubebuilder:validation:Optional
-	MappingNestedObjectsLimit *float64 `json:"mappingNestedObjectsLimit,omitempty" tf:"mapping_nested_objects_limit,omitempty"`
+	MappingNestedObjectsLimit *int64 `json:"mappingNestedObjectsLimit,omitempty" tf:"mapping_nested_objects_limit,omitempty"`
 
 	// (Number) The number of replicas each primary shard has.
 	// The number of replicas each primary shard has.
 	// +kubebuilder:validation:Optional
-	NumberOfReplicas *float64 `json:"numberOfReplicas,omitempty" tf:"number_of_replicas,omitempty"`
+	NumberOfReplicas *int64 `json:"numberOfReplicas,omitempty" tf:"number_of_replicas,omitempty"`
 
 	// (Number) The number of primary shards that an index should have.
 	// The number of primary shards that an index should have.
 	// +kubebuilder:validation:Optional
-	NumberOfShards *float64 `json:"numberOfShards,omitempty" tf:"number_of_shards,omitempty"`
+	NumberOfShards *int64 `json:"numberOfShards,omitempty" tf:"number_of_shards,omitempty"`
 }
 
 type InternalAuthenticationBackendLimitingInitParameters struct {
 
 	// (Number) The number of login attempts allowed before login is blocked.
 	// The number of login attempts allowed before login is blocked.
-	AllowedTries *float64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
+	AllowedTries *int64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
 
 	// (String) The internal backend. Enter internal.
 	// The internal backend. Enter `internal`.
@@ -192,19 +192,19 @@ type InternalAuthenticationBackendLimitingInitParameters struct {
 
 	// (Number) The duration of time that login remains blocked after a failed login.
 	// The duration of time that login remains blocked after a failed login.
-	BlockExpirySeconds *float64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
+	BlockExpirySeconds *int64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
 
 	// (Number) The maximum number of blocked IP addresses.
 	// The maximum number of blocked IP addresses.
-	MaxBlockedClients *float64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
+	MaxBlockedClients *int64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
 
 	// (Number) The maximum number of tracked IP addresses that have failed login.
 	// The maximum number of tracked IP addresses that have failed login.
-	MaxTrackedClients *float64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
+	MaxTrackedClients *int64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
 
 	// (Number) The window of time in which the value for allowed_tries is enforced.
 	// The window of time in which the value for `allowed_tries` is enforced.
-	TimeWindowSeconds *float64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
+	TimeWindowSeconds *int64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
 
 	// (String) Type of the service
 	// The type of rate limiting.
@@ -215,7 +215,7 @@ type InternalAuthenticationBackendLimitingObservation struct {
 
 	// (Number) The number of login attempts allowed before login is blocked.
 	// The number of login attempts allowed before login is blocked.
-	AllowedTries *float64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
+	AllowedTries *int64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
 
 	// (String) The internal backend. Enter internal.
 	// The internal backend. Enter `internal`.
@@ -223,19 +223,19 @@ type InternalAuthenticationBackendLimitingObservation struct {
 
 	// (Number) The duration of time that login remains blocked after a failed login.
 	// The duration of time that login remains blocked after a failed login.
-	BlockExpirySeconds *float64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
+	BlockExpirySeconds *int64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
 
 	// (Number) The maximum number of blocked IP addresses.
 	// The maximum number of blocked IP addresses.
-	MaxBlockedClients *float64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
+	MaxBlockedClients *int64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
 
 	// (Number) The maximum number of tracked IP addresses that have failed login.
 	// The maximum number of tracked IP addresses that have failed login.
-	MaxTrackedClients *float64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
+	MaxTrackedClients *int64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
 
 	// (Number) The window of time in which the value for allowed_tries is enforced.
 	// The window of time in which the value for `allowed_tries` is enforced.
-	TimeWindowSeconds *float64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
+	TimeWindowSeconds *int64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
 
 	// (String) Type of the service
 	// The type of rate limiting.
@@ -247,7 +247,7 @@ type InternalAuthenticationBackendLimitingParameters struct {
 	// (Number) The number of login attempts allowed before login is blocked.
 	// The number of login attempts allowed before login is blocked.
 	// +kubebuilder:validation:Optional
-	AllowedTries *float64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
+	AllowedTries *int64 `json:"allowedTries,omitempty" tf:"allowed_tries,omitempty"`
 
 	// (String) The internal backend. Enter internal.
 	// The internal backend. Enter `internal`.
@@ -257,22 +257,22 @@ type InternalAuthenticationBackendLimitingParameters struct {
 	// (Number) The duration of time that login remains blocked after a failed login.
 	// The duration of time that login remains blocked after a failed login.
 	// +kubebuilder:validation:Optional
-	BlockExpirySeconds *float64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
+	BlockExpirySeconds *int64 `json:"blockExpirySeconds,omitempty" tf:"block_expiry_seconds,omitempty"`
 
 	// (Number) The maximum number of blocked IP addresses.
 	// The maximum number of blocked IP addresses.
 	// +kubebuilder:validation:Optional
-	MaxBlockedClients *float64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
+	MaxBlockedClients *int64 `json:"maxBlockedClients,omitempty" tf:"max_blocked_clients,omitempty"`
 
 	// (Number) The maximum number of tracked IP addresses that have failed login.
 	// The maximum number of tracked IP addresses that have failed login.
 	// +kubebuilder:validation:Optional
-	MaxTrackedClients *float64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
+	MaxTrackedClients *int64 `json:"maxTrackedClients,omitempty" tf:"max_tracked_clients,omitempty"`
 
 	// (Number) The window of time in which the value for allowed_tries is enforced.
 	// The window of time in which the value for `allowed_tries` is enforced.
 	// +kubebuilder:validation:Optional
-	TimeWindowSeconds *float64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
+	TimeWindowSeconds *int64 `json:"timeWindowSeconds,omitempty" tf:"time_window_seconds,omitempty"`
 
 	// (String) Type of the service
 	// The type of rate limiting.
@@ -286,18 +286,23 @@ type ManagedDatabaseOpensearchComponentsInitParameters struct {
 type ManagedDatabaseOpensearchComponentsObservation struct {
 
 	// (String)
+	// Type of the component
 	Component *string `json:"component,omitempty" tf:"component,omitempty"`
 
 	// (String)
+	// Hostname of the component
 	Host *string `json:"host,omitempty" tf:"host,omitempty"`
 
 	// (Number)
-	Port *float64 `json:"port,omitempty" tf:"port,omitempty"`
+	// Port number of the component
+	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
 
 	// (String)
+	// Component network route type
 	Route *string `json:"route,omitempty" tf:"route,omitempty"`
 
 	// (String)
+	// Usage of the component
 	Usage *string `json:"usage,omitempty" tf:"usage,omitempty"`
 }
 
@@ -329,6 +334,10 @@ type ManagedDatabaseOpensearchInitParameters struct {
 	// (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
 	// Private networks attached to the managed database
 	Network []ManagedDatabaseOpensearchNetworkInitParameters `json:"network,omitempty" tf:"network,omitempty"`
+
+	// (List of Object) Information about nodes providing the managed service (see below for nested schema)
+	// Information about nodes providing the managed service
+	NodeStates []ManagedDatabaseOpensearchNodeStatesInitParameters `json:"nodeStates,omitempty" tf:"node_states,omitempty"`
 
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
@@ -419,7 +428,7 @@ type ManagedDatabaseOpensearchNetworkParameters struct {
 	// Private network UUID. Must reside in the same zone as the database.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network
 	// +kubebuilder:validation:Optional
-	UUID *string `json:"uuid,omitempty" tf:"uuid,omitempty"`
+	UUID *string `json:"uuid" tf:"uuid,omitempty"`
 
 	// Reference to a Network in network to populate uuid.
 	// +kubebuilder:validation:Optional
@@ -431,21 +440,33 @@ type ManagedDatabaseOpensearchNetworkParameters struct {
 }
 
 type ManagedDatabaseOpensearchNodeStatesInitParameters struct {
+
+	// (String)
+	// Role of the node
+	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
 
 type ManagedDatabaseOpensearchNodeStatesObservation struct {
 
 	// (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+	// Name plus a node iteration
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String)
+	// Role of the node
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 
 	// (String) State of the service
+	// State of the node
 	State *string `json:"state,omitempty" tf:"state,omitempty"`
 }
 
 type ManagedDatabaseOpensearchNodeStatesParameters struct {
+
+	// (String)
+	// Role of the node
+	// +kubebuilder:validation:Optional
+	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
 
 type ManagedDatabaseOpensearchObservation struct {
@@ -555,17 +576,22 @@ type ManagedDatabaseOpensearchParameters struct {
 	// (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
 	// Private networks attached to the managed database
 	// +kubebuilder:validation:Optional
 	Network []ManagedDatabaseOpensearchNetworkParameters `json:"network,omitempty" tf:"network,omitempty"`
 
+	// (List of Object) Information about nodes providing the managed service (see below for nested schema)
+	// Information about nodes providing the managed service
+	// +kubebuilder:validation:Optional
+	NodeStates []ManagedDatabaseOpensearchNodeStatesParameters `json:"nodeStates,omitempty" tf:"node_states,omitempty"`
+
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
 	// +kubebuilder:validation:Optional
-	Plan *string `json:"plan,omitempty" tf:"plan,omitempty"`
+	Plan *string `json:"plan" tf:"plan,omitempty"`
 
 	// (Boolean) The administrative power state of the service
 	// The administrative power state of the service
@@ -580,12 +606,12 @@ type ManagedDatabaseOpensearchParameters struct {
 	// (String) Title of a managed database instance
 	// Title of a managed database instance
 	// +kubebuilder:validation:Optional
-	Title *string `json:"title,omitempty" tf:"title,omitempty"`
+	Title *string `json:"title" tf:"title,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 type ManagedDatabaseOpensearchPropertiesInitParameters struct {
@@ -608,11 +634,11 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 
 	// (Number) Controls the number of shards allowed in the cluster per data node.
 	// Controls the number of shards allowed in the cluster per data node.
-	ClusterMaxShardsPerNode *float64 `json:"clusterMaxShardsPerNode,omitempty" tf:"cluster_max_shards_per_node,omitempty"`
+	ClusterMaxShardsPerNode *int64 `json:"clusterMaxShardsPerNode,omitempty" tf:"cluster_max_shards_per_node,omitempty"`
 
 	// (Number) Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
 	// Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
-	ClusterRoutingAllocationNodeConcurrentRecoveries *float64 `json:"clusterRoutingAllocationNodeConcurrentRecoveries,omitempty" tf:"cluster_routing_allocation_node_concurrent_recoveries,omitempty"`
+	ClusterRoutingAllocationNodeConcurrentRecoveries *int64 `json:"clusterRoutingAllocationNodeConcurrentRecoveries,omitempty" tf:"cluster_routing_allocation_node_concurrent_recoveries,omitempty"`
 
 	// (String) Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
 	// Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
@@ -621,6 +647,10 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 	// (String) Sender name placeholder to be used in Opensearch Dashboards and Opensearch keystore. This should be identical to the Sender name defined in Opensearch dashboards.
 	// Sender name placeholder to be used in Opensearch Dashboards and Opensearch keystore. This should be identical to the Sender name defined in Opensearch dashboards.
 	EmailSenderName *string `json:"emailSenderName,omitempty" tf:"email_sender_name,omitempty"`
+
+	// (String, Sensitive) Sender password for Opensearch alerts to authenticate with SMTP server. Sender password for Opensearch alerts to authenticate with SMTP server.
+	// Sender password for Opensearch alerts to authenticate with SMTP server. Sender password for Opensearch alerts to authenticate with SMTP server.
+	EmailSenderPasswordSecretRef *v1.SecretKeySelector `json:"emailSenderPasswordSecretRef,omitempty" tf:"-"`
 
 	// (String) Sender username for Opensearch alerts.
 	// Sender username for Opensearch alerts.
@@ -632,15 +662,15 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 
 	// (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	// Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
-	HTTPMaxContentLength *float64 `json:"httpMaxContentLength,omitempty" tf:"http_max_content_length,omitempty"`
+	HTTPMaxContentLength *int64 `json:"httpMaxContentLength,omitempty" tf:"http_max_content_length,omitempty"`
 
 	// (Number) The max size of allowed headers, in bytes.
 	// The max size of allowed headers, in bytes.
-	HTTPMaxHeaderSize *float64 `json:"httpMaxHeaderSize,omitempty" tf:"http_max_header_size,omitempty"`
+	HTTPMaxHeaderSize *int64 `json:"httpMaxHeaderSize,omitempty" tf:"http_max_header_size,omitempty"`
 
 	// (Number) The max length of an HTTP URL, in bytes.
 	// The max length of an HTTP URL, in bytes.
-	HTTPMaxInitialLineLength *float64 `json:"httpMaxInitialLineLength,omitempty" tf:"http_max_initial_line_length,omitempty"`
+	HTTPMaxInitialLineLength *int64 `json:"httpMaxInitialLineLength,omitempty" tf:"http_max_initial_line_length,omitempty"`
 
 	// (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
 	// IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -656,35 +686,35 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 
 	// (Number) Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
 	// Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
-	IndicesFielddataCacheSize *float64 `json:"indicesFielddataCacheSize,omitempty" tf:"indices_fielddata_cache_size,omitempty"`
+	IndicesFielddataCacheSize *int64 `json:"indicesFielddataCacheSize,omitempty" tf:"indices_fielddata_cache_size,omitempty"`
 
 	// (Number) Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
 	// Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
-	IndicesMemoryIndexBufferSize *float64 `json:"indicesMemoryIndexBufferSize,omitempty" tf:"indices_memory_index_buffer_size,omitempty"`
+	IndicesMemoryIndexBufferSize *int64 `json:"indicesMemoryIndexBufferSize,omitempty" tf:"indices_memory_index_buffer_size,omitempty"`
 
 	// (Number) Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
 	// Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
-	IndicesMemoryMaxIndexBufferSize *float64 `json:"indicesMemoryMaxIndexBufferSize,omitempty" tf:"indices_memory_max_index_buffer_size,omitempty"`
+	IndicesMemoryMaxIndexBufferSize *int64 `json:"indicesMemoryMaxIndexBufferSize,omitempty" tf:"indices_memory_max_index_buffer_size,omitempty"`
 
 	// (Number) Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
 	// Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
-	IndicesMemoryMinIndexBufferSize *float64 `json:"indicesMemoryMinIndexBufferSize,omitempty" tf:"indices_memory_min_index_buffer_size,omitempty"`
+	IndicesMemoryMinIndexBufferSize *int64 `json:"indicesMemoryMinIndexBufferSize,omitempty" tf:"indices_memory_min_index_buffer_size,omitempty"`
 
 	// (Number) Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
 	// Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
-	IndicesQueriesCacheSize *float64 `json:"indicesQueriesCacheSize,omitempty" tf:"indices_queries_cache_size,omitempty"`
+	IndicesQueriesCacheSize *int64 `json:"indicesQueriesCacheSize,omitempty" tf:"indices_queries_cache_size,omitempty"`
 
 	// (Number) Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
 	// Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
-	IndicesQueryBoolMaxClauseCount *float64 `json:"indicesQueryBoolMaxClauseCount,omitempty" tf:"indices_query_bool_max_clause_count,omitempty"`
+	IndicesQueryBoolMaxClauseCount *int64 `json:"indicesQueryBoolMaxClauseCount,omitempty" tf:"indices_query_bool_max_clause_count,omitempty"`
 
 	// (Number) Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
 	// Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
-	IndicesRecoveryMaxBytesPerSec *float64 `json:"indicesRecoveryMaxBytesPerSec,omitempty" tf:"indices_recovery_max_bytes_per_sec,omitempty"`
+	IndicesRecoveryMaxBytesPerSec *int64 `json:"indicesRecoveryMaxBytesPerSec,omitempty" tf:"indices_recovery_max_bytes_per_sec,omitempty"`
 
 	// (Number) Number of file chunks sent in parallel for each recovery. Defaults to 2.
 	// Number of file chunks sent in parallel for each recovery. Defaults to 2.
-	IndicesRecoveryMaxConcurrentFileChunks *float64 `json:"indicesRecoveryMaxConcurrentFileChunks,omitempty" tf:"indices_recovery_max_concurrent_file_chunks,omitempty"`
+	IndicesRecoveryMaxConcurrentFileChunks *int64 `json:"indicesRecoveryMaxConcurrentFileChunks,omitempty" tf:"indices_recovery_max_concurrent_file_chunks,omitempty"`
 
 	// (Boolean) Specifies whether ISM is enabled or not.
 	// Specifies whether ISM is enabled or not.
@@ -696,27 +726,23 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 
 	// (Number) The maximum age before rolling over the audit history index in hours.
 	// The maximum age before rolling over the audit history index in hours.
-	IsmHistoryMaxAge *float64 `json:"ismHistoryMaxAge,omitempty" tf:"ism_history_max_age,omitempty"`
+	IsmHistoryMaxAge *int64 `json:"ismHistoryMaxAge,omitempty" tf:"ism_history_max_age,omitempty"`
 
 	// (Number) The maximum number of documents before rolling over the audit history index.
 	// The maximum number of documents before rolling over the audit history index.
-	IsmHistoryMaxDocs *float64 `json:"ismHistoryMaxDocs,omitempty" tf:"ism_history_max_docs,omitempty"`
+	IsmHistoryMaxDocs *int64 `json:"ismHistoryMaxDocs,omitempty" tf:"ism_history_max_docs,omitempty"`
 
 	// (Number) The time between rollover checks for the audit history index in hours.
 	// The time between rollover checks for the audit history index in hours.
-	IsmHistoryRolloverCheckPeriod *float64 `json:"ismHistoryRolloverCheckPeriod,omitempty" tf:"ism_history_rollover_check_period,omitempty"`
+	IsmHistoryRolloverCheckPeriod *int64 `json:"ismHistoryRolloverCheckPeriod,omitempty" tf:"ism_history_rollover_check_period,omitempty"`
 
 	// (Number) How long audit history indices are kept in days.
 	// How long audit history indices are kept in days.
-	IsmHistoryRolloverRetentionPeriod *float64 `json:"ismHistoryRolloverRetentionPeriod,omitempty" tf:"ism_history_rollover_retention_period,omitempty"`
+	IsmHistoryRolloverRetentionPeriod *int64 `json:"ismHistoryRolloverRetentionPeriod,omitempty" tf:"ism_history_rollover_retention_period,omitempty"`
 
 	// (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
 	// Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
 	KeepIndexRefreshInterval *bool `json:"keepIndexRefreshInterval,omitempty" tf:"keep_index_refresh_interval,omitempty"`
-
-	// (Number) Maximum index count. DEPRECATED: use index_patterns instead.
-	// Maximum index count. DEPRECATED: use index_patterns instead.
-	MaxIndexCount *float64 `json:"maxIndexCount,omitempty" tf:"max_index_count,omitempty"`
 
 	// (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
 	// OpenSearch OpenID Connect Configuration.
@@ -752,7 +778,7 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 
 	// (Number) Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
 	// Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
-	SearchMaxBuckets *float64 `json:"searchMaxBuckets,omitempty" tf:"search_max_buckets,omitempty"`
+	SearchMaxBuckets *int64 `json:"searchMaxBuckets,omitempty" tf:"search_max_buckets,omitempty"`
 
 	// (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
 	// Service logging. Store logs for the service so that they are available in the HTTP API and console.
@@ -760,47 +786,47 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 
 	// (Number) analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolAnalyzeQueueSize *float64 `json:"threadPoolAnalyzeQueueSize,omitempty" tf:"thread_pool_analyze_queue_size,omitempty"`
+	ThreadPoolAnalyzeQueueSize *int64 `json:"threadPoolAnalyzeQueueSize,omitempty" tf:"thread_pool_analyze_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// analyze thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolAnalyzeSize *float64 `json:"threadPoolAnalyzeSize,omitempty" tf:"thread_pool_analyze_size,omitempty"`
+	ThreadPoolAnalyzeSize *int64 `json:"threadPoolAnalyzeSize,omitempty" tf:"thread_pool_analyze_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// force_merge thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolForceMergeSize *float64 `json:"threadPoolForceMergeSize,omitempty" tf:"thread_pool_force_merge_size,omitempty"`
+	ThreadPoolForceMergeSize *int64 `json:"threadPoolForceMergeSize,omitempty" tf:"thread_pool_force_merge_size,omitempty"`
 
 	// (Number) get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolGetQueueSize *float64 `json:"threadPoolGetQueueSize,omitempty" tf:"thread_pool_get_queue_size,omitempty"`
+	ThreadPoolGetQueueSize *int64 `json:"threadPoolGetQueueSize,omitempty" tf:"thread_pool_get_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// get thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolGetSize *float64 `json:"threadPoolGetSize,omitempty" tf:"thread_pool_get_size,omitempty"`
+	ThreadPoolGetSize *int64 `json:"threadPoolGetSize,omitempty" tf:"thread_pool_get_size,omitempty"`
 
 	// (Number) search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolSearchQueueSize *float64 `json:"threadPoolSearchQueueSize,omitempty" tf:"thread_pool_search_queue_size,omitempty"`
+	ThreadPoolSearchQueueSize *int64 `json:"threadPoolSearchQueueSize,omitempty" tf:"thread_pool_search_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// search thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolSearchSize *float64 `json:"threadPoolSearchSize,omitempty" tf:"thread_pool_search_size,omitempty"`
+	ThreadPoolSearchSize *int64 `json:"threadPoolSearchSize,omitempty" tf:"thread_pool_search_size,omitempty"`
 
 	// (Number) search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolSearchThrottledQueueSize *float64 `json:"threadPoolSearchThrottledQueueSize,omitempty" tf:"thread_pool_search_throttled_queue_size,omitempty"`
+	ThreadPoolSearchThrottledQueueSize *int64 `json:"threadPoolSearchThrottledQueueSize,omitempty" tf:"thread_pool_search_throttled_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// search_throttled thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolSearchThrottledSize *float64 `json:"threadPoolSearchThrottledSize,omitempty" tf:"thread_pool_search_throttled_size,omitempty"`
+	ThreadPoolSearchThrottledSize *int64 `json:"threadPoolSearchThrottledSize,omitempty" tf:"thread_pool_search_throttled_size,omitempty"`
 
 	// (Number) write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolWriteQueueSize *float64 `json:"threadPoolWriteQueueSize,omitempty" tf:"thread_pool_write_queue_size,omitempty"`
+	ThreadPoolWriteQueueSize *int64 `json:"threadPoolWriteQueueSize,omitempty" tf:"thread_pool_write_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// write thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolWriteSize *float64 `json:"threadPoolWriteSize,omitempty" tf:"thread_pool_write_size,omitempty"`
+	ThreadPoolWriteSize *int64 `json:"threadPoolWriteSize,omitempty" tf:"thread_pool_write_size,omitempty"`
 
 	// (String) OpenSearch major version.
 	// OpenSearch major version.
@@ -827,11 +853,11 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 
 	// (Number) Controls the number of shards allowed in the cluster per data node.
 	// Controls the number of shards allowed in the cluster per data node.
-	ClusterMaxShardsPerNode *float64 `json:"clusterMaxShardsPerNode,omitempty" tf:"cluster_max_shards_per_node,omitempty"`
+	ClusterMaxShardsPerNode *int64 `json:"clusterMaxShardsPerNode,omitempty" tf:"cluster_max_shards_per_node,omitempty"`
 
 	// (Number) Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
 	// Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
-	ClusterRoutingAllocationNodeConcurrentRecoveries *float64 `json:"clusterRoutingAllocationNodeConcurrentRecoveries,omitempty" tf:"cluster_routing_allocation_node_concurrent_recoveries,omitempty"`
+	ClusterRoutingAllocationNodeConcurrentRecoveries *int64 `json:"clusterRoutingAllocationNodeConcurrentRecoveries,omitempty" tf:"cluster_routing_allocation_node_concurrent_recoveries,omitempty"`
 
 	// (String) Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
 	// Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
@@ -851,15 +877,15 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 
 	// (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	// Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
-	HTTPMaxContentLength *float64 `json:"httpMaxContentLength,omitempty" tf:"http_max_content_length,omitempty"`
+	HTTPMaxContentLength *int64 `json:"httpMaxContentLength,omitempty" tf:"http_max_content_length,omitempty"`
 
 	// (Number) The max size of allowed headers, in bytes.
 	// The max size of allowed headers, in bytes.
-	HTTPMaxHeaderSize *float64 `json:"httpMaxHeaderSize,omitempty" tf:"http_max_header_size,omitempty"`
+	HTTPMaxHeaderSize *int64 `json:"httpMaxHeaderSize,omitempty" tf:"http_max_header_size,omitempty"`
 
 	// (Number) The max length of an HTTP URL, in bytes.
 	// The max length of an HTTP URL, in bytes.
-	HTTPMaxInitialLineLength *float64 `json:"httpMaxInitialLineLength,omitempty" tf:"http_max_initial_line_length,omitempty"`
+	HTTPMaxInitialLineLength *int64 `json:"httpMaxInitialLineLength,omitempty" tf:"http_max_initial_line_length,omitempty"`
 
 	// (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
 	// IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -875,35 +901,35 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 
 	// (Number) Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
 	// Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
-	IndicesFielddataCacheSize *float64 `json:"indicesFielddataCacheSize,omitempty" tf:"indices_fielddata_cache_size,omitempty"`
+	IndicesFielddataCacheSize *int64 `json:"indicesFielddataCacheSize,omitempty" tf:"indices_fielddata_cache_size,omitempty"`
 
 	// (Number) Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
 	// Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
-	IndicesMemoryIndexBufferSize *float64 `json:"indicesMemoryIndexBufferSize,omitempty" tf:"indices_memory_index_buffer_size,omitempty"`
+	IndicesMemoryIndexBufferSize *int64 `json:"indicesMemoryIndexBufferSize,omitempty" tf:"indices_memory_index_buffer_size,omitempty"`
 
 	// (Number) Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
 	// Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
-	IndicesMemoryMaxIndexBufferSize *float64 `json:"indicesMemoryMaxIndexBufferSize,omitempty" tf:"indices_memory_max_index_buffer_size,omitempty"`
+	IndicesMemoryMaxIndexBufferSize *int64 `json:"indicesMemoryMaxIndexBufferSize,omitempty" tf:"indices_memory_max_index_buffer_size,omitempty"`
 
 	// (Number) Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
 	// Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
-	IndicesMemoryMinIndexBufferSize *float64 `json:"indicesMemoryMinIndexBufferSize,omitempty" tf:"indices_memory_min_index_buffer_size,omitempty"`
+	IndicesMemoryMinIndexBufferSize *int64 `json:"indicesMemoryMinIndexBufferSize,omitempty" tf:"indices_memory_min_index_buffer_size,omitempty"`
 
 	// (Number) Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
 	// Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
-	IndicesQueriesCacheSize *float64 `json:"indicesQueriesCacheSize,omitempty" tf:"indices_queries_cache_size,omitempty"`
+	IndicesQueriesCacheSize *int64 `json:"indicesQueriesCacheSize,omitempty" tf:"indices_queries_cache_size,omitempty"`
 
 	// (Number) Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
 	// Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
-	IndicesQueryBoolMaxClauseCount *float64 `json:"indicesQueryBoolMaxClauseCount,omitempty" tf:"indices_query_bool_max_clause_count,omitempty"`
+	IndicesQueryBoolMaxClauseCount *int64 `json:"indicesQueryBoolMaxClauseCount,omitempty" tf:"indices_query_bool_max_clause_count,omitempty"`
 
 	// (Number) Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
 	// Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
-	IndicesRecoveryMaxBytesPerSec *float64 `json:"indicesRecoveryMaxBytesPerSec,omitempty" tf:"indices_recovery_max_bytes_per_sec,omitempty"`
+	IndicesRecoveryMaxBytesPerSec *int64 `json:"indicesRecoveryMaxBytesPerSec,omitempty" tf:"indices_recovery_max_bytes_per_sec,omitempty"`
 
 	// (Number) Number of file chunks sent in parallel for each recovery. Defaults to 2.
 	// Number of file chunks sent in parallel for each recovery. Defaults to 2.
-	IndicesRecoveryMaxConcurrentFileChunks *float64 `json:"indicesRecoveryMaxConcurrentFileChunks,omitempty" tf:"indices_recovery_max_concurrent_file_chunks,omitempty"`
+	IndicesRecoveryMaxConcurrentFileChunks *int64 `json:"indicesRecoveryMaxConcurrentFileChunks,omitempty" tf:"indices_recovery_max_concurrent_file_chunks,omitempty"`
 
 	// (Boolean) Specifies whether ISM is enabled or not.
 	// Specifies whether ISM is enabled or not.
@@ -915,27 +941,23 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 
 	// (Number) The maximum age before rolling over the audit history index in hours.
 	// The maximum age before rolling over the audit history index in hours.
-	IsmHistoryMaxAge *float64 `json:"ismHistoryMaxAge,omitempty" tf:"ism_history_max_age,omitempty"`
+	IsmHistoryMaxAge *int64 `json:"ismHistoryMaxAge,omitempty" tf:"ism_history_max_age,omitempty"`
 
 	// (Number) The maximum number of documents before rolling over the audit history index.
 	// The maximum number of documents before rolling over the audit history index.
-	IsmHistoryMaxDocs *float64 `json:"ismHistoryMaxDocs,omitempty" tf:"ism_history_max_docs,omitempty"`
+	IsmHistoryMaxDocs *int64 `json:"ismHistoryMaxDocs,omitempty" tf:"ism_history_max_docs,omitempty"`
 
 	// (Number) The time between rollover checks for the audit history index in hours.
 	// The time between rollover checks for the audit history index in hours.
-	IsmHistoryRolloverCheckPeriod *float64 `json:"ismHistoryRolloverCheckPeriod,omitempty" tf:"ism_history_rollover_check_period,omitempty"`
+	IsmHistoryRolloverCheckPeriod *int64 `json:"ismHistoryRolloverCheckPeriod,omitempty" tf:"ism_history_rollover_check_period,omitempty"`
 
 	// (Number) How long audit history indices are kept in days.
 	// How long audit history indices are kept in days.
-	IsmHistoryRolloverRetentionPeriod *float64 `json:"ismHistoryRolloverRetentionPeriod,omitempty" tf:"ism_history_rollover_retention_period,omitempty"`
+	IsmHistoryRolloverRetentionPeriod *int64 `json:"ismHistoryRolloverRetentionPeriod,omitempty" tf:"ism_history_rollover_retention_period,omitempty"`
 
 	// (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
 	// Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
 	KeepIndexRefreshInterval *bool `json:"keepIndexRefreshInterval,omitempty" tf:"keep_index_refresh_interval,omitempty"`
-
-	// (Number) Maximum index count. DEPRECATED: use index_patterns instead.
-	// Maximum index count. DEPRECATED: use index_patterns instead.
-	MaxIndexCount *float64 `json:"maxIndexCount,omitempty" tf:"max_index_count,omitempty"`
 
 	// (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
 	// OpenSearch OpenID Connect Configuration.
@@ -971,7 +993,7 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 
 	// (Number) Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
 	// Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
-	SearchMaxBuckets *float64 `json:"searchMaxBuckets,omitempty" tf:"search_max_buckets,omitempty"`
+	SearchMaxBuckets *int64 `json:"searchMaxBuckets,omitempty" tf:"search_max_buckets,omitempty"`
 
 	// (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
 	// Service logging. Store logs for the service so that they are available in the HTTP API and console.
@@ -979,47 +1001,47 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 
 	// (Number) analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolAnalyzeQueueSize *float64 `json:"threadPoolAnalyzeQueueSize,omitempty" tf:"thread_pool_analyze_queue_size,omitempty"`
+	ThreadPoolAnalyzeQueueSize *int64 `json:"threadPoolAnalyzeQueueSize,omitempty" tf:"thread_pool_analyze_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// analyze thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolAnalyzeSize *float64 `json:"threadPoolAnalyzeSize,omitempty" tf:"thread_pool_analyze_size,omitempty"`
+	ThreadPoolAnalyzeSize *int64 `json:"threadPoolAnalyzeSize,omitempty" tf:"thread_pool_analyze_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// force_merge thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolForceMergeSize *float64 `json:"threadPoolForceMergeSize,omitempty" tf:"thread_pool_force_merge_size,omitempty"`
+	ThreadPoolForceMergeSize *int64 `json:"threadPoolForceMergeSize,omitempty" tf:"thread_pool_force_merge_size,omitempty"`
 
 	// (Number) get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolGetQueueSize *float64 `json:"threadPoolGetQueueSize,omitempty" tf:"thread_pool_get_queue_size,omitempty"`
+	ThreadPoolGetQueueSize *int64 `json:"threadPoolGetQueueSize,omitempty" tf:"thread_pool_get_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// get thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolGetSize *float64 `json:"threadPoolGetSize,omitempty" tf:"thread_pool_get_size,omitempty"`
+	ThreadPoolGetSize *int64 `json:"threadPoolGetSize,omitempty" tf:"thread_pool_get_size,omitempty"`
 
 	// (Number) search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolSearchQueueSize *float64 `json:"threadPoolSearchQueueSize,omitempty" tf:"thread_pool_search_queue_size,omitempty"`
+	ThreadPoolSearchQueueSize *int64 `json:"threadPoolSearchQueueSize,omitempty" tf:"thread_pool_search_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// search thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolSearchSize *float64 `json:"threadPoolSearchSize,omitempty" tf:"thread_pool_search_size,omitempty"`
+	ThreadPoolSearchSize *int64 `json:"threadPoolSearchSize,omitempty" tf:"thread_pool_search_size,omitempty"`
 
 	// (Number) search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolSearchThrottledQueueSize *float64 `json:"threadPoolSearchThrottledQueueSize,omitempty" tf:"thread_pool_search_throttled_queue_size,omitempty"`
+	ThreadPoolSearchThrottledQueueSize *int64 `json:"threadPoolSearchThrottledQueueSize,omitempty" tf:"thread_pool_search_throttled_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// search_throttled thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolSearchThrottledSize *float64 `json:"threadPoolSearchThrottledSize,omitempty" tf:"thread_pool_search_throttled_size,omitempty"`
+	ThreadPoolSearchThrottledSize *int64 `json:"threadPoolSearchThrottledSize,omitempty" tf:"thread_pool_search_throttled_size,omitempty"`
 
 	// (Number) write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
-	ThreadPoolWriteQueueSize *float64 `json:"threadPoolWriteQueueSize,omitempty" tf:"thread_pool_write_queue_size,omitempty"`
+	ThreadPoolWriteQueueSize *int64 `json:"threadPoolWriteQueueSize,omitempty" tf:"thread_pool_write_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// write thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
-	ThreadPoolWriteSize *float64 `json:"threadPoolWriteSize,omitempty" tf:"thread_pool_write_size,omitempty"`
+	ThreadPoolWriteSize *int64 `json:"threadPoolWriteSize,omitempty" tf:"thread_pool_write_size,omitempty"`
 
 	// (String) OpenSearch major version.
 	// OpenSearch major version.
@@ -1051,12 +1073,12 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// (Number) Controls the number of shards allowed in the cluster per data node.
 	// Controls the number of shards allowed in the cluster per data node.
 	// +kubebuilder:validation:Optional
-	ClusterMaxShardsPerNode *float64 `json:"clusterMaxShardsPerNode,omitempty" tf:"cluster_max_shards_per_node,omitempty"`
+	ClusterMaxShardsPerNode *int64 `json:"clusterMaxShardsPerNode,omitempty" tf:"cluster_max_shards_per_node,omitempty"`
 
 	// (Number) Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
 	// Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
 	// +kubebuilder:validation:Optional
-	ClusterRoutingAllocationNodeConcurrentRecoveries *float64 `json:"clusterRoutingAllocationNodeConcurrentRecoveries,omitempty" tf:"cluster_routing_allocation_node_concurrent_recoveries,omitempty"`
+	ClusterRoutingAllocationNodeConcurrentRecoveries *int64 `json:"clusterRoutingAllocationNodeConcurrentRecoveries,omitempty" tf:"cluster_routing_allocation_node_concurrent_recoveries,omitempty"`
 
 	// (String) Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
 	// Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
@@ -1086,17 +1108,17 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	// Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	// +kubebuilder:validation:Optional
-	HTTPMaxContentLength *float64 `json:"httpMaxContentLength,omitempty" tf:"http_max_content_length,omitempty"`
+	HTTPMaxContentLength *int64 `json:"httpMaxContentLength,omitempty" tf:"http_max_content_length,omitempty"`
 
 	// (Number) The max size of allowed headers, in bytes.
 	// The max size of allowed headers, in bytes.
 	// +kubebuilder:validation:Optional
-	HTTPMaxHeaderSize *float64 `json:"httpMaxHeaderSize,omitempty" tf:"http_max_header_size,omitempty"`
+	HTTPMaxHeaderSize *int64 `json:"httpMaxHeaderSize,omitempty" tf:"http_max_header_size,omitempty"`
 
 	// (Number) The max length of an HTTP URL, in bytes.
 	// The max length of an HTTP URL, in bytes.
 	// +kubebuilder:validation:Optional
-	HTTPMaxInitialLineLength *float64 `json:"httpMaxInitialLineLength,omitempty" tf:"http_max_initial_line_length,omitempty"`
+	HTTPMaxInitialLineLength *int64 `json:"httpMaxInitialLineLength,omitempty" tf:"http_max_initial_line_length,omitempty"`
 
 	// (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
 	// IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
@@ -1116,42 +1138,42 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// (Number) Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
 	// Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
 	// +kubebuilder:validation:Optional
-	IndicesFielddataCacheSize *float64 `json:"indicesFielddataCacheSize,omitempty" tf:"indices_fielddata_cache_size,omitempty"`
+	IndicesFielddataCacheSize *int64 `json:"indicesFielddataCacheSize,omitempty" tf:"indices_fielddata_cache_size,omitempty"`
 
 	// (Number) Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
 	// Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
 	// +kubebuilder:validation:Optional
-	IndicesMemoryIndexBufferSize *float64 `json:"indicesMemoryIndexBufferSize,omitempty" tf:"indices_memory_index_buffer_size,omitempty"`
+	IndicesMemoryIndexBufferSize *int64 `json:"indicesMemoryIndexBufferSize,omitempty" tf:"indices_memory_index_buffer_size,omitempty"`
 
 	// (Number) Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
 	// Absolute value. Default is unbound. Doesn't work without indices.memory.index_buffer_size. Maximum amount of heap used for query cache, an absolute indices.memory.index_buffer_size maximum hard limit.
 	// +kubebuilder:validation:Optional
-	IndicesMemoryMaxIndexBufferSize *float64 `json:"indicesMemoryMaxIndexBufferSize,omitempty" tf:"indices_memory_max_index_buffer_size,omitempty"`
+	IndicesMemoryMaxIndexBufferSize *int64 `json:"indicesMemoryMaxIndexBufferSize,omitempty" tf:"indices_memory_max_index_buffer_size,omitempty"`
 
 	// (Number) Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
 	// Absolute value. Default is 48mb. Doesn't work without indices.memory.index_buffer_size. Minimum amount of heap used for query cache, an absolute indices.memory.index_buffer_size minimal hard limit.
 	// +kubebuilder:validation:Optional
-	IndicesMemoryMinIndexBufferSize *float64 `json:"indicesMemoryMinIndexBufferSize,omitempty" tf:"indices_memory_min_index_buffer_size,omitempty"`
+	IndicesMemoryMinIndexBufferSize *int64 `json:"indicesMemoryMinIndexBufferSize,omitempty" tf:"indices_memory_min_index_buffer_size,omitempty"`
 
 	// (Number) Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
 	// Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other OpenSearch functionality.
 	// +kubebuilder:validation:Optional
-	IndicesQueriesCacheSize *float64 `json:"indicesQueriesCacheSize,omitempty" tf:"indices_queries_cache_size,omitempty"`
+	IndicesQueriesCacheSize *int64 `json:"indicesQueriesCacheSize,omitempty" tf:"indices_queries_cache_size,omitempty"`
 
 	// (Number) Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
 	// Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
 	// +kubebuilder:validation:Optional
-	IndicesQueryBoolMaxClauseCount *float64 `json:"indicesQueryBoolMaxClauseCount,omitempty" tf:"indices_query_bool_max_clause_count,omitempty"`
+	IndicesQueryBoolMaxClauseCount *int64 `json:"indicesQueryBoolMaxClauseCount,omitempty" tf:"indices_query_bool_max_clause_count,omitempty"`
 
 	// (Number) Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
 	// Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb.
 	// +kubebuilder:validation:Optional
-	IndicesRecoveryMaxBytesPerSec *float64 `json:"indicesRecoveryMaxBytesPerSec,omitempty" tf:"indices_recovery_max_bytes_per_sec,omitempty"`
+	IndicesRecoveryMaxBytesPerSec *int64 `json:"indicesRecoveryMaxBytesPerSec,omitempty" tf:"indices_recovery_max_bytes_per_sec,omitempty"`
 
 	// (Number) Number of file chunks sent in parallel for each recovery. Defaults to 2.
 	// Number of file chunks sent in parallel for each recovery. Defaults to 2.
 	// +kubebuilder:validation:Optional
-	IndicesRecoveryMaxConcurrentFileChunks *float64 `json:"indicesRecoveryMaxConcurrentFileChunks,omitempty" tf:"indices_recovery_max_concurrent_file_chunks,omitempty"`
+	IndicesRecoveryMaxConcurrentFileChunks *int64 `json:"indicesRecoveryMaxConcurrentFileChunks,omitempty" tf:"indices_recovery_max_concurrent_file_chunks,omitempty"`
 
 	// (Boolean) Specifies whether ISM is enabled or not.
 	// Specifies whether ISM is enabled or not.
@@ -1166,32 +1188,27 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// (Number) The maximum age before rolling over the audit history index in hours.
 	// The maximum age before rolling over the audit history index in hours.
 	// +kubebuilder:validation:Optional
-	IsmHistoryMaxAge *float64 `json:"ismHistoryMaxAge,omitempty" tf:"ism_history_max_age,omitempty"`
+	IsmHistoryMaxAge *int64 `json:"ismHistoryMaxAge,omitempty" tf:"ism_history_max_age,omitempty"`
 
 	// (Number) The maximum number of documents before rolling over the audit history index.
 	// The maximum number of documents before rolling over the audit history index.
 	// +kubebuilder:validation:Optional
-	IsmHistoryMaxDocs *float64 `json:"ismHistoryMaxDocs,omitempty" tf:"ism_history_max_docs,omitempty"`
+	IsmHistoryMaxDocs *int64 `json:"ismHistoryMaxDocs,omitempty" tf:"ism_history_max_docs,omitempty"`
 
 	// (Number) The time between rollover checks for the audit history index in hours.
 	// The time between rollover checks for the audit history index in hours.
 	// +kubebuilder:validation:Optional
-	IsmHistoryRolloverCheckPeriod *float64 `json:"ismHistoryRolloverCheckPeriod,omitempty" tf:"ism_history_rollover_check_period,omitempty"`
+	IsmHistoryRolloverCheckPeriod *int64 `json:"ismHistoryRolloverCheckPeriod,omitempty" tf:"ism_history_rollover_check_period,omitempty"`
 
 	// (Number) How long audit history indices are kept in days.
 	// How long audit history indices are kept in days.
 	// +kubebuilder:validation:Optional
-	IsmHistoryRolloverRetentionPeriod *float64 `json:"ismHistoryRolloverRetentionPeriod,omitempty" tf:"ism_history_rollover_retention_period,omitempty"`
+	IsmHistoryRolloverRetentionPeriod *int64 `json:"ismHistoryRolloverRetentionPeriod,omitempty" tf:"ism_history_rollover_retention_period,omitempty"`
 
 	// (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
 	// Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
 	// +kubebuilder:validation:Optional
 	KeepIndexRefreshInterval *bool `json:"keepIndexRefreshInterval,omitempty" tf:"keep_index_refresh_interval,omitempty"`
-
-	// (Number) Maximum index count. DEPRECATED: use index_patterns instead.
-	// Maximum index count. DEPRECATED: use index_patterns instead.
-	// +kubebuilder:validation:Optional
-	MaxIndexCount *float64 `json:"maxIndexCount,omitempty" tf:"max_index_count,omitempty"`
 
 	// (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
 	// OpenSearch OpenID Connect Configuration.
@@ -1236,7 +1253,7 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// (Number) Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
 	// Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
 	// +kubebuilder:validation:Optional
-	SearchMaxBuckets *float64 `json:"searchMaxBuckets,omitempty" tf:"search_max_buckets,omitempty"`
+	SearchMaxBuckets *int64 `json:"searchMaxBuckets,omitempty" tf:"search_max_buckets,omitempty"`
 
 	// (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
 	// Service logging. Store logs for the service so that they are available in the HTTP API and console.
@@ -1246,57 +1263,57 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// (Number) analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// analyze thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// +kubebuilder:validation:Optional
-	ThreadPoolAnalyzeQueueSize *float64 `json:"threadPoolAnalyzeQueueSize,omitempty" tf:"thread_pool_analyze_queue_size,omitempty"`
+	ThreadPoolAnalyzeQueueSize *int64 `json:"threadPoolAnalyzeQueueSize,omitempty" tf:"thread_pool_analyze_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// analyze thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
 	// +kubebuilder:validation:Optional
-	ThreadPoolAnalyzeSize *float64 `json:"threadPoolAnalyzeSize,omitempty" tf:"thread_pool_analyze_size,omitempty"`
+	ThreadPoolAnalyzeSize *int64 `json:"threadPoolAnalyzeSize,omitempty" tf:"thread_pool_analyze_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// force_merge thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
 	// +kubebuilder:validation:Optional
-	ThreadPoolForceMergeSize *float64 `json:"threadPoolForceMergeSize,omitempty" tf:"thread_pool_force_merge_size,omitempty"`
+	ThreadPoolForceMergeSize *int64 `json:"threadPoolForceMergeSize,omitempty" tf:"thread_pool_force_merge_size,omitempty"`
 
 	// (Number) get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// get thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// +kubebuilder:validation:Optional
-	ThreadPoolGetQueueSize *float64 `json:"threadPoolGetQueueSize,omitempty" tf:"thread_pool_get_queue_size,omitempty"`
+	ThreadPoolGetQueueSize *int64 `json:"threadPoolGetQueueSize,omitempty" tf:"thread_pool_get_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// get thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
 	// +kubebuilder:validation:Optional
-	ThreadPoolGetSize *float64 `json:"threadPoolGetSize,omitempty" tf:"thread_pool_get_size,omitempty"`
+	ThreadPoolGetSize *int64 `json:"threadPoolGetSize,omitempty" tf:"thread_pool_get_size,omitempty"`
 
 	// (Number) search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// search thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// +kubebuilder:validation:Optional
-	ThreadPoolSearchQueueSize *float64 `json:"threadPoolSearchQueueSize,omitempty" tf:"thread_pool_search_queue_size,omitempty"`
+	ThreadPoolSearchQueueSize *int64 `json:"threadPoolSearchQueueSize,omitempty" tf:"thread_pool_search_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// search thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
 	// +kubebuilder:validation:Optional
-	ThreadPoolSearchSize *float64 `json:"threadPoolSearchSize,omitempty" tf:"thread_pool_search_size,omitempty"`
+	ThreadPoolSearchSize *int64 `json:"threadPoolSearchSize,omitempty" tf:"thread_pool_search_size,omitempty"`
 
 	// (Number) search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// search_throttled thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// +kubebuilder:validation:Optional
-	ThreadPoolSearchThrottledQueueSize *float64 `json:"threadPoolSearchThrottledQueueSize,omitempty" tf:"thread_pool_search_throttled_queue_size,omitempty"`
+	ThreadPoolSearchThrottledQueueSize *int64 `json:"threadPoolSearchThrottledQueueSize,omitempty" tf:"thread_pool_search_throttled_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// search_throttled thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
 	// +kubebuilder:validation:Optional
-	ThreadPoolSearchThrottledSize *float64 `json:"threadPoolSearchThrottledSize,omitempty" tf:"thread_pool_search_throttled_size,omitempty"`
+	ThreadPoolSearchThrottledSize *int64 `json:"threadPoolSearchThrottledSize,omitempty" tf:"thread_pool_search_throttled_size,omitempty"`
 
 	// (Number) write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// write thread pool queue size. Size for the thread pool queue. See documentation for exact details.
 	// +kubebuilder:validation:Optional
-	ThreadPoolWriteQueueSize *float64 `json:"threadPoolWriteQueueSize,omitempty" tf:"thread_pool_write_queue_size,omitempty"`
+	ThreadPoolWriteQueueSize *int64 `json:"threadPoolWriteQueueSize,omitempty" tf:"thread_pool_write_queue_size,omitempty"`
 
 	// value is automatically lowered if set to higher than maximum value.
 	// write thread pool size. Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
 	// +kubebuilder:validation:Optional
-	ThreadPoolWriteSize *float64 `json:"threadPoolWriteSize,omitempty" tf:"thread_pool_write_size,omitempty"`
+	ThreadPoolWriteSize *int64 `json:"threadPoolWriteSize,omitempty" tf:"thread_pool_write_size,omitempty"`
 
 	// (String) OpenSearch major version.
 	// OpenSearch major version.
@@ -1336,11 +1353,11 @@ type OpenIDInitParameters struct {
 
 	// (Number) The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
 	// The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
-	RefreshRateLimitCount *float64 `json:"refreshRateLimitCount,omitempty" tf:"refresh_rate_limit_count,omitempty"`
+	RefreshRateLimitCount *int64 `json:"refreshRateLimitCount,omitempty" tf:"refresh_rate_limit_count,omitempty"`
 
 	// (Number) The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
 	// The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
-	RefreshRateLimitTimeWindowMs *float64 `json:"refreshRateLimitTimeWindowMs,omitempty" tf:"refresh_rate_limit_time_window_ms,omitempty"`
+	RefreshRateLimitTimeWindowMs *int64 `json:"refreshRateLimitTimeWindowMs,omitempty" tf:"refresh_rate_limit_time_window_ms,omitempty"`
 
 	// separated list of roles. Required only if you want to use roles in the JWT.
 	// The key in the JSON payload that stores the user’s roles. The key in the JSON payload that stores the user’s roles. The value of this key must be a comma-separated list of roles. Required only if you want to use roles in the JWT.
@@ -1387,11 +1404,11 @@ type OpenIDObservation struct {
 
 	// (Number) The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
 	// The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
-	RefreshRateLimitCount *float64 `json:"refreshRateLimitCount,omitempty" tf:"refresh_rate_limit_count,omitempty"`
+	RefreshRateLimitCount *int64 `json:"refreshRateLimitCount,omitempty" tf:"refresh_rate_limit_count,omitempty"`
 
 	// (Number) The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
 	// The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
-	RefreshRateLimitTimeWindowMs *float64 `json:"refreshRateLimitTimeWindowMs,omitempty" tf:"refresh_rate_limit_time_window_ms,omitempty"`
+	RefreshRateLimitTimeWindowMs *int64 `json:"refreshRateLimitTimeWindowMs,omitempty" tf:"refresh_rate_limit_time_window_ms,omitempty"`
 
 	// separated list of roles. Required only if you want to use roles in the JWT.
 	// The key in the JSON payload that stores the user’s roles. The key in the JSON payload that stores the user’s roles. The value of this key must be a comma-separated list of roles. Required only if you want to use roles in the JWT.
@@ -1446,12 +1463,12 @@ type OpenIDParameters struct {
 	// (Number) The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
 	// The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
 	// +kubebuilder:validation:Optional
-	RefreshRateLimitCount *float64 `json:"refreshRateLimitCount,omitempty" tf:"refresh_rate_limit_count,omitempty"`
+	RefreshRateLimitCount *int64 `json:"refreshRateLimitCount,omitempty" tf:"refresh_rate_limit_count,omitempty"`
 
 	// (Number) The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
 	// The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
 	// +kubebuilder:validation:Optional
-	RefreshRateLimitTimeWindowMs *float64 `json:"refreshRateLimitTimeWindowMs,omitempty" tf:"refresh_rate_limit_time_window_ms,omitempty"`
+	RefreshRateLimitTimeWindowMs *int64 `json:"refreshRateLimitTimeWindowMs,omitempty" tf:"refresh_rate_limit_time_window_ms,omitempty"`
 
 	// separated list of roles. Required only if you want to use roles in the JWT.
 	// The key in the JSON payload that stores the user’s roles. The key in the JSON payload that stores the user’s roles. The value of this key must be a comma-separated list of roles. Required only if you want to use roles in the JWT.
@@ -1477,11 +1494,11 @@ type OpensearchDashboardsInitParameters struct {
 
 	// (Number) Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
 	// Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
-	MaxOldSpaceSize *float64 `json:"maxOldSpaceSize,omitempty" tf:"max_old_space_size,omitempty"`
+	MaxOldSpaceSize *int64 `json:"maxOldSpaceSize,omitempty" tf:"max_old_space_size,omitempty"`
 
 	// (Number) Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
 	// Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
-	OpensearchRequestTimeout *float64 `json:"opensearchRequestTimeout,omitempty" tf:"opensearch_request_timeout,omitempty"`
+	OpensearchRequestTimeout *int64 `json:"opensearchRequestTimeout,omitempty" tf:"opensearch_request_timeout,omitempty"`
 }
 
 type OpensearchDashboardsObservation struct {
@@ -1492,11 +1509,11 @@ type OpensearchDashboardsObservation struct {
 
 	// (Number) Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
 	// Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
-	MaxOldSpaceSize *float64 `json:"maxOldSpaceSize,omitempty" tf:"max_old_space_size,omitempty"`
+	MaxOldSpaceSize *int64 `json:"maxOldSpaceSize,omitempty" tf:"max_old_space_size,omitempty"`
 
 	// (Number) Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
 	// Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
-	OpensearchRequestTimeout *float64 `json:"opensearchRequestTimeout,omitempty" tf:"opensearch_request_timeout,omitempty"`
+	OpensearchRequestTimeout *int64 `json:"opensearchRequestTimeout,omitempty" tf:"opensearch_request_timeout,omitempty"`
 }
 
 type OpensearchDashboardsParameters struct {
@@ -1509,12 +1526,12 @@ type OpensearchDashboardsParameters struct {
 	// (Number) Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
 	// Limits the maximum amount of memory (in MiB) the OpenSearch Dashboards process can use. This sets the max_old_space_size option of the nodejs running the OpenSearch Dashboards. Note: the memory reserved by OpenSearch Dashboards is not available for OpenSearch.
 	// +kubebuilder:validation:Optional
-	MaxOldSpaceSize *float64 `json:"maxOldSpaceSize,omitempty" tf:"max_old_space_size,omitempty"`
+	MaxOldSpaceSize *int64 `json:"maxOldSpaceSize,omitempty" tf:"max_old_space_size,omitempty"`
 
 	// (Number) Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
 	// Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
 	// +kubebuilder:validation:Optional
-	OpensearchRequestTimeout *float64 `json:"opensearchRequestTimeout,omitempty" tf:"opensearch_request_timeout,omitempty"`
+	OpensearchRequestTimeout *int64 `json:"opensearchRequestTimeout,omitempty" tf:"opensearch_request_timeout,omitempty"`
 }
 
 type SAMLInitParameters struct {
@@ -1645,8 +1662,8 @@ type ManagedDatabaseOpensearchStatus struct {
 // +kubebuilder:storageversion
 
 // ManagedDatabaseOpensearch is the Schema for the ManagedDatabaseOpensearchs API. This resource represents OpenSearch managed database. See UpCloud Managed Databases https://upcloud.com/products/managed-databases product page for more details about the service.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,upcloud}

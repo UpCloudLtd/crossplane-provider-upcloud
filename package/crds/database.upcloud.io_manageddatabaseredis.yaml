@@ -19,11 +19,11 @@ spec:
   scope: Cluster
   versions:
   - additionalPrinterColumns:
-    - jsonPath: .status.conditions[?(@.type=='Ready')].status
-      name: READY
-      type: string
     - jsonPath: .status.conditions[?(@.type=='Synced')].status
       name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
       type: string
     - jsonPath: .metadata.annotations.crossplane\.io/external-name
       name: EXTERNAL-NAME
@@ -194,6 +194,19 @@ spec:
                           type: object
                       type: object
                     type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                      type: object
+                    type: array
                   plan:
                     description: |-
                       (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
@@ -271,7 +284,8 @@ spec:
                                 description: |-
                                   (Number) Port number of the server where to migrate data from.
                                   Port number of the server where to migrate data from.
-                                type: number
+                                format: int64
+                                type: integer
                               ssl:
                                 description: |-
                                   (Boolean) The server where to migrate data from is secured with SSL.
@@ -298,17 +312,20 @@ spec:
                           description: |-
                             (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
                             Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
-                          type: number
+                          format: int64
+                          type: integer
                         redisLfuDecayTime:
                           description: |-
                             policy counter decay time in minutes.
                             LFU maxmemory-policy counter decay time in minutes.
-                          type: number
+                          format: int64
+                          type: integer
                         redisLfuLogFactor:
                           description: |-
                             lfu and allkeys-lfu maxmemory-policies.
                             Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
-                          type: number
+                          format: int64
+                          type: integer
                         redisMaxmemoryPolicy:
                           description: |-
                             policy.
@@ -323,17 +340,19 @@ spec:
                           description: |-
                             (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
                             Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
-                          type: number
+                          format: int64
+                          type: integer
                         redisPersistence:
                           description: |-
-                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to the backup schedule for backup purposes. When persistence is 'off', no RDB dumps or backups are done, so data can be lost at any moment if the service is restarted for any reason, or if the service is powered off. Also, the service can't be forked.
                             Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
                           type: string
                         redisPubsubClientOutputBufferLimit:
                           description: |-
                             (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
                             Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
-                          type: number
+                          format: int64
+                          type: integer
                         redisSsl:
                           description: |-
                             (Boolean) Require SSL to access Redis.
@@ -343,7 +362,8 @@ spec:
                           description: |-
                             (Number) Redis idle connection timeout in seconds.
                             Redis idle connection timeout in seconds.
-                          type: number
+                          format: int64
+                          type: integer
                         redisVersion:
                           description: |-
                             (String) Redis major version.
@@ -499,6 +519,19 @@ spec:
                           type: object
                       type: object
                     type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                      type: object
+                    type: array
                   plan:
                     description: |-
                       (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
@@ -553,11 +586,31 @@ spec:
                                   (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
                                   The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
                                 type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: Namespace of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                - namespace
+                                type: object
                               port:
                                 description: |-
                                   (Number) Port number of the server where to migrate data from.
                                   Port number of the server where to migrate data from.
-                                type: number
+                                format: int64
+                                type: integer
                               ssl:
                                 description: |-
                                   (Boolean) The server where to migrate data from is secured with SSL.
@@ -584,17 +637,20 @@ spec:
                           description: |-
                             (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
                             Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
-                          type: number
+                          format: int64
+                          type: integer
                         redisLfuDecayTime:
                           description: |-
                             policy counter decay time in minutes.
                             LFU maxmemory-policy counter decay time in minutes.
-                          type: number
+                          format: int64
+                          type: integer
                         redisLfuLogFactor:
                           description: |-
                             lfu and allkeys-lfu maxmemory-policies.
                             Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
-                          type: number
+                          format: int64
+                          type: integer
                         redisMaxmemoryPolicy:
                           description: |-
                             policy.
@@ -609,17 +665,19 @@ spec:
                           description: |-
                             (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
                             Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
-                          type: number
+                          format: int64
+                          type: integer
                         redisPersistence:
                           description: |-
-                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to the backup schedule for backup purposes. When persistence is 'off', no RDB dumps or backups are done, so data can be lost at any moment if the service is restarted for any reason, or if the service is powered off. Also, the service can't be forked.
                             Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
                           type: string
                         redisPubsubClientOutputBufferLimit:
                           description: |-
                             (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
                             Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
-                          type: number
+                          format: int64
+                          type: integer
                         redisSsl:
                           description: |-
                             (Boolean) Require SSL to access Redis.
@@ -629,7 +687,8 @@ spec:
                           description: |-
                             (Number) Redis idle connection timeout in seconds.
                             Redis idle connection timeout in seconds.
-                          type: number
+                          format: int64
+                          type: integer
                         redisVersion:
                           description: |-
                             (String) Redis major version.
@@ -850,21 +909,30 @@ spec:
                     items:
                       properties:
                         component:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Type of the component
                           type: string
                         host:
-                          description: (String) Hostname or IP address of the server
-                            where to migrate data from.
+                          description: |-
+                            (String) Hostname or IP address of the server where to migrate data from.
+                            Hostname of the component
                           type: string
                         port:
-                          description: (Number) Port number of the server where to
-                            migrate data from.
-                          type: number
+                          description: |-
+                            (Number) Port number of the server where to migrate data from.
+                            Port number of the component
+                          format: int64
+                          type: integer
                         route:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Component network route type
                           type: string
                         usage:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Usage of the component
                           type: string
                       type: object
                     type: array
@@ -921,15 +989,19 @@ spec:
                     items:
                       properties:
                         name:
-                          description: (String) Name of the service. The name is used
-                            as a prefix for the logical hostname. Must be unique within
-                            an account
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            Name plus a node iteration
                           type: string
                         role:
-                          description: (String)
+                          description: |-
+                            (String)
+                            Role of the node
                           type: string
                         state:
-                          description: (String) State of the service
+                          description: |-
+                            (String) State of the service
+                            State of the node
                           type: string
                       type: object
                     type: array
@@ -996,7 +1068,8 @@ spec:
                                 description: |-
                                   (Number) Port number of the server where to migrate data from.
                                   Port number of the server where to migrate data from.
-                                type: number
+                                format: int64
+                                type: integer
                               ssl:
                                 description: |-
                                   (Boolean) The server where to migrate data from is secured with SSL.
@@ -1023,17 +1096,20 @@ spec:
                           description: |-
                             (Number) Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
                             Redis IO thread count. Set Redis IO thread count. Changing this will cause a restart of the Redis service.
-                          type: number
+                          format: int64
+                          type: integer
                         redisLfuDecayTime:
                           description: |-
                             policy counter decay time in minutes.
                             LFU maxmemory-policy counter decay time in minutes.
-                          type: number
+                          format: int64
+                          type: integer
                         redisLfuLogFactor:
                           description: |-
                             lfu and allkeys-lfu maxmemory-policies.
                             Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
-                          type: number
+                          format: int64
+                          type: integer
                         redisMaxmemoryPolicy:
                           description: |-
                             policy.
@@ -1048,17 +1124,19 @@ spec:
                           description: |-
                             (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
                             Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
-                          type: number
+                          format: int64
+                          type: integer
                         redisPersistence:
                           description: |-
-                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to the backup schedule for backup purposes. When persistence is 'off', no RDB dumps or backups are done, so data can be lost at any moment if the service is restarted for any reason, or if the service is powered off. Also, the service can't be forked.
                             Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
                           type: string
                         redisPubsubClientOutputBufferLimit:
                           description: |-
                             (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
                             Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
-                          type: number
+                          format: int64
+                          type: integer
                         redisSsl:
                           description: |-
                             (Boolean) Require SSL to access Redis.
@@ -1068,7 +1146,8 @@ spec:
                           description: |-
                             (Number) Redis idle connection timeout in seconds.
                             Redis idle connection timeout in seconds.
-                          type: number
+                          format: int64
+                          type: integer
                         redisVersion:
                           description: |-
                             (String) Redis major version.
@@ -1133,6 +1212,13 @@ spec:
                         A Message containing details about this condition's last transition from
                         one status to another, if any.
                       type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
                     reason:
                       description: A Reason for this condition's last transition from
                         one status to another.
@@ -1156,6 +1242,13 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
             type: object
         required:
         - spec

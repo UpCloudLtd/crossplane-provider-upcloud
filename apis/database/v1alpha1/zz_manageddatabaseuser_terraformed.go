@@ -21,7 +21,7 @@ func (mg *ManagedDatabaseUser) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this ManagedDatabaseUser
 func (tr *ManagedDatabaseUser) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"password": "spec.forProvider.passwordSecretRef"}
+	return map[string]string{"password": "passwordSecretRef"}
 }
 
 // GetObservation of this ManagedDatabaseUser

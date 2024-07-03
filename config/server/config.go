@@ -27,11 +27,11 @@ func Configure(p *config.Provider) {
 		}
 
 		r.References["network_interface.network"] = config.Reference{
-			Type: "github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network",
+			TerraformName: "upcloud_network",
 		}
 
 		r.References["storage_devices.storage"] = config.Reference{
-			Type: "github.com/UpCloudLtd/provider-upcloud/apis/storage/v1alpha1.Storage",
+			TerraformName: "upcloud_storage",
 		}
 
 		// TODO use r.SchemaElementOptions.SetEmbeddedObject("template") to flatten the yaml manifest from list to single embedded object
@@ -43,7 +43,7 @@ func Configure(p *config.Provider) {
 		r.Kind = "ServerGroup"
 
 		r.References["members"] = config.Reference{
-			Type: "Server",
+			TerraformName: "upcloud_server",
 		}
 	})
 
@@ -52,7 +52,7 @@ func Configure(p *config.Provider) {
 		r.Kind = "FirewallRules"
 
 		r.References["server_id"] = config.Reference{
-			Type: "Server",
+			TerraformName: "upcloud_server",
 		}
 	})
 }
