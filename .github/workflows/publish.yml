@@ -1,0 +1,27 @@
+name: Publish
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+jobs:
+  publish_release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout head
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Extract tag name
+        id: get_tag
+        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+      - name: Build
+        run: make build
+      - name: Install UpBound CLI
+        run: |
+          curl -fsSLo /tmp/up --create-dirs 'https://cli.upbound.io/stable/v0.31.0/bin/linux_amd64/up' && \
+          chmod +x /tmp/up
+      - name: Login to UpBound Marketplace
+        run: /tmp/up login
+      - name: Publish to UpBound Marketplace
+        run: /tmp/up xpkg push upcloud/provider-upcloud:${{ steps.get_tag.outputs.tag }} -f ./_output/xpkg/linux_amd64/provider-upcloud-${{ steps.get_tag.outputs.tag }}.xpkg
