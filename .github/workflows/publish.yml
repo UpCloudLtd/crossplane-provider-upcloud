@@ -22,6 +22,8 @@ jobs:
           curl -fsSLo /tmp/up --create-dirs 'https://cli.upbound.io/stable/v0.31.0/bin/linux_amd64/up' && \
           chmod +x /tmp/up
       - name: Login to UpBound Marketplace
+        env:
+          UP_TOKEN: ${{ secrets.UP_TOKEN }}
         run: /tmp/up login
       - name: Publish to UpBound Marketplace
         run: /tmp/up xpkg push upcloud/provider-upcloud:${{ steps.get_tag.outputs.tag }} -f ./_output/xpkg/linux_amd64/provider-upcloud-${{ steps.get_tag.outputs.tag }}.xpkg
