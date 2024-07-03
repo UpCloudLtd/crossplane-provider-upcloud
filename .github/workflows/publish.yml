@@ -16,7 +16,8 @@ jobs:
         id: get_tag
         run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
       - name: Build
-        run: make submodules && \
+        run: |
+          make submodules && \
           make build
       - name: Install UpBound CLI
         run: |
