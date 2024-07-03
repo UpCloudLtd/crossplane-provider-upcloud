@@ -53,7 +53,9 @@ spec:
       dhcpDefaultRoute: true
       family: IPv4
     name: example2-network
-    router: ${upcloud_router.example2.id}
+    routerSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example2
     zone: de-fra1
 
 ---

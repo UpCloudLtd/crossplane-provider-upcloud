@@ -125,13 +125,27 @@ type NetworkInitParameters struct {
 	// IP subnet within the network. Network must have exactly one IP subnet.
 	IPNetwork []IPNetworkInitParameters `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
 
+	// value pairs to classify the network.
+	// Key-value pairs to classify the network.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Name of the network.
 	// Name of the network.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// (String) UUID of a router to attach to this network.
 	// UUID of a router to attach to this network.
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Router
 	Router *string `json:"router,omitempty" tf:"router,omitempty"`
+
+	// Reference to a Router in network to populate router.
+	// +kubebuilder:validation:Optional
+	RouterRef *v1.Reference `json:"routerRef,omitempty" tf:"-"`
+
+	// Selector for a Router in network to populate router.
+	// +kubebuilder:validation:Optional
+	RouterSelector *v1.Selector `json:"routerSelector,omitempty" tf:"-"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
@@ -146,6 +160,11 @@ type NetworkObservation struct {
 	// (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
 	// IP subnet within the network. Network must have exactly one IP subnet.
 	IPNetwork []IPNetworkObservation `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
+
+	// value pairs to classify the network.
+	// Key-value pairs to classify the network.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
 	// (String) Name of the network.
 	// Name of the network.
@@ -171,20 +190,35 @@ type NetworkParameters struct {
 	// +kubebuilder:validation:Optional
 	IPNetwork []IPNetworkParameters `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
 
+	// value pairs to classify the network.
+	// Key-value pairs to classify the network.
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Name of the network.
 	// Name of the network.
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (String) UUID of a router to attach to this network.
 	// UUID of a router to attach to this network.
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Router
 	// +kubebuilder:validation:Optional
 	Router *string `json:"router,omitempty" tf:"router,omitempty"`
+
+	// Reference to a Router in network to populate router.
+	// +kubebuilder:validation:Optional
+	RouterRef *v1.Reference `json:"routerRef,omitempty" tf:"-"`
+
+	// Selector for a Router in network to populate router.
+	// +kubebuilder:validation:Optional
+	RouterSelector *v1.Selector `json:"routerSelector,omitempty" tf:"-"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 // NetworkSpec defines the desired state of Network

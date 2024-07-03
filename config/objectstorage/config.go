@@ -32,7 +32,7 @@ func Configure(p *config.Provider) {
 		r.ExternalName = config.TemplatedStringAsIdentifier("name", "{{ .parameters.service_uuid }}/{{ .external_name }}")
 
 		r.References["service_uuid"] = config.Reference{
-			Type: "ManagedObjectStorage",
+			TerraformName: "upcloud_managed_object_storage",
 		}
 	})
 
@@ -41,7 +41,7 @@ func Configure(p *config.Provider) {
 		r.ExternalName = config.TemplatedStringAsIdentifier("username", "{{ .parameters.service_uuid }}/{{ .external_name }}")
 
 		r.References["service_uuid"] = config.Reference{
-			Type: "ManagedObjectStorage",
+			TerraformName: "upcloud_managed_object_storage",
 		}
 	})
 
@@ -55,11 +55,11 @@ func Configure(p *config.Provider) {
 		r.ExternalName.OmittedFields = []string{}
 
 		r.References["service_uuid"] = config.Reference{
-			Type: "ManagedObjectStorage",
+			TerraformName: "upcloud_managed_object_storage",
 		}
 
 		r.References["username"] = config.Reference{
-			Type: "ManagedObjectStorageUser",
+			TerraformName: "upcloud_managed_object_storage_user",
 		}
 	})
 
@@ -98,15 +98,15 @@ func Configure(p *config.Provider) {
 		}
 
 		r.References["service_uuid"] = config.Reference{
-			Type: "ManagedObjectStorage",
+			TerraformName: "upcloud_managed_object_storage",
 		}
 
 		r.References["username"] = config.Reference{
-			Type: "ManagedObjectStorageUser",
+			TerraformName: "upcloud_managed_object_storage_user",
 		}
 
 		r.References["name"] = config.Reference{
-			Type: "ManagedObjectStoragePolicy",
+			TerraformName: "upcloud_managed_object_storage_policy",
 		}
 	})
 }

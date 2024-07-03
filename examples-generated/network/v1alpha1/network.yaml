@@ -15,7 +15,9 @@ spec:
       family: IPv4
       gateway: 10.0.0.1
     name: example_private_net
-    router: ${upcloud_router.example_router.id}
+    routerSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example_router
     zone: nl-ams1
 
 ---

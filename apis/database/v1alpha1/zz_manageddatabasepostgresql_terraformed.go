@@ -21,7 +21,7 @@ func (mg *ManagedDatabasePostgresql) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this ManagedDatabasePostgresql
 func (tr *ManagedDatabasePostgresql) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"properties[*].admin_password": "spec.forProvider.properties[*].adminPasswordSecretRef", "properties[*].migration[*].password": "spec.forProvider.properties[*].migration[*].passwordSecretRef", "service_password": "status.atProvider.servicePassword", "service_uri": "status.atProvider.serviceUri"}
+	return map[string]string{"properties[*].admin_password": "properties[*].adminPasswordSecretRef", "properties[*].migration[*].password": "properties[*].migration[*].passwordSecretRef", "service_password": "status.atProvider.servicePassword", "service_uri": "status.atProvider.serviceUri"}
 }
 
 // GetObservation of this ManagedDatabasePostgresql

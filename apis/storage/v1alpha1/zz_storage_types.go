@@ -287,7 +287,7 @@ type StorageParameters struct {
 	// (Number) The size of the storage in gigabytes
 	// The size of the storage in gigabytes
 	// +kubebuilder:validation:Optional
-	Size *int64 `json:"size,omitempty" tf:"size,omitempty"`
+	Size *int64 `json:"size" tf:"size,omitempty"`
 
 	// (String) The storage tier to use
 	// The storage tier to use
@@ -297,12 +297,12 @@ type StorageParameters struct {
 	// (String) A short, informative description
 	// A short, informative description
 	// +kubebuilder:validation:Optional
-	Title *string `json:"title,omitempty" tf:"title,omitempty"`
+	Title *string `json:"title" tf:"title,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// The zone in which the storage will be created, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 // StorageSpec defines the desired state of Storage

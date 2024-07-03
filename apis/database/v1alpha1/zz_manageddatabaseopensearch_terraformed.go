@@ -21,7 +21,7 @@ func (mg *ManagedDatabaseOpensearch) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this ManagedDatabaseOpensearch
 func (tr *ManagedDatabaseOpensearch) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"properties[*].email_sender_password": "spec.forProvider.properties[*].emailSenderPasswordSecretRef", "service_password": "status.atProvider.servicePassword", "service_uri": "status.atProvider.serviceUri"}
+	return map[string]string{"properties[*].email_sender_password": "properties[*].emailSenderPasswordSecretRef", "service_password": "status.atProvider.servicePassword", "service_uri": "status.atProvider.serviceUri"}
 }
 
 // GetObservation of this ManagedDatabaseOpensearch

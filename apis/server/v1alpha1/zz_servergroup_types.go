@@ -39,15 +39,15 @@ type ServerGroupInitParameters struct {
 
 	// (Set of String) UUIDs of the servers that are members of this group. Servers can also be attached to the server group via server_group property of upcloud_server. See also track_members property.
 	// UUIDs of the servers that are members of this group. Servers can also be attached to the server group via `server_group` property of `upcloud_server`. See also `track_members` property.
-	// +crossplane:generate:reference:type=Server
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/server/v1alpha1.Server
 	// +listType=set
 	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
 
-	// References to Server to populate members.
+	// References to Server in server to populate members.
 	// +kubebuilder:validation:Optional
 	MembersRefs []v1.Reference `json:"membersRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Server to populate members.
+	// Selector for a list of Server in server to populate members.
 	// +kubebuilder:validation:Optional
 	MembersSelector *v1.Selector `json:"membersSelector,omitempty" tf:"-"`
 
@@ -129,23 +129,23 @@ type ServerGroupParameters struct {
 
 	// (Set of String) UUIDs of the servers that are members of this group. Servers can also be attached to the server group via server_group property of upcloud_server. See also track_members property.
 	// UUIDs of the servers that are members of this group. Servers can also be attached to the server group via `server_group` property of `upcloud_server`. See also `track_members` property.
-	// +crossplane:generate:reference:type=Server
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/server/v1alpha1.Server
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
 
-	// References to Server to populate members.
+	// References to Server in server to populate members.
 	// +kubebuilder:validation:Optional
 	MembersRefs []v1.Reference `json:"membersRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Server to populate members.
+	// Selector for a list of Server in server to populate members.
 	// +kubebuilder:validation:Optional
 	MembersSelector *v1.Selector `json:"membersSelector,omitempty" tf:"-"`
 
 	// (String) Title of your server group
 	// Title of your server group
 	// +kubebuilder:validation:Optional
-	Title *string `json:"title,omitempty" tf:"title,omitempty"`
+	Title *string `json:"title" tf:"title,omitempty"`
 
 	// (Boolean) Controls if members of the server group are being tracked in this resource. Set to false when using server_group property of upcloud_server to attach servers to the server group to avoid delayed state updates.
 	// Controls if members of the server group are being tracked in this resource. Set to `false` when using `server_group` property of `upcloud_server` to attach servers to the server group to avoid delayed state updates.

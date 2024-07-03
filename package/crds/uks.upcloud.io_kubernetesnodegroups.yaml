@@ -81,11 +81,12 @@ spec:
                     type: boolean
                   cluster:
                     description: |-
-                      (String) Cluster ID.
-                      Cluster ID.
+                      (String) UUID of the cluster.
+                      UUID of the cluster.
                     type: string
                   clusterRef:
-                    description: Reference to a KubernetesCluster to populate cluster.
+                    description: Reference to a KubernetesCluster in uks to populate
+                      cluster.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -119,7 +120,8 @@ spec:
                     - name
                     type: object
                   clusterSelector:
-                    description: Selector for a KubernetesCluster to populate cluster.
+                    description: Selector for a KubernetesCluster in uks to populate
+                      cluster.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -158,6 +160,37 @@ spec:
                             type: string
                         type: object
                     type: object
+                  customPlan:
+                    description: |-
+                      (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+                      Resource properties for custom plan
+                    items:
+                      properties:
+                        cores:
+                          description: |-
+                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                          format: int64
+                          type: integer
+                        memory:
+                          description: |-
+                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                          format: int64
+                          type: integer
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          format: int64
+                          type: integer
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use. Defaults to maxiops
+                            The storage tier to use. Defaults to maxiops
+                          type: string
+                      type: object
+                    type: array
                   kubeletArgs:
                     description: |-
                       those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
@@ -203,6 +236,11 @@ spec:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
+                  storageEncryption:
+                    description: |-
+                      (String) Storage encryption strategy for the nodes in this group.
+                      Storage encryption strategy for the nodes in this group.
+                    type: string
                   taint:
                     description: |-
                       (Block Set) Taints for the nodes in this group. (see below for nested schema)
@@ -251,6 +289,37 @@ spec:
                       If set to true, nodes in this group will be placed on separate compute hosts.
                       Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
                     type: boolean
+                  customPlan:
+                    description: |-
+                      (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+                      Resource properties for custom plan
+                    items:
+                      properties:
+                        cores:
+                          description: |-
+                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                          format: int64
+                          type: integer
+                        memory:
+                          description: |-
+                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                          format: int64
+                          type: integer
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          format: int64
+                          type: integer
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use. Defaults to maxiops
+                            The storage tier to use. Defaults to maxiops
+                          type: string
+                      type: object
+                    type: array
                   kubeletArgs:
                     description: |-
                       those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
@@ -296,6 +365,11 @@ spec:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
+                  storageEncryption:
+                    description: |-
+                      (String) Storage encryption strategy for the nodes in this group.
+                      Storage encryption strategy for the nodes in this group.
+                    type: string
                   taint:
                     description: |-
                       (Block Set) Taints for the nodes in this group. (see below for nested schema)
@@ -514,9 +588,40 @@ spec:
                     type: boolean
                   cluster:
                     description: |-
-                      (String) Cluster ID.
-                      Cluster ID.
+                      (String) UUID of the cluster.
+                      UUID of the cluster.
                     type: string
+                  customPlan:
+                    description: |-
+                      (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+                      Resource properties for custom plan
+                    items:
+                      properties:
+                        cores:
+                          description: |-
+                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                          format: int64
+                          type: integer
+                        memory:
+                          description: |-
+                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                          format: int64
+                          type: integer
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          format: int64
+                          type: integer
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use. Defaults to maxiops
+                            The storage tier to use. Defaults to maxiops
+                          type: string
+                      type: object
+                    type: array
                   id:
                     description: (String) The ID of this resource.
                     type: string
@@ -565,6 +670,11 @@ spec:
                       type: string
                     type: array
                     x-kubernetes-list-type: set
+                  storageEncryption:
+                    description: |-
+                      (String) Storage encryption strategy for the nodes in this group.
+                      Storage encryption strategy for the nodes in this group.
+                    type: string
                   taint:
                     description: |-
                       (Block Set) Taints for the nodes in this group. (see below for nested schema)

@@ -153,7 +153,7 @@ type ManagedDatabaseRedisNetworkParameters struct {
 	// Private network UUID. Must reside in the same zone as the database.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network
 	// +kubebuilder:validation:Optional
-	UUID *string `json:"uuid,omitempty" tf:"uuid,omitempty"`
+	UUID *string `json:"uuid" tf:"uuid,omitempty"`
 
 	// Reference to a Network in network to populate uuid.
 	// +kubebuilder:validation:Optional
@@ -283,7 +283,7 @@ type ManagedDatabaseRedisParameters struct {
 	// (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
 	// Private networks attached to the managed database
@@ -298,7 +298,7 @@ type ManagedDatabaseRedisParameters struct {
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
 	// +kubebuilder:validation:Optional
-	Plan *string `json:"plan,omitempty" tf:"plan,omitempty"`
+	Plan *string `json:"plan" tf:"plan,omitempty"`
 
 	// (Boolean) The administrative power state of the service
 	// The administrative power state of the service
@@ -313,12 +313,12 @@ type ManagedDatabaseRedisParameters struct {
 	// (String) Title of a managed database instance
 	// Title of a managed database instance
 	// +kubebuilder:validation:Optional
-	Title *string `json:"title,omitempty" tf:"title,omitempty"`
+	Title *string `json:"title" tf:"title,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 type ManagedDatabaseRedisPropertiesInitParameters struct {
@@ -367,7 +367,7 @@ type ManagedDatabaseRedisPropertiesInitParameters struct {
 	// Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
 	RedisNumberOfDatabases *int64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
 
-	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to the backup schedule for backup purposes. When persistence is 'off', no RDB dumps or backups are done, so data can be lost at any moment if the service is restarted for any reason, or if the service is powered off. Also, the service can't be forked.
 	// Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
 	RedisPersistence *string `json:"redisPersistence,omitempty" tf:"redis_persistence,omitempty"`
 
@@ -409,6 +409,10 @@ type ManagedDatabaseRedisPropertiesMigrationInitParameters struct {
 	// (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	Method *string `json:"method,omitempty" tf:"method,omitempty"`
+
+	// (String, Sensitive) Password for authentication with the server where to migrate data from.
+	// Password for authentication with the server where to migrate data from.
+	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
 
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
@@ -543,7 +547,7 @@ type ManagedDatabaseRedisPropertiesObservation struct {
 	// Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
 	RedisNumberOfDatabases *int64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
 
-	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to the backup schedule for backup purposes. When persistence is 'off', no RDB dumps or backups are done, so data can be lost at any moment if the service is restarted for any reason, or if the service is powered off. Also, the service can't be forked.
 	// Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
 	RedisPersistence *string `json:"redisPersistence,omitempty" tf:"redis_persistence,omitempty"`
 
@@ -625,7 +629,7 @@ type ManagedDatabaseRedisPropertiesParameters struct {
 	// +kubebuilder:validation:Optional
 	RedisNumberOfDatabases *int64 `json:"redisNumberOfDatabases,omitempty" tf:"redis_number_of_databases,omitempty"`
 
-	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+	// (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to the backup schedule for backup purposes. When persistence is 'off', no RDB dumps or backups are done, so data can be lost at any moment if the service is restarted for any reason, or if the service is powered off. Also, the service can't be forked.
 	// Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
 	// +kubebuilder:validation:Optional
 	RedisPersistence *string `json:"redisPersistence,omitempty" tf:"redis_persistence,omitempty"`
@@ -693,7 +697,6 @@ type ManagedDatabaseRedis struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.nodeStates) || (has(self.initProvider) && has(self.initProvider.nodeStates))",message="spec.forProvider.nodeStates is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.plan) || (has(self.initProvider) && has(self.initProvider.plan))",message="spec.forProvider.plan is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.title) || (has(self.initProvider) && has(self.initProvider.title))",message="spec.forProvider.title is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.zone) || (has(self.initProvider) && has(self.initProvider.zone))",message="spec.forProvider.zone is a required parameter"

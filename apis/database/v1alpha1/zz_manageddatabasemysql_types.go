@@ -174,7 +174,7 @@ type ManagedDatabaseMysqlParameters struct {
 	// (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
 	// Private networks attached to the managed database
@@ -189,7 +189,7 @@ type ManagedDatabaseMysqlParameters struct {
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
 	// +kubebuilder:validation:Optional
-	Plan *string `json:"plan,omitempty" tf:"plan,omitempty"`
+	Plan *string `json:"plan" tf:"plan,omitempty"`
 
 	// (Boolean) The administrative power state of the service
 	// The administrative power state of the service
@@ -204,12 +204,12 @@ type ManagedDatabaseMysqlParameters struct {
 	// (String) Title of a managed database instance
 	// Title of a managed database instance
 	// +kubebuilder:validation:Optional
-	Title *string `json:"title,omitempty" tf:"title,omitempty"`
+	Title *string `json:"title" tf:"title,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 type MigrationInitParameters struct {
@@ -229,6 +229,10 @@ type MigrationInitParameters struct {
 	// (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	Method *string `json:"method,omitempty" tf:"method,omitempty"`
+
+	// (String, Sensitive) Password for authentication with the server where to migrate data from.
+	// Password for authentication with the server where to migrate data from.
+	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
 
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
@@ -385,7 +389,7 @@ type NetworkParameters struct {
 	// Private network UUID. Must reside in the same zone as the database.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network
 	// +kubebuilder:validation:Optional
-	UUID *string `json:"uuid,omitempty" tf:"uuid,omitempty"`
+	UUID *string `json:"uuid" tf:"uuid,omitempty"`
 
 	// Reference to a Network in network to populate uuid.
 	// +kubebuilder:validation:Optional
@@ -427,6 +431,10 @@ type NodeStatesParameters struct {
 }
 
 type PropertiesInitParameters struct {
+
+	// (String, Sensitive) Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+	// Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+	AdminPasswordSecretRef *v1.SecretKeySelector `json:"adminPasswordSecretRef,omitempty" tf:"-"`
 
 	// (String) Custom username for admin user. This must be set only when a new service is being created.
 	// Custom username for admin user. This must be set only when a new service is being created.
@@ -997,7 +1005,6 @@ type ManagedDatabaseMysql struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.nodeStates) || (has(self.initProvider) && has(self.initProvider.nodeStates))",message="spec.forProvider.nodeStates is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.plan) || (has(self.initProvider) && has(self.initProvider.plan))",message="spec.forProvider.plan is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.title) || (has(self.initProvider) && has(self.initProvider.title))",message="spec.forProvider.title is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.zone) || (has(self.initProvider) && has(self.initProvider.zone))",message="spec.forProvider.zone is a required parameter"

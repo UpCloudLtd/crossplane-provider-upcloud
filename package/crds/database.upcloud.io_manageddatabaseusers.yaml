@@ -178,8 +178,8 @@ spec:
                       The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to database user `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
                     type: string
                   serviceRef:
-                    description: Reference to a ManagedDatabasePostgresql to populate
-                      service.
+                    description: Reference to a ManagedDatabasePostgresql in database
+                      to populate service.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -213,8 +213,8 @@ spec:
                     - name
                     type: object
                   serviceSelector:
-                    description: Selector for a ManagedDatabasePostgresql to populate
-                      service.
+                    description: Selector for a ManagedDatabasePostgresql in database
+                      to populate service.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -298,6 +298,25 @@ spec:
                           type: array
                       type: object
                     type: array
+                  passwordSecretRef:
+                    description: |-
+                      (String, Sensitive) Password for the database user. Defaults to a random value
+                      Password for the database user. Defaults to a random value
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   pgAccessControl:
                     description: |-
                       (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)

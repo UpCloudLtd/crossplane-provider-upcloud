@@ -3,17 +3,25 @@ package kubernetes
 import (
 	"github.com/UpCloudLtd/provider-upcloud/config/groupversion"
 	"github.com/crossplane/upjet/pkg/config"
+	"slices"
 )
 
-// Resources is a list of all supported kubernetes resources.
-var Resources = []string{
-	"upcloud_kubernetes_cluster",
+// SDKResources is a list of all supported kubernetes resources implemented with Terraform legacy SDKv2.
+var SDKResources = []string{
 	"upcloud_kubernetes_node_group",
 }
 
+// PluginFrameworkResources is a list of all supported network resources implemented with Terraform Plugin Framework.
+var PluginFrameworkResources = []string{
+	"upcloud_kubernetes_cluster",
+}
+
+// AllResources is a list of all supported network resources.
+var AllResources = slices.Concat(SDKResources, PluginFrameworkResources)
+
 // Configure configures the kubernetes resources.
 func Configure(p *config.Provider) {
-	groupversion.Configure(Resources, p, "uks", "v1alpha1")
+	groupversion.Configure(AllResources, p, "uks", "v1alpha1")
 
 	p.AddResourceConfigurator("upcloud_kubernetes_cluster", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider
@@ -21,7 +29,13 @@ func Configure(p *config.Provider) {
 		r.UseAsync = true
 
 		r.References["network"] = config.Reference{
-			Type: "github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network",
+			TerraformName: "upcloud_network",
+		}
+
+		if s, ok := r.TerraformResource.Schema["labels"]; ok {
+			s.Optional = false
+			s.Computed = false
+			s.Required = true
 		}
 	})
 
@@ -30,7 +44,7 @@ func Configure(p *config.Provider) {
 		r.Kind = "KubernetesNodeGroup"
 
 		r.References["cluster"] = config.Reference{
-			Type: "KubernetesCluster",
+			TerraformName: "upcloud_kubernetes_cluster",
 		}
 	})
 }

@@ -700,6 +700,25 @@ spec:
                       Database Engine properties for MySQL
                     items:
                       properties:
+                        adminPasswordSecretRef:
+                          description: |-
+                            (String, Sensitive) Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                            Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
                         adminUsername:
                           description: |-
                             (String) Custom username for admin user. This must be set only when a new service is being created.
@@ -881,6 +900,25 @@ spec:
                                   (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
                                   The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
                                 type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: Namespace of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                - namespace
+                                type: object
                               port:
                                 description: |-
                                   (Number) Port number of the server where to migrate data from.
@@ -1150,10 +1188,6 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
-            - message: spec.forProvider.nodeStates is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.nodeStates)
-                || (has(self.initProvider) && has(self.initProvider.nodeStates))'
             - message: spec.forProvider.plan is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.plan)

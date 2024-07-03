@@ -11,45 +11,46 @@ This is a quick guide on how to develop this provider. For general info about de
     - unzip
 
 2. Create a local cluster using Kind:
-    ```
+    ```shell
     kind create cluster -n crossplane-dev
     ```
 
 3. Generate the CRDs and controllers for them:
-    ```
+    ```shell
     make generate
     ```
     Note that in some cases this might fail do to unresolved references in Go code (in `api` directory). This usually happends when you changed CRD references in their config. It is safe to just delete the offending file - the `generate` target will just regenerate everything. You can also just delete all previously gennerated APIs with `make cleanup-apis`.
 
 4. Install the CRDs in your cluster:
-    ```
+    ```shell
     make install
     ```
 
 5. Run the controller manager outside of the cluster:
-    ```
+    ```shell
     make run
     ```
 
 6. Go to `examples/providerconfig`, copy the secret template and populate it with your UpCloud API username and password:
-    ```
+    ```shell
     cp examples/providerconfig/secret.yaml.tmpl examples/providerconfig/secret.yaml
     ```
 
 7. Apply the whole provider config directory:
-    ```
+    ```shell
     make deploy-providerconfigs
     ```
 
 8. You are ready to test things. You can start by applying some of the files in the [examples/resources](examples/resources/) directory. Note that some resources require additional objects to be created. For example databases require a secret with credentials. We hold those objects in `examples/resourceconfig` directory so that they can be applied separately. We need to apply / delete them separately because otherwise the deletion process can hang due to not having a valid TF configuration (because for example password is not populated, and for TF that is a required field). You can apply all the example resources in one go using
-    ```
-    make deploy-examples
-    ```
+    ```shell
+`    make deploy-examples
+`    ```
 
 9. You can cleanup by running:
-    ```
+    ```shell
     make delete-examples
     make delete-providerconfigs
+    make uninstall
     ```
 
 
@@ -66,13 +67,13 @@ If you use VSCode, you can use the following run configuration and run the contr
        "program": "${workspaceFolder}/cmd/provider",
        "args": ["--debug"],
        "env": {
-           "TERRAFORM_VERSION": "1.7.5",
+           "TERRAFORM_VERSION": "1.5.7",
            "TERRAFORM_PROVIDER_SOURCE": "UpCloudLtd/upcloud",
            "TERRAFORM_PROVIDER_REPO": "https://github.com/UpCloudLtd/terraform-provider-upcloud",
-           "TERRAFORM_PROVIDER_VERSION": "5.2.3",
+           "TERRAFORM_PROVIDER_VERSION": "5.7.0",
            "TERRAFORM_PROVIDER_DOWNLOAD_NAME": "terraform-provider-upcloud",
-           "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.2.2",
-           "TERRAFORM_NATIVE_PROVIDER_BINARY": "terraform-provider-upcloud_v5.2.3",
+           "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.7.0",
+           "TERRAFORM_NATIVE_PROVIDER_BINARY": "terraform-provider-upcloud_v5.7.0",
            "TERRAFORM_DOCS_PATH": "docs/resources"
        }
    }
@@ -84,9 +85,9 @@ First is to use locally built TF provider. You can do that by [building the TF p
     ```shell
 
     // "TERRAFORM_PROVIDER_SOURCE": "UpCloudLtd/upcloud",
-    // "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.2.2",
+    // "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.7.0",
     "TERRAFORM_PROVIDER_SOURCE": "registry.upcloud.com/upcloud/upcloud",
-    "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "file:///home/myusername/.terraform.d/plugins/registry.upcloud.com/upcloud/upcloud/5.2.3",
+    "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "file:///home/myusername/.terraform.d/plugins/registry.upcloud.com/upcloud/upcloud/5.7.0",
     ```
 Just make sure to change the version to whatever was the result of local TF build process.
 

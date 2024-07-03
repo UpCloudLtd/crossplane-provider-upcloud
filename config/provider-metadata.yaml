@@ -126,12 +126,12 @@ resources:
                       "zone": "de-fra1"
                     }
         argumentDocs:
-            access: '(String) Network access for the floating IP address. Supported value: public'
-            family: (String) The address family of new IP address
-            id: (String) The ID of this resource.
-            ip_address: (String) An UpCloud assigned IP Address
-            mac_address: (String) MAC address of server interface to assign address to
-            zone: (String) Zone of address, required when assigning a detached floating IP address, e.g. de-fra1. You can list available zones with upctl zone list.
+            access: '(String) Network access for the floating IP address. Supported value: public.'
+            family: (String) The address family of the floating IP address.
+            id: (String) Identifier of the floating IP address. Contains the same value as ip_address.
+            ip_address: (String) An UpCloud assigned IP Address.
+            mac_address: (String) MAC address of a server interface to assign address to.
+            zone: (String) Zone of the address, e.g. de-fra1. Required when assigning a detached floating IP address. You can list available zones with upctl zone list.
         importStatements:
             - terraform import upcloud_floating_ip_address.my_new_floating_address 94.237.114.205
     upcloud_gateway:
@@ -274,6 +274,7 @@ resources:
             static_network: (String) Destination prefix of the route; needs to be a valid IPv4 prefix
             tunnels: (List of String) List of connection's tunnels names. Note that this field can have outdated information as connections are created by a separate resource. To make sure that you have the most recent data run 'terrafrom refresh'.
             type: (String) The type of the connection; currently the only supported type is 'ipsec'.
+            uuid: (String) The UUID of the connection
         importStatements: []
     upcloud_gateway_connection_tunnel:
         subCategory: Network
@@ -375,6 +376,7 @@ resources:
             psk: (String, Sensitive) The pre-shared key. This value is only used during resource creation and is not returned in the state. It is not possible to update this value. If you need to update it, delete the connection and create a new one.
             rekey_time: (Number) IKE SA rekey time in seconds.
             remote_address: (String) Remote public IP address of the tunnel
+            uuid: (String) The UUID of the tunnel
         importStatements: []
     upcloud_kubernetes_cluster:
         subCategory: Kubernetes
@@ -509,7 +511,7 @@ resources:
                     }
         argumentDocs:
             control_plane_ip_filter: (Set of String) IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use ["0.0.0.0/0"]. To deny access from all sources, use []. Values set here do not restrict access to node groups or exposed Kubernetes services.
-            id: (String) The ID of this resource.
+            id: (String) UUID of the cluster.
             labels: (Map of String) Key-value pairs to classify the cluster.
             name: (String) Cluster name. Needs to be unique within the account.
             network: (String) Network ID for the cluster to run in.
@@ -518,7 +520,8 @@ resources:
             plan: (String) The pricing plan used for the cluster. Default plan is development. You can list available plans with upctl kubernetes plans.
             private_node_groups: (Boolean) Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
             state: (String) Operational state of the cluster.
-            version: (String) Kubernetes version ID, e.g. 1.27. You can list available version IDs with upctl kubernetes versions.
+            storage_encryption: (String) Set default storage encryption strategy for all nodes in the cluster.
+            version: (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
             zone: (String) Zone in which the Kubernetes cluster will be hosted, e.g. de-fra1. You can list available zones with upctl zone list.
         importStatements: []
     upcloud_kubernetes_node_group:
@@ -580,16 +583,22 @@ resources:
             anti_affinity: |-
                 (Boolean) If set to true, nodes in this group will be placed on separate compute hosts.
                 Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
-            cluster: (String) Cluster ID.
+            cluster: (String) UUID of the cluster.
+            cores: (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
+            custom_plan: '(Block List, Max: 1) Resource properties for custom plan (see below for nested schema)'
             effect: (String) Taint effect.
             id: (String) The ID of this resource.
             key: (String) Kubelet argument key.
             kubelet_args: (Block Set) Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
             labels: (Map of String) Key-value pairs to classify the node group.
+            memory: (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
             name: (String) The name of the node group. Needs to be unique within a cluster.
             node_count: (Number) Amount of nodes to provision in the node group.
             plan: (String) The server plan used for the node group. You can list available plans with upctl server plans
             ssh_keys: (Set of String) You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
+            storage_encryption: (String) Storage encryption strategy for the nodes in this group.
+            storage_size: (Number) The size of the storage device in gigabytes.
+            storage_tier: (String) The storage tier to use. Defaults to maxiops
             taint: (Block Set) Taints for the nodes in this group. (see below for nested schema)
             utility_network_access: (Boolean) If set to false, nodes in this group will not have access to utility network.
             value: (String) Kubelet argument value.
@@ -1589,7 +1598,6 @@ resources:
             deadlock_timeout: (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
             default_toast_compression: (String) Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
             family: (String) Network family. Currently only IPv4 is supported.
-            feature_enabled: (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
             host: (String) Hostname or IP address of the server where to migrate data from.
             id: (String) The ID of this resource.
             idle_in_transaction_session_timeout: (Number) Time out sessions with open transactions after this number of milliseconds.
@@ -1597,22 +1605,10 @@ resources:
             ignore_startup_parameters: (List of String) List of parameters to ignore when given in startup packet.
             ip_filter: (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
             jit: (Boolean) Controls system-wide use of Just-in-Time Compilation (JIT).
-            log: (List of String) Specifies which classes of statements will be logged by session audit logging.
             log_autovacuum_min_duration: (Number) Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
-            log_catalog: (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
-            log_client: (Boolean) Specifies whether log messages will be visible to a client process such as psql.
             log_error_verbosity: (String) Controls the amount of detail written in the server log for each message that is logged.
-            log_level: (String) Specifies the log level that will be used for log entries.
-            log_line_prefix: (String) Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
-            log_max_string_length: (Number) Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
+            log_line_prefix: (String) Choose from one of the available log formats.
             log_min_duration_statement: (Number) Log statements that take more than this number of milliseconds to run, -1 disables.
-            log_nested_statements: (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
-            log_parameter: (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
-            log_parameter_max_size: (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
-            log_relation: (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
-            log_rows: (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
-            log_statement: (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
-            log_statement_once: (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
             log_temp_files: (Number) Log statements for each temporary file created larger than this number of kilobytes, -1 disables.
             maintenance_window_dow: (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
             maintenance_window_time: (String) Maintenance window UTC time in hh:mm:ss format
@@ -1645,7 +1641,6 @@ resources:
             pg_stat_monitor_pgsm_enable_query_plan: (Boolean) Enables or disables query plan monitoring.
             pg_stat_monitor_pgsm_max_buckets: (Number) Sets the maximum number of buckets.
             pg_stat_statements_track: (String) Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
-            pgaudit: '(Block List, Max: 1) PGAudit settings. System-wide settings for the pgaudit extension. (see below for nested schema)'
             pgbouncer: '(Block List, Max: 1) PGBouncer connection pooling settings. System-wide settings for pgbouncer. (see below for nested schema)'
             pglookout: '(Block List, Max: 1) PGLookout settings. System-wide settings for pglookout. (see below for nested schema)'
             plan: (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
@@ -1654,7 +1649,7 @@ resources:
             primary_database: (String) Primary database name
             properties: '(Block List, Max: 1) Database Engine properties for PostgreSQL (see below for nested schema)'
             public_access: (Boolean) Public Access. Allow access to the service from the public Internet.
-            role: (String) Specifies the master role to use for object audit logging.
+            role: (String)
             route: (String)
             server_idle_timeout: (Number) If a server connection has been idle more than this many seconds it will be dropped. If 0 then timeout is disabled. [seconds].
             server_lifetime: (Number) The pooler will close an unused server connection that has been connected longer than this. [seconds].
@@ -1747,7 +1742,7 @@ resources:
             redis_maxmemory_policy: (String) Redis maxmemory-policy.
             redis_notify_keyspace_events: (String) Set notify-keyspace-events option.
             redis_number_of_databases: (Number) Number of Redis databases. Set number of Redis databases. Changing this will cause a restart of the Redis service.
-            redis_persistence: (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+            redis_persistence: (String) Redis persistence. When persistence is 'rdb', Redis does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to the backup schedule for backup purposes. When persistence is 'off', no RDB dumps or backups are done, so data can be lost at any moment if the service is restarted for any reason, or if the service is powered off. Also, the service can't be forked.
             redis_pubsub_client_output_buffer_limit: (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
             redis_ssl: (Boolean) Require SSL to access Redis.
             redis_timeout: (Number) Redis idle connection timeout in seconds.
@@ -2056,6 +2051,7 @@ resources:
             gateway: (String) Gateway address given by DHCP
             id: (String) UUID of the network.
             ip_network: (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
+            labels: (Map of String) Key-value pairs to classify the network.
             name: (String) Name of the network.
             router: (String) UUID of a router to attach to this network.
             type: (String) The network type
@@ -2174,7 +2170,7 @@ resources:
               terraform import upcloud_object_storage.example_storage 06c1f4b6-faf2-47d0-8896-1d941092b009
     upcloud_router:
         subCategory: Network
-        description: This resource represents a generated UpCloud router resource. Routers can be used to connect multiple Private Networks. UpCloud Servers on any attached network can communicate directly with each other.
+        description: Routers can be used to connect multiple Private Networks. UpCloud Servers on any attached network can communicate directly with each other.
         name: upcloud_router
         title: upcloud_router Resource - terraform-provider-upcloud
         examples:
@@ -2184,13 +2180,14 @@ resources:
                   "name": "My Example Router"
                 }
         argumentDocs:
-            attached_networks: (List of String) A collection of UUID representing networks attached to this router
-            id: (String) The ID of this resource.
-            name: (String) Name of the router
+            attached_networks: (List of String) List of UUIDs representing networks attached to this router.
+            id: (String) UUID of the router.
+            labels: (Map of String) Key-value pairs to classify the router.
+            name: (String) Name of the router.
             nexthop: '(String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.'
             route: (String) Destination prefix of the route.
-            static_route: (Block Set) A collection of static routes for this router (see below for nested schema)
-            type: (String) The type of router
+            static_route: (Block Set) A collection of static routes for this router. (see below for nested schema)
+            type: (String) Type of the router
         importStatements:
             - terraform import upcloud_router.my_example_router 049d7ca2-757e-4fb1-a833-f87ee056547a
     upcloud_server:

@@ -21,7 +21,7 @@ func (mg *ManagedDatabaseRedis) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this ManagedDatabaseRedis
 func (tr *ManagedDatabaseRedis) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"properties[*].migration[*].password": "spec.forProvider.properties[*].migration[*].passwordSecretRef", "service_password": "status.atProvider.servicePassword", "service_uri": "status.atProvider.serviceUri"}
+	return map[string]string{"properties[*].migration[*].password": "properties[*].migration[*].passwordSecretRef", "service_password": "status.atProvider.servicePassword", "service_uri": "status.atProvider.serviceUri"}
 }
 
 // GetObservation of this ManagedDatabaseRedis

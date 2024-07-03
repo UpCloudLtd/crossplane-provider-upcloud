@@ -110,7 +110,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   membersRefs:
-                    description: References to Server to populate members.
+                    description: References to Server in server to populate members.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -147,7 +147,8 @@ spec:
                       type: object
                     type: array
                   membersSelector:
-                    description: Selector for a list of Server to populate members.
+                    description: Selector for a list of Server in server to populate
+                      members.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -248,7 +249,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   membersRefs:
-                    description: References to Server to populate members.
+                    description: References to Server in server to populate members.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -285,7 +286,8 @@ spec:
                       type: object
                     type: array
                   membersSelector:
-                    description: Selector for a list of Server to populate members.
+                    description: Selector for a list of Server in server to populate
+                      members.
                     properties:
                       matchControllerRef:
                         description: |-

@@ -203,7 +203,7 @@ spec:
                       properties:
                         role:
                           description: |-
-                            (String) Specifies the master role to use for object audit logging.
+                            (String)
                             Role of the node
                           type: string
                       type: object
@@ -382,7 +382,7 @@ spec:
                           type: string
                         logLinePrefix:
                           description: |-
-                            formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                            (String) Choose from one of the available log formats.
                             Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
                           type: string
                         logMinDurationStatement:
@@ -577,83 +577,82 @@ spec:
                             Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
                           type: string
                         pgaudit:
-                          description: |-
-                            wide settings for the pgaudit extension. (see below for nested schema)
-                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          description: PGAudit settings. System-wide settings for
+                            the pgaudit extension.
                           items:
                             properties:
                               featureEnabled:
-                                description: |-
-                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
-                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                description: Enable pgaudit extension. Enable pgaudit
+                                  extension. When enabled, pgaudit extension will
+                                  be automatically installed.Otherwise, extension
+                                  will be uninstalled but auditing configurations
+                                  will be preserved.
                                 type: boolean
                               log:
-                                description: |-
-                                  (List of String) Specifies which classes of statements will be logged by session audit logging.
-                                  Specifies which classes of statements will be logged by session audit logging.
+                                description: Specifies which classes of statements
+                                  will be logged by session audit logging.
                                 items:
                                   type: string
                                 type: array
                               logCatalog:
-                                description: |-
-                                  (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
-                                  Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                description: Specifies that session logging should
+                                  be enabled in the casewhere all relations in a statement
+                                  are in pg_catalog.
                                 type: boolean
                               logClient:
-                                description: |-
-                                  (Boolean) Specifies whether log messages will be visible to a client process such as psql.
-                                  Specifies whether log messages will be visible to a client process such as psql.
+                                description: Specifies whether log messages will be
+                                  visible to a client process such as psql.
                                 type: boolean
                               logLevel:
-                                description: |-
-                                  (String) Specifies the log level that will be used for log entries.
-                                  Specifies the log level that will be used for log entries.
+                                description: Specifies the log level that will be
+                                  used for log entries.
                                 type: string
                               logMaxStringLength:
-                                description: |-
-                                  1 disable the truncation.
-                                  Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
+                                description: Crop parameters representation and whole
+                                  statements if they exceed this threshold. A (default)
+                                  value of -1 disable the truncation.
                                 format: int64
                                 type: integer
                               logNestedStatements:
-                                description: |-
-                                  (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
-                                  This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                description: This GUC allows to turn off logging nested
+                                  statements, that is, statements that are executed
+                                  as part of another ExecutorRun.
                                 type: boolean
                               logParameter:
-                                description: |-
-                                  (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
-                                  Specifies that audit logging should include the parameters that were passed with the statement.
+                                description: Specifies that audit logging should include
+                                  the parameters that were passed with the statement.
                                 type: boolean
                               logParameterMaxSize:
-                                description: |-
-                                  (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
-                                  Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
+                                description: Specifies that parameter values longer
+                                  than this setting (in bytes) should not be logged,
+                                  but replaced with <long param suppressed>.
                                 format: int64
                                 type: integer
                               logRelation:
-                                description: |-
-                                  (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
-                                  Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                description: Specifies whether session audit logging
+                                  should create a separate log entry for each relation
+                                  (TABLE, VIEW, etc.) referenced in a SELECT or DML
+                                  statement.
                                 type: boolean
                               logRows:
-                                description: |-
-                                  (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
-                                  Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                description: Specifies that audit logging should include
+                                  the rows retrieved or affected by a statement. When
+                                  enabled the rows field will be included after the
+                                  parameter field.
                                 type: boolean
                               logStatement:
-                                description: |-
-                                  (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
-                                  Specifies whether logging will include the statement text and parameters (if enabled).
+                                description: Specifies whether logging will include
+                                  the statement text and parameters (if enabled).
                                 type: boolean
                               logStatementOnce:
-                                description: |-
-                                  (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
-                                  Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                description: Specifies whether logging will include
+                                  the statement text and parameters with the first
+                                  log entry for a statement/substatement combination
+                                  or with every entry.
                                 type: boolean
                               role:
                                 description: |-
-                                  (String) Specifies the master role to use for object audit logging.
+                                  (String)
                                   Specifies the master role to use for object audit logging.
                                 type: string
                             type: object
@@ -980,7 +979,7 @@ spec:
                       properties:
                         role:
                           description: |-
-                            (String) Specifies the master role to use for object audit logging.
+                            (String)
                             Role of the node
                           type: string
                       type: object
@@ -1001,6 +1000,25 @@ spec:
                       Database Engine properties for PostgreSQL
                     items:
                       properties:
+                        adminPasswordSecretRef:
+                          description: |-
+                            (String, Sensitive) Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                            Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
                         adminUsername:
                           description: |-
                             (String) Custom username for admin user. This must be set only when a new service is being created.
@@ -1140,7 +1158,7 @@ spec:
                           type: string
                         logLinePrefix:
                           description: |-
-                            formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                            (String) Choose from one of the available log formats.
                             Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
                           type: string
                         logMinDurationStatement:
@@ -1265,6 +1283,25 @@ spec:
                                   (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
                                   The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
                                 type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    description: The key to select.
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                  namespace:
+                                    description: Namespace of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                - namespace
+                                type: object
                               port:
                                 description: |-
                                   (Number) Port number of the server where to migrate data from.
@@ -1316,83 +1353,82 @@ spec:
                             Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
                           type: string
                         pgaudit:
-                          description: |-
-                            wide settings for the pgaudit extension. (see below for nested schema)
-                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          description: PGAudit settings. System-wide settings for
+                            the pgaudit extension.
                           items:
                             properties:
                               featureEnabled:
-                                description: |-
-                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
-                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                description: Enable pgaudit extension. Enable pgaudit
+                                  extension. When enabled, pgaudit extension will
+                                  be automatically installed.Otherwise, extension
+                                  will be uninstalled but auditing configurations
+                                  will be preserved.
                                 type: boolean
                               log:
-                                description: |-
-                                  (List of String) Specifies which classes of statements will be logged by session audit logging.
-                                  Specifies which classes of statements will be logged by session audit logging.
+                                description: Specifies which classes of statements
+                                  will be logged by session audit logging.
                                 items:
                                   type: string
                                 type: array
                               logCatalog:
-                                description: |-
-                                  (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
-                                  Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                description: Specifies that session logging should
+                                  be enabled in the casewhere all relations in a statement
+                                  are in pg_catalog.
                                 type: boolean
                               logClient:
-                                description: |-
-                                  (Boolean) Specifies whether log messages will be visible to a client process such as psql.
-                                  Specifies whether log messages will be visible to a client process such as psql.
+                                description: Specifies whether log messages will be
+                                  visible to a client process such as psql.
                                 type: boolean
                               logLevel:
-                                description: |-
-                                  (String) Specifies the log level that will be used for log entries.
-                                  Specifies the log level that will be used for log entries.
+                                description: Specifies the log level that will be
+                                  used for log entries.
                                 type: string
                               logMaxStringLength:
-                                description: |-
-                                  1 disable the truncation.
-                                  Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
+                                description: Crop parameters representation and whole
+                                  statements if they exceed this threshold. A (default)
+                                  value of -1 disable the truncation.
                                 format: int64
                                 type: integer
                               logNestedStatements:
-                                description: |-
-                                  (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
-                                  This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                description: This GUC allows to turn off logging nested
+                                  statements, that is, statements that are executed
+                                  as part of another ExecutorRun.
                                 type: boolean
                               logParameter:
-                                description: |-
-                                  (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
-                                  Specifies that audit logging should include the parameters that were passed with the statement.
+                                description: Specifies that audit logging should include
+                                  the parameters that were passed with the statement.
                                 type: boolean
                               logParameterMaxSize:
-                                description: |-
-                                  (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
-                                  Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
+                                description: Specifies that parameter values longer
+                                  than this setting (in bytes) should not be logged,
+                                  but replaced with <long param suppressed>.
                                 format: int64
                                 type: integer
                               logRelation:
-                                description: |-
-                                  (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
-                                  Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                description: Specifies whether session audit logging
+                                  should create a separate log entry for each relation
+                                  (TABLE, VIEW, etc.) referenced in a SELECT or DML
+                                  statement.
                                 type: boolean
                               logRows:
-                                description: |-
-                                  (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
-                                  Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                description: Specifies that audit logging should include
+                                  the rows retrieved or affected by a statement. When
+                                  enabled the rows field will be included after the
+                                  parameter field.
                                 type: boolean
                               logStatement:
-                                description: |-
-                                  (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
-                                  Specifies whether logging will include the statement text and parameters (if enabled).
+                                description: Specifies whether logging will include
+                                  the statement text and parameters (if enabled).
                                 type: boolean
                               logStatementOnce:
-                                description: |-
-                                  (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
-                                  Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                description: Specifies whether logging will include
+                                  the statement text and parameters with the first
+                                  log entry for a statement/substatement combination
+                                  or with every entry.
                                 type: boolean
                               role:
                                 description: |-
-                                  (String) Specifies the master role to use for object audit logging.
+                                  (String)
                                   Specifies the master role to use for object audit logging.
                                 type: string
                             type: object
@@ -1751,10 +1787,6 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
-            - message: spec.forProvider.nodeStates is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.nodeStates)
-                || (has(self.initProvider) && has(self.initProvider.nodeStates))'
             - message: spec.forProvider.plan is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.plan)
@@ -1866,7 +1898,7 @@ spec:
                           type: string
                         role:
                           description: |-
-                            (String) Specifies the master role to use for object audit logging.
+                            (String)
                             Role of the node
                           type: string
                         state:
@@ -2036,7 +2068,7 @@ spec:
                           type: string
                         logLinePrefix:
                           description: |-
-                            formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+                            (String) Choose from one of the available log formats.
                             Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
                           type: string
                         logMinDurationStatement:
@@ -2212,83 +2244,82 @@ spec:
                             Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
                           type: string
                         pgaudit:
-                          description: |-
-                            wide settings for the pgaudit extension. (see below for nested schema)
-                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          description: PGAudit settings. System-wide settings for
+                            the pgaudit extension.
                           items:
                             properties:
                               featureEnabled:
-                                description: |-
-                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
-                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                description: Enable pgaudit extension. Enable pgaudit
+                                  extension. When enabled, pgaudit extension will
+                                  be automatically installed.Otherwise, extension
+                                  will be uninstalled but auditing configurations
+                                  will be preserved.
                                 type: boolean
                               log:
-                                description: |-
-                                  (List of String) Specifies which classes of statements will be logged by session audit logging.
-                                  Specifies which classes of statements will be logged by session audit logging.
+                                description: Specifies which classes of statements
+                                  will be logged by session audit logging.
                                 items:
                                   type: string
                                 type: array
                               logCatalog:
-                                description: |-
-                                  (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
-                                  Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
+                                description: Specifies that session logging should
+                                  be enabled in the casewhere all relations in a statement
+                                  are in pg_catalog.
                                 type: boolean
                               logClient:
-                                description: |-
-                                  (Boolean) Specifies whether log messages will be visible to a client process such as psql.
-                                  Specifies whether log messages will be visible to a client process such as psql.
+                                description: Specifies whether log messages will be
+                                  visible to a client process such as psql.
                                 type: boolean
                               logLevel:
-                                description: |-
-                                  (String) Specifies the log level that will be used for log entries.
-                                  Specifies the log level that will be used for log entries.
+                                description: Specifies the log level that will be
+                                  used for log entries.
                                 type: string
                               logMaxStringLength:
-                                description: |-
-                                  1 disable the truncation.
-                                  Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
+                                description: Crop parameters representation and whole
+                                  statements if they exceed this threshold. A (default)
+                                  value of -1 disable the truncation.
                                 format: int64
                                 type: integer
                               logNestedStatements:
-                                description: |-
-                                  (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
-                                  This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
+                                description: This GUC allows to turn off logging nested
+                                  statements, that is, statements that are executed
+                                  as part of another ExecutorRun.
                                 type: boolean
                               logParameter:
-                                description: |-
-                                  (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
-                                  Specifies that audit logging should include the parameters that were passed with the statement.
+                                description: Specifies that audit logging should include
+                                  the parameters that were passed with the statement.
                                 type: boolean
                               logParameterMaxSize:
-                                description: |-
-                                  (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
-                                  Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
+                                description: Specifies that parameter values longer
+                                  than this setting (in bytes) should not be logged,
+                                  but replaced with <long param suppressed>.
                                 format: int64
                                 type: integer
                               logRelation:
-                                description: |-
-                                  (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
-                                  Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                description: Specifies whether session audit logging
+                                  should create a separate log entry for each relation
+                                  (TABLE, VIEW, etc.) referenced in a SELECT or DML
+                                  statement.
                                 type: boolean
                               logRows:
-                                description: |-
-                                  (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
-                                  Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
+                                description: Specifies that audit logging should include
+                                  the rows retrieved or affected by a statement. When
+                                  enabled the rows field will be included after the
+                                  parameter field.
                                 type: boolean
                               logStatement:
-                                description: |-
-                                  (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
-                                  Specifies whether logging will include the statement text and parameters (if enabled).
+                                description: Specifies whether logging will include
+                                  the statement text and parameters (if enabled).
                                 type: boolean
                               logStatementOnce:
-                                description: |-
-                                  (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
-                                  Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
+                                description: Specifies whether logging will include
+                                  the statement text and parameters with the first
+                                  log entry for a statement/substatement combination
+                                  or with every entry.
                                 type: boolean
                               role:
                                 description: |-
-                                  (String) Specifies the master role to use for object audit logging.
+                                  (String)
                                   Specifies the master role to use for object audit logging.
                                 type: string
                             type: object

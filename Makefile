@@ -12,7 +12,7 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 
 export TERRAFORM_PROVIDER_SOURCE ?= UpCloudLtd/upcloud
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/UpCloudLtd/terraform-provider-upcloud
-export TERRAFORM_PROVIDER_VERSION ?= 5.3.0
+export TERRAFORM_PROVIDER_VERSION ?= 5.7.0
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-upcloud
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://github.com/UpCloudLtd/terraform-provider-upcloud/releases/download/v${TERRAFORM_PROVIDER_VERSION}
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-upcloud_v${TERRAFORM_PROVIDER_VERSION}
@@ -256,6 +256,10 @@ cleanup-apis:
 install: $(KUBECTL)
 	@$(INFO) installing crds
 	@$(KUBECTL) apply -f package/crds/
+
+uninstall: $(KUBECTL)
+	@$(INFO) uninstalling crds
+	@$(KUBECTL) delete --ignore-not-found=true -f package/crds/
 
 deploy-providerconfigs: $(KUBECTL)
 	@$(KUBECTL) apply -f examples/providerconfig/

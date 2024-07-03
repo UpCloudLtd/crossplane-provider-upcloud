@@ -61,7 +61,10 @@ func GetProvider() *ujconfig.Provider {
 }
 
 func pluginFrameworkResourcesList() []string {
-	allResources := network.PluginFrameworkResources
+	allResources := slices.Concat(
+		kubernetes.PluginFrameworkResources,
+		network.PluginFrameworkResources,
+	)
 
 	for i, name := range allResources {
 		// $ is added to match the exact string since the format is regex.
@@ -78,7 +81,7 @@ func sdkResourcesList() []string {
 		storage.Resources,
 		objectstorage.Resources,
 		database.Resources,
-		kubernetes.Resources,
+		kubernetes.SDKResources,
 	)
 
 	for i, name := range allResources {

@@ -507,7 +507,7 @@ type ServerParameters struct {
 	// (String) A valid domain name
 	// A valid domain name
 	// +kubebuilder:validation:Optional
-	Hostname *string `json:"hostname,omitempty" tf:"hostname,omitempty"`
+	Hostname *string `json:"hostname" tf:"hostname,omitempty"`
 
 	// value pairs to classify the server.
 	// Key-value pairs to classify the server.
@@ -533,7 +533,7 @@ type ServerParameters struct {
 	// (Block List, Min: 1) One or more blocks describing the network interfaces of the server. (see below for nested schema)
 	// One or more blocks describing the network interfaces of the server.
 	// +kubebuilder:validation:Optional
-	NetworkInterface []NetworkInterfaceParameters `json:"networkInterface,omitempty" tf:"network_interface,omitempty"`
+	NetworkInterface []NetworkInterfaceParameters `json:"networkInterface" tf:"network_interface,omitempty"`
 
 	// (String) The model of the server's network interfaces
 	// The model of the server's network interfaces
@@ -597,7 +597,7 @@ type ServerParameters struct {
 	// fra1. You can list available zones with upctl zone list.
 	// The zone in which the server will be hosted, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 type SimpleBackupInitParameters struct {
@@ -698,7 +698,7 @@ type StorageDevicesParameters struct {
 	// A valid storage UUID
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/storage/v1alpha1.Storage
 	// +kubebuilder:validation:Optional
-	Storage *string `json:"storage,omitempty" tf:"storage,omitempty"`
+	Storage *string `json:"storage" tf:"storage,omitempty"`
 
 	// Reference to a Storage in storage to populate storage.
 	// +kubebuilder:validation:Optional

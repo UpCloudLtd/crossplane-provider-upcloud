@@ -81,7 +81,8 @@ spec:
                       Managed Object Storage service UUID.
                     type: string
                   serviceUuidRef:
-                    description: Reference to a ManagedObjectStorage to populate serviceUuid.
+                    description: Reference to a ManagedObjectStorage in objectstorage
+                      to populate serviceUuid.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -115,7 +116,8 @@ spec:
                     - name
                     type: object
                   serviceUuidSelector:
-                    description: Selector for a ManagedObjectStorage to populate serviceUuid.
+                    description: Selector for a ManagedObjectStorage in objectstorage
+                      to populate serviceUuid.
                     properties:
                       matchControllerRef:
                         description: |-

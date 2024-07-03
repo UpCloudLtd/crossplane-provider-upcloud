@@ -153,7 +153,7 @@ type ManagedDatabasePostgresqlNetworkParameters struct {
 	// Private network UUID. Must reside in the same zone as the database.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network
 	// +kubebuilder:validation:Optional
-	UUID *string `json:"uuid,omitempty" tf:"uuid,omitempty"`
+	UUID *string `json:"uuid" tf:"uuid,omitempty"`
 
 	// Reference to a Network in network to populate uuid.
 	// +kubebuilder:validation:Optional
@@ -166,7 +166,7 @@ type ManagedDatabasePostgresqlNetworkParameters struct {
 
 type ManagedDatabasePostgresqlNodeStatesInitParameters struct {
 
-	// (String) Specifies the master role to use for object audit logging.
+	// (String)
 	// Role of the node
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
@@ -177,7 +177,7 @@ type ManagedDatabasePostgresqlNodeStatesObservation struct {
 	// Name plus a node iteration
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (String) Specifies the master role to use for object audit logging.
+	// (String)
 	// Role of the node
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 
@@ -188,7 +188,7 @@ type ManagedDatabasePostgresqlNodeStatesObservation struct {
 
 type ManagedDatabasePostgresqlNodeStatesParameters struct {
 
-	// (String) Specifies the master role to use for object audit logging.
+	// (String)
 	// Role of the node
 	// +kubebuilder:validation:Optional
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
@@ -287,7 +287,7 @@ type ManagedDatabasePostgresqlParameters struct {
 	// (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
 	// Private networks attached to the managed database
@@ -302,7 +302,7 @@ type ManagedDatabasePostgresqlParameters struct {
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
 	// +kubebuilder:validation:Optional
-	Plan *string `json:"plan,omitempty" tf:"plan,omitempty"`
+	Plan *string `json:"plan" tf:"plan,omitempty"`
 
 	// (Boolean) The administrative power state of the service
 	// The administrative power state of the service
@@ -317,15 +317,19 @@ type ManagedDatabasePostgresqlParameters struct {
 	// (String) Title of a managed database instance
 	// Title of a managed database instance
 	// +kubebuilder:validation:Optional
-	Title *string `json:"title,omitempty" tf:"title,omitempty"`
+	Title *string `json:"title" tf:"title,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 type ManagedDatabasePostgresqlPropertiesInitParameters struct {
+
+	// (String, Sensitive) Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+	// Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+	AdminPasswordSecretRef *v1.SecretKeySelector `json:"adminPasswordSecretRef,omitempty" tf:"-"`
 
 	// (String) Custom username for admin user. This must be set only when a new service is being created.
 	// Custom username for admin user. This must be set only when a new service is being created.
@@ -423,7 +427,7 @@ type ManagedDatabasePostgresqlPropertiesInitParameters struct {
 	// Controls the amount of detail written in the server log for each message that is logged.
 	LogErrorVerbosity *string `json:"logErrorVerbosity,omitempty" tf:"log_error_verbosity,omitempty"`
 
-	// formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+	// (String) Choose from one of the available log formats.
 	// Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
 	LogLinePrefix *string `json:"logLinePrefix,omitempty" tf:"log_line_prefix,omitempty"`
 
@@ -519,7 +523,6 @@ type ManagedDatabasePostgresqlPropertiesInitParameters struct {
 	// Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
 	PgStatStatementsTrack *string `json:"pgStatStatementsTrack,omitempty" tf:"pg_stat_statements_track,omitempty"`
 
-	// wide settings for the pgaudit extension. (see below for nested schema)
 	// PGAudit settings. System-wide settings for the pgaudit extension.
 	Pgaudit []PgauditInitParameters `json:"pgaudit,omitempty" tf:"pgaudit,omitempty"`
 
@@ -694,7 +697,7 @@ type ManagedDatabasePostgresqlPropertiesObservation struct {
 	// Controls the amount of detail written in the server log for each message that is logged.
 	LogErrorVerbosity *string `json:"logErrorVerbosity,omitempty" tf:"log_error_verbosity,omitempty"`
 
-	// formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+	// (String) Choose from one of the available log formats.
 	// Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
 	LogLinePrefix *string `json:"logLinePrefix,omitempty" tf:"log_line_prefix,omitempty"`
 
@@ -790,7 +793,6 @@ type ManagedDatabasePostgresqlPropertiesObservation struct {
 	// Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
 	PgStatStatementsTrack *string `json:"pgStatStatementsTrack,omitempty" tf:"pg_stat_statements_track,omitempty"`
 
-	// wide settings for the pgaudit extension. (see below for nested schema)
 	// PGAudit settings. System-wide settings for the pgaudit extension.
 	Pgaudit []PgauditObservation `json:"pgaudit,omitempty" tf:"pgaudit,omitempty"`
 
@@ -994,7 +996,7 @@ type ManagedDatabasePostgresqlPropertiesParameters struct {
 	// +kubebuilder:validation:Optional
 	LogErrorVerbosity *string `json:"logErrorVerbosity,omitempty" tf:"log_error_verbosity,omitempty"`
 
-	// formats. These can support popular log analyzers like pgbadger, pganalyze etc.
+	// (String) Choose from one of the available log formats.
 	// Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.
 	// +kubebuilder:validation:Optional
 	LogLinePrefix *string `json:"logLinePrefix,omitempty" tf:"log_line_prefix,omitempty"`
@@ -1114,7 +1116,6 @@ type ManagedDatabasePostgresqlPropertiesParameters struct {
 	// +kubebuilder:validation:Optional
 	PgStatStatementsTrack *string `json:"pgStatStatementsTrack,omitempty" tf:"pg_stat_statements_track,omitempty"`
 
-	// wide settings for the pgaudit extension. (see below for nested schema)
 	// PGAudit settings. System-wide settings for the pgaudit extension.
 	// +kubebuilder:validation:Optional
 	Pgaudit []PgauditParameters `json:"pgaudit,omitempty" tf:"pgaudit,omitempty"`
@@ -1212,190 +1213,151 @@ type ManagedDatabasePostgresqlPropertiesParameters struct {
 
 type PgauditInitParameters struct {
 
-	// (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
 	// Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
 	FeatureEnabled *bool `json:"featureEnabled,omitempty" tf:"feature_enabled,omitempty"`
 
-	// (List of String) Specifies which classes of statements will be logged by session audit logging.
 	// Specifies which classes of statements will be logged by session audit logging.
 	Log []*string `json:"log,omitempty" tf:"log,omitempty"`
 
-	// (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
 	// Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
 	LogCatalog *bool `json:"logCatalog,omitempty" tf:"log_catalog,omitempty"`
 
-	// (Boolean) Specifies whether log messages will be visible to a client process such as psql.
 	// Specifies whether log messages will be visible to a client process such as psql.
 	LogClient *bool `json:"logClient,omitempty" tf:"log_client,omitempty"`
 
-	// (String) Specifies the log level that will be used for log entries.
 	// Specifies the log level that will be used for log entries.
 	LogLevel *string `json:"logLevel,omitempty" tf:"log_level,omitempty"`
 
-	// 1 disable the truncation.
 	// Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
 	LogMaxStringLength *int64 `json:"logMaxStringLength,omitempty" tf:"log_max_string_length,omitempty"`
 
-	// (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
 	// This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
 	LogNestedStatements *bool `json:"logNestedStatements,omitempty" tf:"log_nested_statements,omitempty"`
 
-	// (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
 	// Specifies that audit logging should include the parameters that were passed with the statement.
 	LogParameter *bool `json:"logParameter,omitempty" tf:"log_parameter,omitempty"`
 
-	// (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
 	// Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
 	LogParameterMaxSize *int64 `json:"logParameterMaxSize,omitempty" tf:"log_parameter_max_size,omitempty"`
 
-	// (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
 	// Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
 	LogRelation *bool `json:"logRelation,omitempty" tf:"log_relation,omitempty"`
 
-	// (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
 	// Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
 	LogRows *bool `json:"logRows,omitempty" tf:"log_rows,omitempty"`
 
-	// (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
 	// Specifies whether logging will include the statement text and parameters (if enabled).
 	LogStatement *bool `json:"logStatement,omitempty" tf:"log_statement,omitempty"`
 
-	// (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
 	// Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
 	LogStatementOnce *bool `json:"logStatementOnce,omitempty" tf:"log_statement_once,omitempty"`
 
-	// (String) Specifies the master role to use for object audit logging.
+	// (String)
 	// Specifies the master role to use for object audit logging.
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
 
 type PgauditObservation struct {
 
-	// (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
 	// Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
 	FeatureEnabled *bool `json:"featureEnabled,omitempty" tf:"feature_enabled,omitempty"`
 
-	// (List of String) Specifies which classes of statements will be logged by session audit logging.
 	// Specifies which classes of statements will be logged by session audit logging.
 	Log []*string `json:"log,omitempty" tf:"log,omitempty"`
 
-	// (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
 	// Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
 	LogCatalog *bool `json:"logCatalog,omitempty" tf:"log_catalog,omitempty"`
 
-	// (Boolean) Specifies whether log messages will be visible to a client process such as psql.
 	// Specifies whether log messages will be visible to a client process such as psql.
 	LogClient *bool `json:"logClient,omitempty" tf:"log_client,omitempty"`
 
-	// (String) Specifies the log level that will be used for log entries.
 	// Specifies the log level that will be used for log entries.
 	LogLevel *string `json:"logLevel,omitempty" tf:"log_level,omitempty"`
 
-	// 1 disable the truncation.
 	// Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
 	LogMaxStringLength *int64 `json:"logMaxStringLength,omitempty" tf:"log_max_string_length,omitempty"`
 
-	// (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
 	// This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
 	LogNestedStatements *bool `json:"logNestedStatements,omitempty" tf:"log_nested_statements,omitempty"`
 
-	// (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
 	// Specifies that audit logging should include the parameters that were passed with the statement.
 	LogParameter *bool `json:"logParameter,omitempty" tf:"log_parameter,omitempty"`
 
-	// (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
 	// Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
 	LogParameterMaxSize *int64 `json:"logParameterMaxSize,omitempty" tf:"log_parameter_max_size,omitempty"`
 
-	// (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
 	// Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
 	LogRelation *bool `json:"logRelation,omitempty" tf:"log_relation,omitempty"`
 
-	// (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
 	// Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
 	LogRows *bool `json:"logRows,omitempty" tf:"log_rows,omitempty"`
 
-	// (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
 	// Specifies whether logging will include the statement text and parameters (if enabled).
 	LogStatement *bool `json:"logStatement,omitempty" tf:"log_statement,omitempty"`
 
-	// (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
 	// Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
 	LogStatementOnce *bool `json:"logStatementOnce,omitempty" tf:"log_statement_once,omitempty"`
 
-	// (String) Specifies the master role to use for object audit logging.
+	// (String)
 	// Specifies the master role to use for object audit logging.
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
 }
 
 type PgauditParameters struct {
 
-	// (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
 	// Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
 	// +kubebuilder:validation:Optional
 	FeatureEnabled *bool `json:"featureEnabled,omitempty" tf:"feature_enabled,omitempty"`
 
-	// (List of String) Specifies which classes of statements will be logged by session audit logging.
 	// Specifies which classes of statements will be logged by session audit logging.
 	// +kubebuilder:validation:Optional
 	Log []*string `json:"log,omitempty" tf:"log,omitempty"`
 
-	// (Boolean) Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
 	// Specifies that session logging should be enabled in the casewhere all relations in a statement are in pg_catalog.
 	// +kubebuilder:validation:Optional
 	LogCatalog *bool `json:"logCatalog,omitempty" tf:"log_catalog,omitempty"`
 
-	// (Boolean) Specifies whether log messages will be visible to a client process such as psql.
 	// Specifies whether log messages will be visible to a client process such as psql.
 	// +kubebuilder:validation:Optional
 	LogClient *bool `json:"logClient,omitempty" tf:"log_client,omitempty"`
 
-	// (String) Specifies the log level that will be used for log entries.
 	// Specifies the log level that will be used for log entries.
 	// +kubebuilder:validation:Optional
 	LogLevel *string `json:"logLevel,omitempty" tf:"log_level,omitempty"`
 
-	// 1 disable the truncation.
 	// Crop parameters representation and whole statements if they exceed this threshold. A (default) value of -1 disable the truncation.
 	// +kubebuilder:validation:Optional
 	LogMaxStringLength *int64 `json:"logMaxStringLength,omitempty" tf:"log_max_string_length,omitempty"`
 
-	// (Boolean) This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
 	// This GUC allows to turn off logging nested statements, that is, statements that are executed as part of another ExecutorRun.
 	// +kubebuilder:validation:Optional
 	LogNestedStatements *bool `json:"logNestedStatements,omitempty" tf:"log_nested_statements,omitempty"`
 
-	// (Boolean) Specifies that audit logging should include the parameters that were passed with the statement.
 	// Specifies that audit logging should include the parameters that were passed with the statement.
 	// +kubebuilder:validation:Optional
 	LogParameter *bool `json:"logParameter,omitempty" tf:"log_parameter,omitempty"`
 
-	// (Number) Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with .
 	// Specifies that parameter values longer than this setting (in bytes) should not be logged, but replaced with <long param suppressed>.
 	// +kubebuilder:validation:Optional
 	LogParameterMaxSize *int64 `json:"logParameterMaxSize,omitempty" tf:"log_parameter_max_size,omitempty"`
 
-	// (Boolean) Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
 	// Specifies whether session audit logging should create a separate log entry for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
 	// +kubebuilder:validation:Optional
 	LogRelation *bool `json:"logRelation,omitempty" tf:"log_relation,omitempty"`
 
-	// (Boolean) Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
 	// Specifies that audit logging should include the rows retrieved or affected by a statement. When enabled the rows field will be included after the parameter field.
 	// +kubebuilder:validation:Optional
 	LogRows *bool `json:"logRows,omitempty" tf:"log_rows,omitempty"`
 
-	// (Boolean) Specifies whether logging will include the statement text and parameters (if enabled).
 	// Specifies whether logging will include the statement text and parameters (if enabled).
 	// +kubebuilder:validation:Optional
 	LogStatement *bool `json:"logStatement,omitempty" tf:"log_statement,omitempty"`
 
-	// (Boolean) Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
 	// Specifies whether logging will include the statement text and parameters with the first log entry for a statement/substatement combination or with every entry.
 	// +kubebuilder:validation:Optional
 	LogStatementOnce *bool `json:"logStatementOnce,omitempty" tf:"log_statement_once,omitempty"`
 
-	// (String) Specifies the master role to use for object audit logging.
+	// (String)
 	// Specifies the master role to use for object audit logging.
 	// +kubebuilder:validation:Optional
 	Role *string `json:"role,omitempty" tf:"role,omitempty"`
@@ -1567,6 +1529,10 @@ type PropertiesMigrationInitParameters struct {
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	Method *string `json:"method,omitempty" tf:"method,omitempty"`
 
+	// (String, Sensitive) Password for authentication with the server where to migrate data from.
+	// Password for authentication with the server where to migrate data from.
+	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
+
 	// (Number) Port number of the server where to migrate data from.
 	// Port number of the server where to migrate data from.
 	Port *int64 `json:"port,omitempty" tf:"port,omitempty"`
@@ -1713,7 +1679,6 @@ type ManagedDatabasePostgresql struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.name) || (has(self.initProvider) && has(self.initProvider.name))",message="spec.forProvider.name is a required parameter"
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.nodeStates) || (has(self.initProvider) && has(self.initProvider.nodeStates))",message="spec.forProvider.nodeStates is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.plan) || (has(self.initProvider) && has(self.initProvider.plan))",message="spec.forProvider.plan is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.title) || (has(self.initProvider) && has(self.initProvider.title))",message="spec.forProvider.title is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.zone) || (has(self.initProvider) && has(self.initProvider.zone))",message="spec.forProvider.zone is a required parameter"

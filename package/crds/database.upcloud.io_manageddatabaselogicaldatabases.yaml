@@ -90,8 +90,8 @@ spec:
                       The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to logical database `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
                     type: string
                   serviceRef:
-                    description: Reference to a ManagedDatabasePostgresql to populate
-                      service.
+                    description: Reference to a ManagedDatabasePostgresql in database
+                      to populate service.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -125,8 +125,8 @@ spec:
                     - name
                     type: object
                   serviceSelector:
-                    description: Selector for a ManagedDatabasePostgresql to populate
-                      service.
+                    description: Selector for a ManagedDatabasePostgresql in database
+                      to populate service.
                     properties:
                       matchControllerRef:
                         description: |-

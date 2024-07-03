@@ -8,13 +8,12 @@ import (
 )
 
 // SDKResources is a list of all supported network resources implemented with Terraform legacy SDKv2.
-var SDKResources = []string{
-	"upcloud_router",
-}
+var SDKResources = []string{}
 
 // PluginFrameworkResources is a list of all supported network resources implemented with Terraform Plugin Framework.
 var PluginFrameworkResources = []string{
 	"upcloud_network",
+	"upcloud_router",
 }
 
 // AllResources is a list of all supported network resources.
@@ -27,12 +26,27 @@ func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("upcloud_network", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider
 
-		// r.References["router"] = config.Reference{
-		// 	Type: "Router",
-		// }
+		r.References["router"] = config.Reference{
+			TerraformName: "upcloud_router",
+		}
+		if s, ok := r.TerraformResource.Schema["ip_networks"]; ok {
+			s.Required = true
+		}
 	})
 
 	p.AddResourceConfigurator("upcloud_router", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider
+
+		if s, ok := r.TerraformResource.Schema["labels"]; ok {
+			s.Optional = false
+			s.Computed = false
+			s.Required = true
+		}
+
+		if s, ok := r.TerraformResource.Schema["static_route"]; ok {
+			s.Optional = false
+			s.Computed = false
+			s.Required = true
+		}
 	})
 }

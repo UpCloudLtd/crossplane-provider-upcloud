@@ -81,8 +81,8 @@ spec:
                       Policy name.
                     type: string
                   nameRef:
-                    description: Reference to a ManagedObjectStoragePolicy to populate
-                      name.
+                    description: Reference to a ManagedObjectStoragePolicy in objectstorage
+                      to populate name.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -116,8 +116,8 @@ spec:
                     - name
                     type: object
                   nameSelector:
-                    description: Selector for a ManagedObjectStoragePolicy to populate
-                      name.
+                    description: Selector for a ManagedObjectStoragePolicy in objectstorage
+                      to populate name.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -162,7 +162,8 @@ spec:
                       Managed Object Storage service UUID.
                     type: string
                   serviceUuidRef:
-                    description: Reference to a ManagedObjectStorage to populate serviceUuid.
+                    description: Reference to a ManagedObjectStorage in objectstorage
+                      to populate serviceUuid.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -196,7 +197,8 @@ spec:
                     - name
                     type: object
                   serviceUuidSelector:
-                    description: Selector for a ManagedObjectStorage to populate serviceUuid.
+                    description: Selector for a ManagedObjectStorage in objectstorage
+                      to populate serviceUuid.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -241,8 +243,8 @@ spec:
                       Username.
                     type: string
                   usernameRef:
-                    description: Reference to a ManagedObjectStorageUser to populate
-                      username.
+                    description: Reference to a ManagedObjectStorageUser in objectstorage
+                      to populate username.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -276,8 +278,8 @@ spec:
                     - name
                     type: object
                   usernameSelector:
-                    description: Selector for a ManagedObjectStorageUser to populate
-                      username.
+                    description: Selector for a ManagedObjectStorageUser in objectstorage
+                      to populate username.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -336,8 +338,8 @@ spec:
                       Policy name.
                     type: string
                   nameRef:
-                    description: Reference to a ManagedObjectStoragePolicy to populate
-                      name.
+                    description: Reference to a ManagedObjectStoragePolicy in objectstorage
+                      to populate name.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -371,8 +373,8 @@ spec:
                     - name
                     type: object
                   nameSelector:
-                    description: Selector for a ManagedObjectStoragePolicy to populate
-                      name.
+                    description: Selector for a ManagedObjectStoragePolicy in objectstorage
+                      to populate name.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -417,7 +419,8 @@ spec:
                       Managed Object Storage service UUID.
                     type: string
                   serviceUuidRef:
-                    description: Reference to a ManagedObjectStorage to populate serviceUuid.
+                    description: Reference to a ManagedObjectStorage in objectstorage
+                      to populate serviceUuid.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -451,7 +454,8 @@ spec:
                     - name
                     type: object
                   serviceUuidSelector:
-                    description: Selector for a ManagedObjectStorage to populate serviceUuid.
+                    description: Selector for a ManagedObjectStorage in objectstorage
+                      to populate serviceUuid.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -496,8 +500,8 @@ spec:
                       Username.
                     type: string
                   usernameRef:
-                    description: Reference to a ManagedObjectStorageUser to populate
-                      username.
+                    description: Reference to a ManagedObjectStorageUser in objectstorage
+                      to populate username.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -531,8 +535,8 @@ spec:
                     - name
                     type: object
                   usernameSelector:
-                    description: Selector for a ManagedObjectStorageUser to populate
-                      username.
+                    description: Selector for a ManagedObjectStorageUser in objectstorage
+                      to populate username.
                     properties:
                       matchControllerRef:
                         description: |-

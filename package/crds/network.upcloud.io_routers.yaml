@@ -34,10 +34,9 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Router is the Schema for the Routers API. This resource represents
-          a generated UpCloud router resource. Routers can be used to connect multiple
-          Private Networks. UpCloud Servers on any attached network can communicate
-          directly with each other.
+        description: Router is the Schema for the Routers API. Routers can be used
+          to connect multiple Private Networks. UpCloud Servers on any attached network
+          can communicate directly with each other.
         properties:
           apiVersion:
             description: |-
@@ -75,20 +74,28 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the router.
+                      Key-value pairs to classify the router.
+                    type: object
+                    x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) Name of the router
-                      Name of the router
+                      (String) Name of the router.
+                      Name of the router.
                     type: string
                   staticRoute:
                     description: |-
-                      (Block Set) A collection of static routes for this router (see below for nested schema)
-                      A collection of static routes for this router
+                      (Block Set) A collection of static routes for this router. (see below for nested schema)
+                      A collection of static routes for this router.
                     items:
                       properties:
                         name:
                           description: |-
-                            (String) Name of the router
+                            (String) Name of the router.
                             Name or description of the route.
                           type: string
                         nexthop:
@@ -117,20 +124,28 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the router.
+                      Key-value pairs to classify the router.
+                    type: object
+                    x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) Name of the router
-                      Name of the router
+                      (String) Name of the router.
+                      Name of the router.
                     type: string
                   staticRoute:
                     description: |-
-                      (Block Set) A collection of static routes for this router (see below for nested schema)
-                      A collection of static routes for this router
+                      (Block Set) A collection of static routes for this router. (see below for nested schema)
+                      A collection of static routes for this router.
                     items:
                       properties:
                         name:
                           description: |-
-                            (String) Name of the router
+                            (String) Name of the router.
                             Name or description of the route.
                           type: string
                         nexthop:
@@ -314,10 +329,18 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
+            - message: spec.forProvider.labels is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.labels)
+                || (has(self.initProvider) && has(self.initProvider.labels))'
             - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.staticRoute is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.staticRoute)
+                || (has(self.initProvider) && has(self.initProvider.staticRoute))'
           status:
             description: RouterStatus defines the observed state of Router.
             properties:
@@ -325,28 +348,36 @@ spec:
                 properties:
                   attachedNetworks:
                     description: |-
-                      (List of String) A collection of UUID representing networks attached to this router
-                      A collection of UUID representing networks attached to this router
+                      (List of String) List of UUIDs representing networks attached to this router.
+                      List of UUIDs representing networks attached to this router.
                     items:
                       type: string
                     type: array
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) UUID of the router.
                     type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the router.
+                      Key-value pairs to classify the router.
+                    type: object
+                    x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) Name of the router
-                      Name of the router
+                      (String) Name of the router.
+                      Name of the router.
                     type: string
                   staticRoute:
                     description: |-
-                      (Block Set) A collection of static routes for this router (see below for nested schema)
-                      A collection of static routes for this router
+                      (Block Set) A collection of static routes for this router. (see below for nested schema)
+                      A collection of static routes for this router.
                     items:
                       properties:
                         name:
                           description: |-
-                            (String) Name of the router
+                            (String) Name of the router.
                             Name or description of the route.
                           type: string
                         nexthop:
@@ -363,8 +394,8 @@ spec:
                     type: array
                   type:
                     description: |-
-                      (String) The type of router
-                      The type of router
+                      (String) Type of the router
+                      Type of the router
                     type: string
                 type: object
               conditions:
