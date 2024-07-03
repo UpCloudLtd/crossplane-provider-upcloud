@@ -19,6 +19,7 @@ spec:
   forProvider:
     controlPlaneIpFilter:
     - 0.0.0.0/0
+    labels: {}
     name: crossplane-uks-example-cluster
     networkRef:
       name: uks-network
