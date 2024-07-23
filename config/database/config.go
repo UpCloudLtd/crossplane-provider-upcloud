@@ -2,11 +2,12 @@ package database
 
 import (
 	"github.com/UpCloudLtd/provider-upcloud/config/groupversion"
+
 	"github.com/crossplane/upjet/pkg/config"
 )
 
-// Resources is a list of all supported database resources.
-var Resources = []string{
+// SDKResources is a list of all supported database resources implemented with Terraform legacy SDKv2.
+var SDKResources = []string{
 	"upcloud_managed_database_postgresql",
 	"upcloud_managed_database_mysql",
 	"upcloud_managed_database_opensearch",
@@ -15,9 +16,15 @@ var Resources = []string{
 	"upcloud_managed_database_user",
 }
 
+// PluginFrameworkResources is a list of all supported database resources implemented with Terraform Plugin Framework.
+var PluginFrameworkResources = []string{}
+
+// AllResources is a list of all supported database resources.
+var AllResources = append(SDKResources, PluginFrameworkResources...)
+
 // Configure configures the database resources.
 func Configure(p *config.Provider) {
-	groupversion.Configure(Resources, p, "database", "v1alpha1")
+	groupversion.Configure(AllResources, p, "database", "v1alpha1")
 
 	p.AddResourceConfigurator("upcloud_managed_database_postgresql", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider

@@ -1,9 +1,8 @@
 package network
 
 import (
-	"slices"
-
 	"github.com/UpCloudLtd/provider-upcloud/config/groupversion"
+
 	"github.com/crossplane/upjet/pkg/config"
 )
 
@@ -16,8 +15,8 @@ var PluginFrameworkResources = []string{
 	"upcloud_router",
 }
 
-// AllResources is a list of all supported network resources.
-var AllResources = slices.Concat(SDKResources, PluginFrameworkResources)
+// AllResources is a list of all supported network resources
+var AllResources = append(SDKResources, PluginFrameworkResources...)
 
 // Configure configures the network resources.
 func Configure(p *config.Provider) {
