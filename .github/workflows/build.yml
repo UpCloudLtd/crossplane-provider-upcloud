@@ -2,6 +2,7 @@ name: Build
 on:
   pull_request:
     paths:
+      - .github/workflows/build.yml
       - apis/**
       - build/**
       - cmd/**
