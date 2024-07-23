@@ -5,7 +5,7 @@ This is a quick guide on how to develop this provider. For general info about de
 ## Quickstart
 
 1. To run provider locally you will need:
-    - Go version 1.22 or higher
+    - Go version 1.21 or higher
     - goimports tool (can be installed with `go install golang.org/x/tools/cmd/goimports@latest`)
     - Terraform version 1.5.7
     - unzip
@@ -19,14 +19,14 @@ This is a quick guide on how to develop this provider. For general info about de
     ```shell
     make generate
     ```
-    Note that in some cases this might fail do to unresolved references in Go code (in `api` directory). This usually happends when you changed CRD references in their config. It is safe to just delete the offending file - the `generate` target will just regenerate everything. You can also just delete all previously gennerated APIs with `make cleanup-apis`.
+    Note that in some cases this might fail do to unresolved references in Go code (in `api` directory). This usually happens when you changed CRD references in their config. It is safe to just delete the offending file - the `generate` target will just regenerate everything. You can also just delete all previously generated APIs with `make cleanup-apis`.
 
 4. Install the CRDs in your cluster:
     ```shell
     make install
     ```
 
-5. Run the controller manager outside of the cluster:
+5. Run the controller manager outside the cluster:
     ```shell
     make run
     ```
@@ -41,12 +41,12 @@ This is a quick guide on how to develop this provider. For general info about de
     make deploy-providerconfigs
     ```
 
-8. You are ready to test things. You can start by applying some of the files in the [examples/resources](examples/resources/) directory. Note that some resources require additional objects to be created. For example databases require a secret with credentials. We hold those objects in `examples/resourceconfig` directory so that they can be applied separately. We need to apply / delete them separately because otherwise the deletion process can hang due to not having a valid TF configuration (because for example password is not populated, and for TF that is a required field). You can apply all the example resources in one go using
+8. You are ready to test things. You can start by applying some of the files in the [examples/resources](examples/resources) directory. Note that some resources require additional objects to be created. For example databases require a secret with credentials. We hold those objects in `examples/resourceconfig` directory so that they can be applied separately. We need to apply / delete them separately because otherwise the deletion process can hang due to not having a valid TF configuration (because for example password is not populated, and for TF that is a required field). You can apply all the example resources in one go using
     ```shell
-`    make deploy-examples
-`    ```
+    make deploy-examples
+    ```
 
-9. You can cleanup by running:
+9. You can clean up by running:
     ```shell
     make delete-examples
     make delete-providerconfigs
@@ -95,7 +95,7 @@ Just make sure to change the version to whatever was the result of local TF buil
 Another way to debug bugs is to interrupt the Crossplane reconciliation process half-way and continue it manually with your own (locally built) TF provider. To understand how that can be done you first need to understand how upjet-generated controllers work.
 Let's say you want to create a new Managed Resource - UpCloud Server. You will create a simple yaml file with Server definition and spec - [like the one in examples](examples/resources/server.yaml) - and apply it. When you do that Kubernetes will add a new `Server` object to etcd and assign a UID to it.
 From there on upjet-generated Server controller will do the following things:
-1. Create a new temporary TF workspace. By default it will be `/tmp/k8s_object_uid`
+1. Create a new temporary TF workspace. By default, it will be `/tmp/k8s_object_uid`
 2. It will generate a `main.tf.json` file there with a valid Terraform config for `upcloud_server` resource.
 3. It will run `terraform init` in that directory
 4. It will run various TF commands, depending on the need. Usually either `apply` or `destroy`.
@@ -117,9 +117,9 @@ Then just run `make e2e`. This command will:
 
 ## Releasing new version
 
-The basic process for releasing a provider is described in [upboud docs](https://docs.upbound.io/upbound-marketplace/packages/#publishing-public-packages). However we need to deviate from it a bit since we use upjet generator. 
+The basic process for releasing a provider is described in [upbound docs](https://docs.upbound.io/upbound-marketplace/packages/#publishing-public-packages). However, we need to deviate from it a bit since we use upjet generator. 
 
-Currently the release process is entirely manual and goes as follow:
+Currently, the release process is entirely manual and goes as follows:
 1. Once all your changes are merged to the `main` branch, create a new tag and push it to the repo. This currently doesn't do anything, but we want to keep things organised and this helps with that.
 2. Make sure you have [up cli](https://docs.upbound.io/reference/cli/) installed and login to relevant account.
 3. Generate all the CRDs and controllers. This shouldn't really be necessary, but just to be sure:

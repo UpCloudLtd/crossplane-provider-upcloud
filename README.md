@@ -54,7 +54,7 @@ Please note that this project is currently in early alpha version, we do not rec
           key: credentials
     ```
 
-4. And now you can start creating your infrastructure. Check our [examples](examples/resources/) to see what Managed Resources you can use and how. Have fun!
+4. And now you can start creating your infrastructure. Check our [examples](examples/resources) to see what Managed Resources you can use and how. Have fun!
 
 ## Missing resources
 

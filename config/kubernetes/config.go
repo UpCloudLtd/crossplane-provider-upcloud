@@ -2,8 +2,8 @@ package kubernetes
 
 import (
 	"github.com/UpCloudLtd/provider-upcloud/config/groupversion"
+
 	"github.com/crossplane/upjet/pkg/config"
-	"slices"
 )
 
 // SDKResources is a list of all supported kubernetes resources implemented with Terraform legacy SDKv2.
@@ -17,7 +17,7 @@ var PluginFrameworkResources = []string{
 }
 
 // AllResources is a list of all supported network resources.
-var AllResources = slices.Concat(SDKResources, PluginFrameworkResources)
+var AllResources = append(SDKResources, PluginFrameworkResources...)
 
 // Configure configures the kubernetes resources.
 func Configure(p *config.Provider) {

@@ -2,19 +2,23 @@ package server
 
 import (
 	"github.com/UpCloudLtd/provider-upcloud/config/groupversion"
+
 	"github.com/crossplane/upjet/pkg/config"
 )
 
-// Resources is a list of all supported server resources.
-var Resources = []string{
+// SDKResources is a list of all supported server resources implemented with Terraform legacy SDKv2.
+var SDKResources = []string{
 	"upcloud_server",
 	"upcloud_server_group",
 	"upcloud_firewall_rules",
 }
 
+// PluginFrameworkResources is a list of all supported server implemented with Terraform Plugin Framework.
+var PluginFrameworkResources = []string{}
+
 // Configure configures the server resources.
 func Configure(p *config.Provider) {
-	groupversion.Configure(Resources, p, "server", "v1alpha1")
+	groupversion.Configure(SDKResources, p, "server", "v1alpha1")
 
 	p.AddResourceConfigurator("upcloud_server", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider

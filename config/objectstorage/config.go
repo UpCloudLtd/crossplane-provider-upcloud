@@ -5,11 +5,12 @@ import (
 	"fmt"
 
 	"github.com/UpCloudLtd/provider-upcloud/config/groupversion"
+
 	"github.com/crossplane/upjet/pkg/config"
 )
 
-// Resources is a list of all supported object storage resources.
-var Resources = []string{
+// SDKResources is a list of all supported object storage resources implemented with Terraform legacy SDKv2.
+var SDKResources = []string{
 	"upcloud_managed_object_storage",
 	"upcloud_managed_object_storage_policy",
 	"upcloud_managed_object_storage_user",
@@ -17,9 +18,12 @@ var Resources = []string{
 	"upcloud_managed_object_storage_user_policy",
 }
 
+// PluginFrameworkResources is a list of all supported object storage resources implemented with Terraform Plugin Framework.
+var PluginFrameworkResources = []string{}
+
 // Configure configures the object storage resources.
 func Configure(p *config.Provider) {
-	groupversion.Configure(Resources, p, "objectstorage", "v1alpha1")
+	groupversion.Configure(SDKResources, p, "objectstorage", "v1alpha1")
 
 	p.AddResourceConfigurator("upcloud_managed_object_storage", func(r *config.Resource) {
 		r.Kind = "ManagedObjectStorage"
