@@ -1,0 +1,25 @@
+name: Build
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build.yml
+      - apis/**
+      - build/**
+      - cmd/**
+      - config/**
+      - internal/**
+      - go.mod
+      - Makefile
+jobs:
+  run_build:
+    name: Make build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout head
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Build
+        run: |
+          make submodules && \
+          make build
