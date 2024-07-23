@@ -14,9 +14,12 @@ var SDKResources = []string{
 // PluginFrameworkResources is a list of all supported storage resources implemented with Terraform Plugin Framework.
 var PluginFrameworkResources = []string{}
 
+// AllResources is a list of all supported storage resources.
+var AllResources = append(SDKResources, PluginFrameworkResources...)
+
 // Configure configures the storage resources.
 func Configure(p *config.Provider) {
-	groupversion.Configure(SDKResources, p, "storage", "v1alpha1")
+	groupversion.Configure(AllResources, p, "storage", "v1alpha1")
 
 	p.AddResourceConfigurator("upcloud_storage", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider

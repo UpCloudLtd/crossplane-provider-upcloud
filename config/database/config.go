@@ -19,9 +19,12 @@ var SDKResources = []string{
 // PluginFrameworkResources is a list of all supported database resources implemented with Terraform Plugin Framework.
 var PluginFrameworkResources = []string{}
 
+// AllResources is a list of all supported database resources.
+var AllResources = append(SDKResources, PluginFrameworkResources...)
+
 // Configure configures the database resources.
 func Configure(p *config.Provider) {
-	groupversion.Configure(SDKResources, p, "database", "v1alpha1")
+	groupversion.Configure(AllResources, p, "database", "v1alpha1")
 
 	p.AddResourceConfigurator("upcloud_managed_database_postgresql", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider

@@ -13,12 +13,15 @@ var SDKResources = []string{
 	"upcloud_firewall_rules",
 }
 
-// PluginFrameworkResources is a list of all supported server implemented with Terraform Plugin Framework.
+// PluginFrameworkResources is a list of all supported server resources implemented with Terraform Plugin Framework.
 var PluginFrameworkResources = []string{}
+
+// AllResources is a list of all supported server resources.
+var AllResources = append(SDKResources, PluginFrameworkResources...)
 
 // Configure configures the server resources.
 func Configure(p *config.Provider) {
-	groupversion.Configure(SDKResources, p, "server", "v1alpha1")
+	groupversion.Configure(AllResources, p, "server", "v1alpha1")
 
 	p.AddResourceConfigurator("upcloud_server", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider

@@ -21,9 +21,12 @@ var SDKResources = []string{
 // PluginFrameworkResources is a list of all supported object storage resources implemented with Terraform Plugin Framework.
 var PluginFrameworkResources = []string{}
 
+// AllResources is a list of all supported object storage resources.
+var AllResources = append(SDKResources, PluginFrameworkResources...)
+
 // Configure configures the object storage resources.
 func Configure(p *config.Provider) {
-	groupversion.Configure(SDKResources, p, "objectstorage", "v1alpha1")
+	groupversion.Configure(AllResources, p, "objectstorage", "v1alpha1")
 
 	p.AddResourceConfigurator("upcloud_managed_object_storage", func(r *config.Resource) {
 		r.Kind = "ManagedObjectStorage"
