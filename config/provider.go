@@ -7,9 +7,6 @@ package config
 import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
-	"slices"
-
-	ujconfig "github.com/crossplane/upjet/pkg/config"
 
 	"github.com/UpCloudLtd/provider-upcloud/config/database"
 	"github.com/UpCloudLtd/provider-upcloud/config/kubernetes"
@@ -19,6 +16,7 @@ import (
 	"github.com/UpCloudLtd/provider-upcloud/config/storage"
 
 	"github.com/UpCloudLtd/terraform-provider-upcloud/upcloud"
+	ujconfig "github.com/crossplane/upjet/pkg/config"
 )
 
 const (
@@ -46,12 +44,12 @@ func GetProvider() *ujconfig.Provider {
 
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
-		server.Configure,
-		network.Configure,
-		storage.Configure,
-		objectstorage.Configure,
 		database.Configure,
 		kubernetes.Configure,
+		network.Configure,
+		objectstorage.Configure,
+		server.Configure,
+		storage.Configure,
 	} {
 		configure(pc)
 	}
@@ -61,33 +59,35 @@ func GetProvider() *ujconfig.Provider {
 }
 
 func pluginFrameworkResourcesList() []string {
-	allResources := slices.Concat(
+	return formatResourceNames([][]string{
+		database.PluginFrameworkResources,
 		kubernetes.PluginFrameworkResources,
 		network.PluginFrameworkResources,
-	)
-
-	for i, name := range allResources {
-		// $ is added to match the exact string since the format is regex.
-		allResources[i] = name + "$"
-	}
-
-	return allResources
+		objectstorage.PluginFrameworkResources,
+		server.PluginFrameworkResources,
+		storage.PluginFrameworkResources,
+	})
 }
 
 func sdkResourcesList() []string {
-	allResources := slices.Concat(
-		server.Resources,
-		network.SDKResources,
-		storage.Resources,
-		objectstorage.Resources,
-		database.Resources,
+	return formatResourceNames([][]string{
+		database.SDKResources,
 		kubernetes.SDKResources,
-	)
+		network.SDKResources,
+		objectstorage.SDKResources,
+		server.SDKResources,
+		storage.SDKResources,
+	})
+}
 
-	for i, name := range allResources {
-		// $ is added to match the exact string since the format is regex.
-		allResources[i] = name + "$"
+func formatResourceNames(resources [][]string) []string {
+	var formatted []string
+	for _, r := range resources {
+		for _, name := range r {
+			// $ is added to match the exact string since the format is regex.
+			formatted = append(formatted, name+"$")
+		}
 	}
 
-	return allResources
+	return formatted
 }
