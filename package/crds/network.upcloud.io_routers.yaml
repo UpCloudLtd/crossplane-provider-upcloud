@@ -79,7 +79,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the router.
-                      Key-value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -89,8 +89,8 @@ spec:
                     type: string
                   staticRoute:
                     description: |-
-                      (Block Set) A collection of static routes for this router. (see below for nested schema)
-                      A collection of static routes for this router.
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
                     items:
                       properties:
                         name:
@@ -129,7 +129,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the router.
-                      Key-value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -139,8 +139,8 @@ spec:
                     type: string
                   staticRoute:
                     description: |-
-                      (Block Set) A collection of static routes for this router. (see below for nested schema)
-                      A collection of static routes for this router.
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
                     items:
                       properties:
                         name:
@@ -361,7 +361,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the router.
-                      Key-value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -371,8 +371,8 @@ spec:
                     type: string
                   staticRoute:
                     description: |-
-                      (Block Set) A collection of static routes for this router. (see below for nested schema)
-                      A collection of static routes for this router.
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
                     items:
                       properties:
                         name:
@@ -389,6 +389,34 @@ spec:
                           description: |-
                             (String) Destination prefix of the route.
                             Destination prefix of the route.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the router
+                            Type of the route.
+                          type: string
+                      type: object
+                    type: array
+                  staticRoutes:
+                    description: |-
+                      (Set of Object) A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as static_route blocks. (see below for nested schema)
+                      A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as `static_route` blocks.
+                    items:
+                      properties:
+                        name:
+                          description: (String) Name of the router.
+                          type: string
+                        nexthop:
+                          description: '(String) Next hop address. NOTE: For static
+                            route to be active the next hop has to be an address of
+                            a reachable running Cloud Server in one of the Private
+                            Networks attached to the router.'
+                          type: string
+                        route:
+                          description: (String) Destination prefix of the route.
+                          type: string
+                        type:
+                          description: (String) Type of the router
                           type: string
                       type: object
                     type: array

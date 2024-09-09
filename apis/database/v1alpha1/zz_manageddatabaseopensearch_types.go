@@ -45,6 +45,219 @@ type AuthFailureListenersParameters struct {
 	InternalAuthenticationBackendLimiting []InternalAuthenticationBackendLimitingParameters `json:"internalAuthenticationBackendLimiting,omitempty" tf:"internal_authentication_backend_limiting,omitempty"`
 }
 
+type AzureMigrationInitParameters struct {
+
+	// (String) Account name. Azure account name.
+	// Account name. Azure account name.
+	Account *string `json:"account,omitempty" tf:"account,omitempty"`
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// (String) Azure container name. Azure container name.
+	// Azure container name. Azure container name.
+	Container *string `json:"container,omitempty" tf:"container,omitempty"`
+
+	// (String) Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+	// Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+	EndpointSuffix *string `json:"endpointSuffix,omitempty" tf:"endpoint_suffix,omitempty"`
+
+	// (String) Account secret key. Azure account secret key. One of key or sas_token should be specified.
+	// Account secret key. Azure account secret key. One of key or sas_token should be specified.
+	Key *string `json:"key,omitempty" tf:"key,omitempty"`
+
+	// (String) SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+	// SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+	SasToken *string `json:"sasToken,omitempty" tf:"sas_token,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
+}
+
+type AzureMigrationObservation struct {
+
+	// (String) Account name. Azure account name.
+	// Account name. Azure account name.
+	Account *string `json:"account,omitempty" tf:"account,omitempty"`
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// (String) Azure container name. Azure container name.
+	// Azure container name. Azure container name.
+	Container *string `json:"container,omitempty" tf:"container,omitempty"`
+
+	// (String) Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+	// Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+	EndpointSuffix *string `json:"endpointSuffix,omitempty" tf:"endpoint_suffix,omitempty"`
+
+	// (String) Account secret key. Azure account secret key. One of key or sas_token should be specified.
+	// Account secret key. Azure account secret key. One of key or sas_token should be specified.
+	Key *string `json:"key,omitempty" tf:"key,omitempty"`
+
+	// (String) SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+	// SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+	SasToken *string `json:"sasToken,omitempty" tf:"sas_token,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
+}
+
+type AzureMigrationParameters struct {
+
+	// (String) Account name. Azure account name.
+	// Account name. Azure account name.
+	// +kubebuilder:validation:Optional
+	Account *string `json:"account,omitempty" tf:"account,omitempty"`
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// +kubebuilder:validation:Optional
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// +kubebuilder:validation:Optional
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// +kubebuilder:validation:Optional
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// (String) Azure container name. Azure container name.
+	// Azure container name. Azure container name.
+	// +kubebuilder:validation:Optional
+	Container *string `json:"container,omitempty" tf:"container,omitempty"`
+
+	// (String) Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+	// Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+	// +kubebuilder:validation:Optional
+	EndpointSuffix *string `json:"endpointSuffix,omitempty" tf:"endpoint_suffix,omitempty"`
+
+	// (String) Account secret key. Azure account secret key. One of key or sas_token should be specified.
+	// Account secret key. Azure account secret key. One of key or sas_token should be specified.
+	// +kubebuilder:validation:Optional
+	Key *string `json:"key,omitempty" tf:"key,omitempty"`
+
+	// (String) SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+	// SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+	// +kubebuilder:validation:Optional
+	SasToken *string `json:"sasToken,omitempty" tf:"sas_token,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	// +kubebuilder:validation:Optional
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
+}
+
+type GcsMigrationInitParameters struct {
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+	// The path to the repository data within its container. Google Cloud Storage bucket name.
+	Bucket *string `json:"bucket,omitempty" tf:"bucket,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// (String) Credentials. Google Cloud Storage credentials file content.
+	// Credentials. Google Cloud Storage credentials file content.
+	Credentials *string `json:"credentials,omitempty" tf:"credentials,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
+}
+
+type GcsMigrationObservation struct {
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+	// The path to the repository data within its container. Google Cloud Storage bucket name.
+	Bucket *string `json:"bucket,omitempty" tf:"bucket,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// (String) Credentials. Google Cloud Storage credentials file content.
+	// Credentials. Google Cloud Storage credentials file content.
+	Credentials *string `json:"credentials,omitempty" tf:"credentials,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
+}
+
+type GcsMigrationParameters struct {
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// +kubebuilder:validation:Optional
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+	// The path to the repository data within its container. Google Cloud Storage bucket name.
+	// +kubebuilder:validation:Optional
+	Bucket *string `json:"bucket,omitempty" tf:"bucket,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// +kubebuilder:validation:Optional
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// +kubebuilder:validation:Optional
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// (String) Credentials. Google Cloud Storage credentials file content.
+	// Credentials. Google Cloud Storage credentials file content.
+	// +kubebuilder:validation:Optional
+	Credentials *string `json:"credentials,omitempty" tf:"credentials,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	// +kubebuilder:validation:Optional
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
+}
+
 type IPRateLimitingInitParameters struct {
 
 	// (Number) The number of login attempts allowed before login is blocked.
@@ -130,6 +343,80 @@ type IPRateLimitingParameters struct {
 	// The type of rate limiting.
 	// +kubebuilder:validation:Optional
 	Type *string `json:"type,omitempty" tf:"type,omitempty"`
+}
+
+type IndexRollupInitParameters struct {
+
+	// (Boolean) plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+	// plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+	RollupDashboardsEnabled *bool `json:"rollupDashboardsEnabled,omitempty" tf:"rollup_dashboards_enabled,omitempty"`
+
+	// (Boolean) plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+	// plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+	RollupEnabled *bool `json:"rollupEnabled,omitempty" tf:"rollup_enabled,omitempty"`
+
+	// (Number) plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+	// plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+	RollupSearchBackoffCount *int64 `json:"rollupSearchBackoffCount,omitempty" tf:"rollup_search_backoff_count,omitempty"`
+
+	// (Number) plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+	// plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+	RollupSearchBackoffMillis *int64 `json:"rollupSearchBackoffMillis,omitempty" tf:"rollup_search_backoff_millis,omitempty"`
+
+	// (Boolean) plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+	// plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+	RollupSearchSearchAllJobs *bool `json:"rollupSearchSearchAllJobs,omitempty" tf:"rollup_search_search_all_jobs,omitempty"`
+}
+
+type IndexRollupObservation struct {
+
+	// (Boolean) plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+	// plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+	RollupDashboardsEnabled *bool `json:"rollupDashboardsEnabled,omitempty" tf:"rollup_dashboards_enabled,omitempty"`
+
+	// (Boolean) plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+	// plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+	RollupEnabled *bool `json:"rollupEnabled,omitempty" tf:"rollup_enabled,omitempty"`
+
+	// (Number) plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+	// plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+	RollupSearchBackoffCount *int64 `json:"rollupSearchBackoffCount,omitempty" tf:"rollup_search_backoff_count,omitempty"`
+
+	// (Number) plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+	// plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+	RollupSearchBackoffMillis *int64 `json:"rollupSearchBackoffMillis,omitempty" tf:"rollup_search_backoff_millis,omitempty"`
+
+	// (Boolean) plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+	// plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+	RollupSearchSearchAllJobs *bool `json:"rollupSearchSearchAllJobs,omitempty" tf:"rollup_search_search_all_jobs,omitempty"`
+}
+
+type IndexRollupParameters struct {
+
+	// (Boolean) plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+	// plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+	// +kubebuilder:validation:Optional
+	RollupDashboardsEnabled *bool `json:"rollupDashboardsEnabled,omitempty" tf:"rollup_dashboards_enabled,omitempty"`
+
+	// (Boolean) plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+	// plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+	// +kubebuilder:validation:Optional
+	RollupEnabled *bool `json:"rollupEnabled,omitempty" tf:"rollup_enabled,omitempty"`
+
+	// (Number) plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+	// plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+	// +kubebuilder:validation:Optional
+	RollupSearchBackoffCount *int64 `json:"rollupSearchBackoffCount,omitempty" tf:"rollup_search_backoff_count,omitempty"`
+
+	// (Number) plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+	// plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+	// +kubebuilder:validation:Optional
+	RollupSearchBackoffMillis *int64 `json:"rollupSearchBackoffMillis,omitempty" tf:"rollup_search_backoff_millis,omitempty"`
+
+	// (Boolean) plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+	// plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+	// +kubebuilder:validation:Optional
+	RollupSearchSearchAllJobs *bool `json:"rollupSearchSearchAllJobs,omitempty" tf:"rollup_search_search_all_jobs,omitempty"`
 }
 
 type IndexTemplateInitParameters struct {
@@ -319,6 +606,11 @@ type ManagedDatabaseOpensearchInitParameters struct {
 	// Grant access to top-level `_mget`, `_msearch` and `_bulk` APIs. Users are limited to perform operations on indices based on the user-specific access control rules.
 	ExtendedAccessControl *bool `json:"extendedAccessControl,omitempty" tf:"extended_access_control,omitempty"`
 
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	MaintenanceWindowDow *string `json:"maintenanceWindowDow,omitempty" tf:"maintenance_window_dow,omitempty"`
@@ -486,6 +778,11 @@ type ManagedDatabaseOpensearchObservation struct {
 	// (String) The ID of this resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	MaintenanceWindowDow *string `json:"maintenanceWindowDow,omitempty" tf:"maintenance_window_dow,omitempty"`
@@ -563,6 +860,12 @@ type ManagedDatabaseOpensearchParameters struct {
 	// +kubebuilder:validation:Optional
 	ExtendedAccessControl *bool `json:"extendedAccessControl,omitempty" tf:"extended_access_control,omitempty"`
 
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// +kubebuilder:validation:Optional
@@ -632,6 +935,9 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 	// Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
 	AutomaticUtilityNetworkIPFilter *bool `json:"automaticUtilityNetworkIpFilter,omitempty" tf:"automatic_utility_network_ip_filter,omitempty"`
 
+	// (Block List, Max: 1) (see below for nested schema)
+	AzureMigration []AzureMigrationInitParameters `json:"azureMigration,omitempty" tf:"azure_migration,omitempty"`
+
 	// (Number) Controls the number of shards allowed in the cluster per data node.
 	// Controls the number of shards allowed in the cluster per data node.
 	ClusterMaxShardsPerNode *int64 `json:"clusterMaxShardsPerNode,omitempty" tf:"cluster_max_shards_per_node,omitempty"`
@@ -660,6 +966,9 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 	// Enable/Disable security audit.
 	EnableSecurityAudit *bool `json:"enableSecurityAudit,omitempty" tf:"enable_security_audit,omitempty"`
 
+	// (Block List, Max: 1) (see below for nested schema)
+	GcsMigration []GcsMigrationInitParameters `json:"gcsMigration,omitempty" tf:"gcs_migration,omitempty"`
+
 	// (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	// Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	HTTPMaxContentLength *int64 `json:"httpMaxContentLength,omitempty" tf:"http_max_content_length,omitempty"`
@@ -679,6 +988,10 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 	// (List of String) Index patterns.
 	// Index patterns.
 	IndexPatterns []*string `json:"indexPatterns,omitempty" tf:"index_patterns,omitempty"`
+
+	// (Block List, Max: 1) Index rollup settings. (see below for nested schema)
+	// Index rollup settings.
+	IndexRollup []IndexRollupInitParameters `json:"indexRollup,omitempty" tf:"index_rollup,omitempty"`
 
 	// (Block List, Max: 1) Template settings for all new indexes. (see below for nested schema)
 	// Template settings for all new indexes.
@@ -744,6 +1057,14 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 	// Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
 	KeepIndexRefreshInterval *bool `json:"keepIndexRefreshInterval,omitempty" tf:"keep_index_refresh_interval,omitempty"`
 
+	// (Boolean) Enable or disable KNN memory circuit breaker. Defaults to true.
+	// Enable or disable KNN memory circuit breaker. Defaults to true.
+	KnnMemoryCircuitBreakerEnabled *bool `json:"knnMemoryCircuitBreakerEnabled,omitempty" tf:"knn_memory_circuit_breaker_enabled,omitempty"`
+
+	// (Number) Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+	// Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+	KnnMemoryCircuitBreakerLimit *int64 `json:"knnMemoryCircuitBreakerLimit,omitempty" tf:"knn_memory_circuit_breaker_limit,omitempty"`
+
 	// (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
 	// OpenSearch OpenID Connect Configuration.
 	OpenID []OpenIDInitParameters `json:"openid,omitempty" tf:"openid,omitempty"`
@@ -767,6 +1088,9 @@ type ManagedDatabaseOpensearchPropertiesInitParameters struct {
 	// (List of String) Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
 	// Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
 	ReindexRemoteWhitelist []*string `json:"reindexRemoteWhitelist,omitempty" tf:"reindex_remote_whitelist,omitempty"`
+
+	// (Block List, Max: 1) (see below for nested schema)
+	S3Migration []S3MigrationInitParameters `json:"s3Migration,omitempty" tf:"s3_migration,omitempty"`
 
 	// (Block List, Max: 1) OpenSearch SAML configuration. (see below for nested schema)
 	// OpenSearch SAML configuration.
@@ -851,6 +1175,9 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 	// Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
 	AutomaticUtilityNetworkIPFilter *bool `json:"automaticUtilityNetworkIpFilter,omitempty" tf:"automatic_utility_network_ip_filter,omitempty"`
 
+	// (Block List, Max: 1) (see below for nested schema)
+	AzureMigration []AzureMigrationObservation `json:"azureMigration,omitempty" tf:"azure_migration,omitempty"`
+
 	// (Number) Controls the number of shards allowed in the cluster per data node.
 	// Controls the number of shards allowed in the cluster per data node.
 	ClusterMaxShardsPerNode *int64 `json:"clusterMaxShardsPerNode,omitempty" tf:"cluster_max_shards_per_node,omitempty"`
@@ -875,6 +1202,9 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 	// Enable/Disable security audit.
 	EnableSecurityAudit *bool `json:"enableSecurityAudit,omitempty" tf:"enable_security_audit,omitempty"`
 
+	// (Block List, Max: 1) (see below for nested schema)
+	GcsMigration []GcsMigrationObservation `json:"gcsMigration,omitempty" tf:"gcs_migration,omitempty"`
+
 	// (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	// Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	HTTPMaxContentLength *int64 `json:"httpMaxContentLength,omitempty" tf:"http_max_content_length,omitempty"`
@@ -894,6 +1224,10 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 	// (List of String) Index patterns.
 	// Index patterns.
 	IndexPatterns []*string `json:"indexPatterns,omitempty" tf:"index_patterns,omitempty"`
+
+	// (Block List, Max: 1) Index rollup settings. (see below for nested schema)
+	// Index rollup settings.
+	IndexRollup []IndexRollupObservation `json:"indexRollup,omitempty" tf:"index_rollup,omitempty"`
 
 	// (Block List, Max: 1) Template settings for all new indexes. (see below for nested schema)
 	// Template settings for all new indexes.
@@ -959,6 +1293,14 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 	// Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
 	KeepIndexRefreshInterval *bool `json:"keepIndexRefreshInterval,omitempty" tf:"keep_index_refresh_interval,omitempty"`
 
+	// (Boolean) Enable or disable KNN memory circuit breaker. Defaults to true.
+	// Enable or disable KNN memory circuit breaker. Defaults to true.
+	KnnMemoryCircuitBreakerEnabled *bool `json:"knnMemoryCircuitBreakerEnabled,omitempty" tf:"knn_memory_circuit_breaker_enabled,omitempty"`
+
+	// (Number) Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+	// Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+	KnnMemoryCircuitBreakerLimit *int64 `json:"knnMemoryCircuitBreakerLimit,omitempty" tf:"knn_memory_circuit_breaker_limit,omitempty"`
+
 	// (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
 	// OpenSearch OpenID Connect Configuration.
 	OpenID []OpenIDObservation `json:"openid,omitempty" tf:"openid,omitempty"`
@@ -982,6 +1324,9 @@ type ManagedDatabaseOpensearchPropertiesObservation struct {
 	// (List of String) Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
 	// Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
 	ReindexRemoteWhitelist []*string `json:"reindexRemoteWhitelist,omitempty" tf:"reindex_remote_whitelist,omitempty"`
+
+	// (Block List, Max: 1) (see below for nested schema)
+	S3Migration []S3MigrationObservation `json:"s3Migration,omitempty" tf:"s3_migration,omitempty"`
 
 	// (Block List, Max: 1) OpenSearch SAML configuration. (see below for nested schema)
 	// OpenSearch SAML configuration.
@@ -1070,6 +1415,10 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// +kubebuilder:validation:Optional
 	AutomaticUtilityNetworkIPFilter *bool `json:"automaticUtilityNetworkIpFilter,omitempty" tf:"automatic_utility_network_ip_filter,omitempty"`
 
+	// (Block List, Max: 1) (see below for nested schema)
+	// +kubebuilder:validation:Optional
+	AzureMigration []AzureMigrationParameters `json:"azureMigration,omitempty" tf:"azure_migration,omitempty"`
+
 	// (Number) Controls the number of shards allowed in the cluster per data node.
 	// Controls the number of shards allowed in the cluster per data node.
 	// +kubebuilder:validation:Optional
@@ -1105,6 +1454,10 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// +kubebuilder:validation:Optional
 	EnableSecurityAudit *bool `json:"enableSecurityAudit,omitempty" tf:"enable_security_audit,omitempty"`
 
+	// (Block List, Max: 1) (see below for nested schema)
+	// +kubebuilder:validation:Optional
+	GcsMigration []GcsMigrationParameters `json:"gcsMigration,omitempty" tf:"gcs_migration,omitempty"`
+
 	// (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	// Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
 	// +kubebuilder:validation:Optional
@@ -1129,6 +1482,11 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// Index patterns.
 	// +kubebuilder:validation:Optional
 	IndexPatterns []*string `json:"indexPatterns,omitempty" tf:"index_patterns,omitempty"`
+
+	// (Block List, Max: 1) Index rollup settings. (see below for nested schema)
+	// Index rollup settings.
+	// +kubebuilder:validation:Optional
+	IndexRollup []IndexRollupParameters `json:"indexRollup,omitempty" tf:"index_rollup,omitempty"`
 
 	// (Block List, Max: 1) Template settings for all new indexes. (see below for nested schema)
 	// Template settings for all new indexes.
@@ -1210,6 +1568,16 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// +kubebuilder:validation:Optional
 	KeepIndexRefreshInterval *bool `json:"keepIndexRefreshInterval,omitempty" tf:"keep_index_refresh_interval,omitempty"`
 
+	// (Boolean) Enable or disable KNN memory circuit breaker. Defaults to true.
+	// Enable or disable KNN memory circuit breaker. Defaults to true.
+	// +kubebuilder:validation:Optional
+	KnnMemoryCircuitBreakerEnabled *bool `json:"knnMemoryCircuitBreakerEnabled,omitempty" tf:"knn_memory_circuit_breaker_enabled,omitempty"`
+
+	// (Number) Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+	// Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+	// +kubebuilder:validation:Optional
+	KnnMemoryCircuitBreakerLimit *int64 `json:"knnMemoryCircuitBreakerLimit,omitempty" tf:"knn_memory_circuit_breaker_limit,omitempty"`
+
 	// (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
 	// OpenSearch OpenID Connect Configuration.
 	// +kubebuilder:validation:Optional
@@ -1239,6 +1607,10 @@ type ManagedDatabaseOpensearchPropertiesParameters struct {
 	// Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
 	// +kubebuilder:validation:Optional
 	ReindexRemoteWhitelist []*string `json:"reindexRemoteWhitelist,omitempty" tf:"reindex_remote_whitelist,omitempty"`
+
+	// (Block List, Max: 1) (see below for nested schema)
+	// +kubebuilder:validation:Optional
+	S3Migration []S3MigrationParameters `json:"s3Migration,omitempty" tf:"s3_migration,omitempty"`
 
 	// (Block List, Max: 1) OpenSearch SAML configuration. (see below for nested schema)
 	// OpenSearch SAML configuration.
@@ -1532,6 +1904,145 @@ type OpensearchDashboardsParameters struct {
 	// Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch.
 	// +kubebuilder:validation:Optional
 	OpensearchRequestTimeout *int64 `json:"opensearchRequestTimeout,omitempty" tf:"opensearch_request_timeout,omitempty"`
+}
+
+type S3MigrationInitParameters struct {
+
+	// (String) AWS Access key. AWS Access key.
+	// AWS Access key. AWS Access key.
+	AccessKey *string `json:"accessKey,omitempty" tf:"access_key,omitempty"`
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+	// S3 bucket name. S3 bucket name.
+	Bucket *string `json:"bucket,omitempty" tf:"bucket,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// compatible service then you should set this to the service’s endpoint.
+	// The S3 service endpoint to connect. The S3 service endpoint to connect to. If you are using an S3-compatible service then you should set this to the service’s endpoint.
+	Endpoint *string `json:"endpoint,omitempty" tf:"endpoint,omitempty"`
+
+	// (String) S3 region. S3 region.
+	// S3 region. S3 region.
+	Region *string `json:"region,omitempty" tf:"region,omitempty"`
+
+	// (String) AWS secret key. AWS secret key.
+	// AWS secret key. AWS secret key.
+	SecretKey *string `json:"secretKey,omitempty" tf:"secret_key,omitempty"`
+
+	// (Boolean) Server side encryption. When set to true files are encrypted on server side.
+	// Server side encryption. When set to true files are encrypted on server side.
+	ServerSideEncryption *bool `json:"serverSideEncryption,omitempty" tf:"server_side_encryption,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
+}
+
+type S3MigrationObservation struct {
+
+	// (String) AWS Access key. AWS Access key.
+	// AWS Access key. AWS Access key.
+	AccessKey *string `json:"accessKey,omitempty" tf:"access_key,omitempty"`
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+	// S3 bucket name. S3 bucket name.
+	Bucket *string `json:"bucket,omitempty" tf:"bucket,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// compatible service then you should set this to the service’s endpoint.
+	// The S3 service endpoint to connect. The S3 service endpoint to connect to. If you are using an S3-compatible service then you should set this to the service’s endpoint.
+	Endpoint *string `json:"endpoint,omitempty" tf:"endpoint,omitempty"`
+
+	// (String) S3 region. S3 region.
+	// S3 region. S3 region.
+	Region *string `json:"region,omitempty" tf:"region,omitempty"`
+
+	// (String) AWS secret key. AWS secret key.
+	// AWS secret key. AWS secret key.
+	SecretKey *string `json:"secretKey,omitempty" tf:"secret_key,omitempty"`
+
+	// (Boolean) Server side encryption. When set to true files are encrypted on server side.
+	// Server side encryption. When set to true files are encrypted on server side.
+	ServerSideEncryption *bool `json:"serverSideEncryption,omitempty" tf:"server_side_encryption,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
+}
+
+type S3MigrationParameters struct {
+
+	// (String) AWS Access key. AWS Access key.
+	// AWS Access key. AWS Access key.
+	// +kubebuilder:validation:Optional
+	AccessKey *string `json:"accessKey,omitempty" tf:"access_key,omitempty"`
+
+	// (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+	// +kubebuilder:validation:Optional
+	BasePath *string `json:"basePath,omitempty" tf:"base_path,omitempty"`
+
+	// (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+	// S3 bucket name. S3 bucket name.
+	// +kubebuilder:validation:Optional
+	Bucket *string `json:"bucket,omitempty" tf:"bucket,omitempty"`
+
+	// (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+	// +kubebuilder:validation:Optional
+	ChunkSize *string `json:"chunkSize,omitempty" tf:"chunk_size,omitempty"`
+
+	// (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+	// +kubebuilder:validation:Optional
+	Compress *bool `json:"compress,omitempty" tf:"compress,omitempty"`
+
+	// compatible service then you should set this to the service’s endpoint.
+	// The S3 service endpoint to connect. The S3 service endpoint to connect to. If you are using an S3-compatible service then you should set this to the service’s endpoint.
+	// +kubebuilder:validation:Optional
+	Endpoint *string `json:"endpoint,omitempty" tf:"endpoint,omitempty"`
+
+	// (String) S3 region. S3 region.
+	// S3 region. S3 region.
+	// +kubebuilder:validation:Optional
+	Region *string `json:"region,omitempty" tf:"region,omitempty"`
+
+	// (String) AWS secret key. AWS secret key.
+	// AWS secret key. AWS secret key.
+	// +kubebuilder:validation:Optional
+	SecretKey *string `json:"secretKey,omitempty" tf:"secret_key,omitempty"`
+
+	// (Boolean) Server side encryption. When set to true files are encrypted on server side.
+	// Server side encryption. When set to true files are encrypted on server side.
+	// +kubebuilder:validation:Optional
+	ServerSideEncryption *bool `json:"serverSideEncryption,omitempty" tf:"server_side_encryption,omitempty"`
+
+	// (String) The snapshot name to restore from. The snapshot name to restore from.
+	// The snapshot name to restore from. The snapshot name to restore from.
+	// +kubebuilder:validation:Optional
+	SnapshotName *string `json:"snapshotName,omitempty" tf:"snapshot_name,omitempty"`
 }
 
 type SAMLInitParameters struct {

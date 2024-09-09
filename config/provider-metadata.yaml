@@ -191,7 +191,7 @@ resources:
             connections: (List of String) Names of connections attached to the gateway. Note that this field can have outdated information as connections are created by a separate resource. To make sure that you have the most recent data run 'terrafrom refresh'.
             features: (Set of String) Features enabled for the gateway. Note that VPN feature is currently in beta, for more details see https://upcloud.com/resources/docs/networking#nat-and-vpn-gateways.
             id: (String) The ID of this resource.
-            labels: (Map of String) Key-value pairs to classify the network gateway.
+            labels: (Map of String) User defined key-value pairs to classify the network gateway.
             name: (String) Gateway name. Needs to be unique within the account.
             operational_state: (String) The service operational state indicates the service's current operational, effective state. Managed by the system.
             plan: (String) Gateway pricing plan.
@@ -512,7 +512,7 @@ resources:
         argumentDocs:
             control_plane_ip_filter: (Set of String) IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use ["0.0.0.0/0"]. To deny access from all sources, use []. Values set here do not restrict access to node groups or exposed Kubernetes services.
             id: (String) UUID of the cluster.
-            labels: (Map of String) Key-value pairs to classify the cluster.
+            labels: (Map of String) User defined key-value pairs to classify the cluster.
             name: (String) Cluster name. Needs to be unique within the account.
             network: (String) Network ID for the cluster to run in.
             network_cidr: (String) Network CIDR for the given network. Computed automatically.
@@ -526,7 +526,7 @@ resources:
         importStatements: []
     upcloud_kubernetes_node_group:
         subCategory: Kubernetes
-        description: This resource represents a node group in a Managed Kubernetes cluster.
+        description: This resource represents a Managed Kubernetes https://upcloud.com/products/managed-kubernetes cluster.
         name: upcloud_kubernetes_node_group
         title: upcloud_kubernetes_node_group Resource - terraform-provider-upcloud
         examples:
@@ -580,23 +580,21 @@ resources:
                       "zone": "de-fra1"
                     }
         argumentDocs:
-            anti_affinity: |-
-                (Boolean) If set to true, nodes in this group will be placed on separate compute hosts.
-                Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
+            anti_affinity: (Boolean) If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
             cluster: (String) UUID of the cluster.
             cores: (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
-            custom_plan: '(Block List, Max: 1) Resource properties for custom plan (see below for nested schema)'
+            custom_plan: (Block List) Resource properties for custom plan (see below for nested schema)
             effect: (String) Taint effect.
-            id: (String) The ID of this resource.
+            id: (String) Computed ID of the node group. This is a combination of the cluster UUID and the node group name, separated with a /.
             key: (String) Kubelet argument key.
             kubelet_args: (Block Set) Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
-            labels: (Map of String) Key-value pairs to classify the node group.
+            labels: (Map of String) User defined key-value pairs to classify the node_group.
             memory: (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
             name: (String) The name of the node group. Needs to be unique within a cluster.
             node_count: (Number) Amount of nodes to provision in the node group.
             plan: (String) The server plan used for the node group. You can list available plans with upctl server plans
             ssh_keys: (Set of String) You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
-            storage_encryption: (String) Storage encryption strategy for the nodes in this group.
+            storage_encryption: (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
             storage_size: (Number) The size of the storage device in gigabytes.
             storage_tier: (String) The storage tier to use. Defaults to maxiops
             taint: (Block Set) Taints for the nodes in this group. (see below for nested schema)
@@ -655,7 +653,7 @@ resources:
             frontends: (List of String) Frontends receive the traffic before dispatching it to the backends.
             id: (String) The ID of this resource.
             ip_addresses: (List of Object) (see below for nested schema)
-            labels: (Map of String) Key-value pairs to classify the load balancer.
+            labels: (Map of String) User defined key-value pairs to classify the load balancer.
             listen: (Boolean)
             maintenance_dow: (String) The day of the week on which maintenance will be performed. If not provided, we will randomly select a weekend day. Valid values monday|tuesday|wednesday|thursday|friday|saturday|sunday.
             maintenance_time: (String) The time at which the maintenance will begin in UTC. A 2-hour timeframe has been allocated for maintenance. During this period, the multi-node production plans will not experience any downtime, while the one-node plans will have a downtime of 1-2 minutes. If not provided, we will randomly select an off-peak time. Needs to be a valid time format in UTC HH:MM:SSZ, for example 20:01:01Z.
@@ -736,8 +734,8 @@ resources:
         argumentDocs:
             backend: (String) ID of the load balancer backend to which the TLS config is connected.
             certificate_bundle: (String) Reference to certificate bundle ID.
-            id: (String) The ID of this resource.
-            name: (String) The name of the TLS config must be unique within service backend.
+            id: (String) ID of the TLS config. ID is in {load balancer UUID}/{backend name}/{TLS config name} format.
+            name: (String) The name of the TLS config. Must be unique within customer account.
         importStatements: []
     upcloud_loadbalancer_dynamic_backend_member:
         subCategory: Load Balancer
@@ -828,16 +826,16 @@ resources:
                 }
         argumentDocs:
             hostnames: (List of String) Certificate hostnames.
-            id: (String) The ID of this resource.
+            id: (String) The UUID of the certificate bundle.
             key_type: (String) Private key type (rsa / ecdsa).
-            name: (String) The name of the bundle must be unique within customer account.
+            name: (String) The name of the certificate bundle. Must be unique within customer account.
             not_after: (String) The time after which a certificate is no longer valid.
             not_before: (String) The time on which a certificate becomes valid.
             operational_state: (String) The service operational state indicates the service's current operational, effective state. Managed by the system.
         importStatements: []
     upcloud_loadbalancer_frontend:
         subCategory: Load Balancer
-        description: This resource represents load balancer frontend service
+        description: This resource represents load balancer frontend service.
         name: upcloud_loadbalancer_frontend
         title: upcloud_loadbalancer_frontend Resource - terraform-provider-upcloud
         examples:
@@ -900,17 +898,17 @@ resources:
         argumentDocs:
             default_backend_name: (String) The name of the default backend where traffic will be routed. Note, default backend can be overwritten in frontend rules.
             http2_enabled: (Boolean) Enable or disable HTTP/2 support.
-            id: (String) The ID of this resource.
+            id: (String) ID of the frontend. ID is in {load balancer UUID}/{frontend name} format.
             inbound_proxy_protocol: (Boolean) Enable or disable inbound proxy protocol support.
-            loadbalancer: (String) ID of the load balancer to which the frontend is connected.
+            loadbalancer: (String) UUID of the load balancer to which the frontend is connected.
             mode: (String) When load balancer operating in tcp mode it acts as a layer 4 proxy. In http mode it acts as a layer 7 proxy.
-            name: (String) The name of the frontend must be unique within the load balancer service.
-            networks: (Block List) Networks that frontend will be listening. Networks are required if load balancer has networks defined. This field will be required when deprecated field network is removed from load balancer resource. (see below for nested schema)
-            port: (Number) Port to listen incoming requests
-            properties: '(Block List, Max: 1) Frontend properties. Properties can set back to defaults by defining empty properties {} block. (see below for nested schema)'
-            rules: (List of String) Set of frontend rule names
+            name: (String) The name of the frontend. Must be unique within the load balancer service.
+            networks: (Block Set) Networks that frontend will be listening. Networks are required if load balancer has networks defined. This field will be required when deprecated field network is removed from load balancer resource. (see below for nested schema)
+            port: (Number) Port to listen for incoming requests.
+            properties: (Block List) Frontend properties. Properties can set back to defaults by defining empty properties {} block. (see below for nested schema)
+            rules: (List of String) Set of frontend rule names.
             timeout_client: (Number) Client request timeout in seconds.
-            tls_configs: (List of String) Set of TLS config names
+            tls_configs: (List of String) Set of TLS config names.
         importStatements: []
     upcloud_loadbalancer_frontend_rule:
         subCategory: Load Balancer
@@ -1079,8 +1077,8 @@ resources:
         argumentDocs:
             certificate_bundle: (String) Reference to certificate bundle ID.
             frontend: (String) ID of the load balancer frontend to which the TLS config is connected.
-            id: (String) The ID of this resource.
-            name: (String) The name of the TLS config must be unique within service frontend.
+            id: (String) ID of the TLS config. ID is in {load balancer UUID}/{frontend name}/{TLS config name} format.
+            name: (String) The name of the TLS config. Must be unique within customer account.
         importStatements: []
     upcloud_loadbalancer_manual_certificate_bundle:
         subCategory: Load Balancer
@@ -1096,14 +1094,14 @@ resources:
                   "private_key": "${base64encode(file(var.private_key_path))}"
                 }
         argumentDocs:
-            certificate: (String) Certificate within base64 string must be in PEM format.
-            id: (String) The ID of this resource.
-            intermediates: (String) Intermediate certificates within base64 string must be in PEM format.
-            name: (String) The name of the bundle must be unique within customer account.
+            certificate: (String) Certificate as base64 encoded string. Must be in PEM format.
+            id: (String) The UUID of the certificate bundle.
+            intermediates: (String) Intermediate certificates as base64 encoded string. Must be in PEM format.
+            name: (String) The name of the certificate bundle. Must be unique within customer account.
             not_after: (String) The time after which a certificate is no longer valid.
             not_before: (String) The time on which a certificate becomes valid.
             operational_state: (String) The service operational state indicates the service's current operational, effective state. Managed by the system.
-            private_key: (String, Sensitive) Private key within base64 string must be in PEM format.
+            private_key: (String, Sensitive) Private key as base64 encoded string. Must be in PEM format.
         importStatements: []
     upcloud_loadbalancer_resolver:
         subCategory: Load Balancer
@@ -1336,6 +1334,7 @@ resources:
             host: (String) Hostname or IP address of the server where to migrate data from.
             id: (String) The ID of this resource.
             ignore_dbs: (String) Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+            ignore_roles: (String) Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
             information_schema_stats_expiry: (Number) The time, in seconds, before cached statistics expire.
             innodb_change_buffer_max_size: (Number) Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
             innodb_flush_neighbors: '(Number) Specifies whether flushing a page from the InnoDB buffer pool also flushes other dirty pages in the same extent (default is 1): 0 - dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.'
@@ -1352,6 +1351,7 @@ resources:
             interactive_timeout: (Number) The number of seconds the server waits for activity on an interactive connection before closing it.
             internal_tmp_mem_storage_engine: (String) The storage engine for in-memory internal temporary tables.
             ip_filter: (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+            labels: (Map of String) User defined key-value pairs to classify the managed database.
             long_query_time: (Number) The slow_query_logs work as SQL statements that take more than long_query_time seconds to execute. Default is 10s.
             maintenance_window_dow: (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
             maintenance_window_time: (String) Maintenance window UTC time in hh:mm:ss format
@@ -1427,28 +1427,40 @@ resources:
                 }
         argumentDocs:
             access_control: (Boolean) Enables users access control for OpenSearch service. User access control rules will only be enforced if this attribute is enabled.
+            access_key: (String) AWS Access key. AWS Access key.
+            account: (String) Account name. Azure account name.
             action_auto_create_index_enabled: (Boolean) action.auto_create_index. Explicitly allow or block automatic creation of indices. Defaults to true.
             action_destructive_requires_name: (Boolean) Require explicit index names when deleting.
             allowed_tries: (Number) The number of login attempts allowed before login is blocked.
             auth_failure_listeners: '(Block List, Max: 1) Opensearch Security Plugin Settings. (see below for nested schema)'
             authentication_backend: (String) The internal backend. Enter internal.
             automatic_utility_network_ip_filter: (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+            azure_migration: '(Block List, Max: 1) (see below for nested schema)'
+            base_path: (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
             block_expiry_seconds: (Number) The duration of time that login remains blocked after a failed login.
+            bucket: (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+            chunk_size: (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
             client_id: (String) The ID of the OpenID Connect client. The ID of the OpenID Connect client configured in your IdP. Required.
             client_secret: (String) The client secret of the OpenID Connect. The client secret of the OpenID Connect client configured in your IdP. Required.
             cluster_max_shards_per_node: (Number) Controls the number of shards allowed in the cluster per data node.
             cluster_routing_allocation_node_concurrent_recoveries: (Number) Concurrent incoming/outgoing shard recoveries per node. How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
             component: (String)
             components: (List of Object) Service component information (see below for nested schema)
+            compress: (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
             connect_url: (String) OpenID Connect metadata/configuration URL. The URL of your IdP where the Security plugin can find the OpenID Connect metadata/configuration settings.
+            container: (String) Azure container name. Azure container name.
+            credentials: (String) Credentials. Google Cloud Storage credentials file content.
             custom_domain: (String) Custom domain. Serve the web frontend using a custom CNAME pointing to the Aiven DNS name.
             email_sender_name: (String) Sender name placeholder to be used in Opensearch Dashboards and Opensearch keystore. This should be identical to the Sender name defined in Opensearch dashboards.
             email_sender_password: (String, Sensitive) Sender password for Opensearch alerts to authenticate with SMTP server. Sender password for Opensearch alerts to authenticate with SMTP server.
             email_sender_username: (String) Sender username for Opensearch alerts.
             enable_security_audit: (Boolean) Enable/Disable security audit.
             enabled: (Boolean) Enable or disable OpenSearch OpenID Connect authentication. Enables or disables OpenID Connect authentication for OpenSearch. When enabled, users can authenticate using OpenID Connect with an Identity Provider.
+            endpoint: (String) The S3 service endpoint to connect. The S3 service endpoint to connect to. If you are using an S3-compatible service then you should set this to the service’s endpoint.
+            endpoint_suffix: (String) Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
             extended_access_control: (Boolean) Grant access to top-level _mget, _msearch and _bulk APIs. Users are limited to perform operations on indices based on the user-specific access control rules.
             family: (String) Network family. Currently only IPv4 is supported.
+            gcs_migration: '(Block List, Max: 1) (see below for nested schema)'
             header: (String) HTTP header name of the JWT token. HTTP header name of the JWT token. Optional. Default is Authorization.
             host: (String)
             http_max_content_length: (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
@@ -1459,6 +1471,7 @@ resources:
             idp_metadata_url: (String) Identity Provider (IdP) SAML metadata URL. The URL of the SAML metadata for the Identity Provider (IdP). This is used to configure SAML-based authentication with the IdP.
             idp_pemtrustedcas_content: (String) PEM-encoded root CA Content for SAML IdP server verification. This parameter specifies the PEM-encoded root certificate authority (CA) content for the SAML identity provider (IdP) server verification. The root CA content is used to verify the SSL/TLS certificate presented by the server.
             index_patterns: (List of String) Index patterns.
+            index_rollup: '(Block List, Max: 1) Index rollup settings. (see below for nested schema)'
             index_template: '(Block List, Max: 1) Template settings for all new indexes. (see below for nested schema)'
             indices_fielddata_cache_size: (Number) Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
             indices_memory_index_buffer_size: (Number) Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
@@ -1480,6 +1493,10 @@ resources:
             jwt_header: '(String) The HTTP header that stores the token. The HTTP header that stores the token. Typically the Authorization header with the Bearer schema: Authorization: Bearer . Optional. Default is Authorization.'
             jwt_url_parameter: (String) URL JWT token. If the token is not transmitted in the HTTP header, but as an URL parameter, define the name of the parameter here. Optional.
             keep_index_refresh_interval: (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
+            key: (String) Account secret key. Azure account secret key. One of key or sas_token should be specified.
+            knn_memory_circuit_breaker_enabled: (Boolean) Enable or disable KNN memory circuit breaker. Defaults to true.
+            knn_memory_circuit_breaker_limit: (Number) Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+            labels: (Map of String) User defined key-value pairs to classify the managed database.
             maintenance_window_dow: (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
             maintenance_window_time: (String) Maintenance window UTC time in hh:mm:ss format
             mapping_nested_objects_limit: (Number) index.mapping.nested_objects.limit. The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
@@ -1504,20 +1521,31 @@ resources:
             public_access: (Boolean) Public Access. Allow access to the service from the public Internet.
             refresh_rate_limit_count: (Number) The maximum number of unknown key IDs in the time frame. The maximum number of unknown key IDs in the time frame. Default is 10. Optional.
             refresh_rate_limit_time_window_ms: (Number) The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. The time frame to use when checking the maximum number of unknown key IDs, in milliseconds. Optional.Default is 10000 (10 seconds).
+            region: (String) S3 region. S3 region.
             reindex_remote_whitelist: (List of String) Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
             role: (String)
             roles_key: (String) The key in the JSON payload that stores the user’s roles. The key in the JSON payload that stores the user’s roles. The value of this key must be a comma-separated list of roles. Required only if you want to use roles in the JWT.
+            rollup_dashboards_enabled: (Boolean) plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+            rollup_enabled: (Boolean) plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+            rollup_search_backoff_count: (Number) plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+            rollup_search_backoff_millis: (Number) plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+            rollup_search_search_all_jobs: (Boolean) plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
             route: (String)
+            s3_migration: '(Block List, Max: 1) (see below for nested schema)'
             saml: '(Block List, Max: 1) OpenSearch SAML configuration. (see below for nested schema)'
+            sas_token: (String) SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
             scope: (String) The scope of the identity token issued by the IdP. The scope of the identity token issued by the IdP. Optional. Default is openid profile email address phone.
             script_max_compilations_rate: (String) Script max compilation rate - circuit breaker to prevent/minimize OOMs. Script compilation circuit breaker limits the number of inline script compilations within a period of time. Default is use-context.
             search_max_buckets: (Number) Maximum number of aggregation buckets allowed in a single response. OpenSearch default value is used when this is not defined.
+            secret_key: (String) AWS secret key. AWS secret key.
+            server_side_encryption: (Boolean) Server side encryption. When set to true files are encrypted on server side.
             service_host: (String) Hostname to the service instance
             service_log: (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
             service_password: (String, Sensitive) Primary username's password to the service instance
             service_port: (String) Port to the service instance
             service_uri: (String, Sensitive) URI to the service instance
             service_username: (String) Primary username to the service instance
+            snapshot_name: (String) The snapshot name to restore from. The snapshot name to restore from.
             sp_entity_id: (String) Service Provider Entity ID. The unique identifier for the Service Provider (SP) entity that is used for SAML authentication. This value is typically provided by the SP.
             state: (String) State of the service
             subject_key: (String) The key in the JSON payload that stores the user’s name. The key in the JSON payload that stores the user’s name. If not defined, the subject registered claim is used. Most IdP providers use the preferred_username claim. Optional.
@@ -1602,9 +1630,11 @@ resources:
             id: (String) The ID of this resource.
             idle_in_transaction_session_timeout: (Number) Time out sessions with open transactions after this number of milliseconds.
             ignore_dbs: (String) Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+            ignore_roles: (String) Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
             ignore_startup_parameters: (List of String) List of parameters to ignore when given in startup packet.
             ip_filter: (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
             jit: (Boolean) Controls system-wide use of Just-in-Time Compilation (JIT).
+            labels: (Map of String) User defined key-value pairs to classify the managed database.
             log_autovacuum_min_duration: (Number) Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
             log_error_verbosity: (String) Controls the amount of detail written in the server log for each message that is logged.
             log_line_prefix: (String) Choose from one of the available log formats.
@@ -1620,6 +1650,7 @@ resources:
             max_parallel_workers: (Number) Sets the maximum number of workers that the system can support for parallel queries.
             max_parallel_workers_per_gather: (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
             max_pred_locks_per_transaction: (Number) PostgreSQL maximum predicate locks per transaction.
+            max_prepared_statements: (Number) PgBouncer tracks protocol-level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
             max_prepared_transactions: (Number) PostgreSQL maximum prepared transactions.
             max_replication_slots: (Number) PostgreSQL maximum replication slots.
             max_slot_wal_keep_size: (Number) PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is -1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
@@ -1720,7 +1751,9 @@ resources:
             host: (String) Hostname or IP address of the server where to migrate data from.
             id: (String) The ID of this resource.
             ignore_dbs: (String) Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+            ignore_roles: (String) Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
             ip_filter: (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+            labels: (Map of String) User defined key-value pairs to classify the managed database.
             maintenance_window_dow: (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
             maintenance_window_time: (String) Maintenance window UTC time in hh:mm:ss format
             method: (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
@@ -1858,7 +1891,7 @@ resources:
             family: (String) Network family. IPv6 currently not supported.
             iam_url: (String)
             id: (String) The ID of this resource.
-            labels: (Map of String) Key-value pairs to classify the managed object storage.
+            labels: (Map of String) User defined key-value pairs to classify the managed object storage.
             name: (String) Name of the Managed Object Storage service. Must be unique within account.
             network: (Block Set) Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network. (see below for nested schema)
             operational_state: (String) Operational state of the Managed Object Storage service.
@@ -1897,8 +1930,8 @@ resources:
             created_at: (String) Creation time.
             default_version_id: (String) Default version id.
             description: (String) Description of the policy.
-            document: (String) Policy document, URL-encoded compliant with RFC 3986.
-            id: (String) The ID of this resource.
+            document: (String) Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
+            id: (String) ID of the policy. ID is in {object storage UUID}/{policy name} format.
             name: (String) Policy name.
             service_uuid: (String) Managed Object Storage service UUID.
             system: (Boolean) Defines whether the policy was set up by the system.
@@ -2051,7 +2084,7 @@ resources:
             gateway: (String) Gateway address given by DHCP
             id: (String) UUID of the network.
             ip_network: (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
-            labels: (Map of String) Key-value pairs to classify the network.
+            labels: (Map of String) User defined key-value pairs to classify the network.
             name: (String) Name of the network.
             router: (String) UUID of a router to attach to this network.
             type: (String) The network type
@@ -2103,7 +2136,7 @@ resources:
         argumentDocs:
             configured_status: (String) Configured status of the network peering.
             id: (String) UUID of the network peering.
-            labels: (Map of String) Key-value pairs to classify the network peering.
+            labels: (Map of String) User defined key-value pairs to classify the network peering.
             name: (String) Name of the network peering.
             network: (Block List) Local network of the network peering. (see below for nested schema)
             peer_network: (Block List) Peer network of the network peering. (see below for nested schema)
@@ -2182,11 +2215,12 @@ resources:
         argumentDocs:
             attached_networks: (List of String) List of UUIDs representing networks attached to this router.
             id: (String) UUID of the router.
-            labels: (Map of String) Key-value pairs to classify the router.
+            labels: (Map of String) User defined key-value pairs to classify the router.
             name: (String) Name of the router.
             nexthop: '(String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.'
             route: (String) Destination prefix of the route.
-            static_route: (Block Set) A collection of static routes for this router. (see below for nested schema)
+            static_route: (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+            static_routes: (Set of Object) A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as static_route blocks. (see below for nested schema)
             type: (String) Type of the router
         importStatements:
             - terraform import upcloud_router.my_example_router 049d7ca2-757e-4fb1-a833-f87ee056547a
@@ -2237,15 +2271,7 @@ resources:
             additional_ip_address: '(Block Set, Max: 4) 0-4 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type private (see below for nested schema)'
             address: (String) The device address the storage will be attached to (scsi|virtio|ide). Leave address_position field empty to auto-select next available address from that bus.
             address_position: (String) The device position in the given bus (defined via field address). Valid values for address virtio are 0-15 (0, for example). Valid values for scsi or ide are 0-1:0-1 (0:0, for example). Leave empty to auto-select next available address in the given bus.
-            backup_rule: |-
-                (Block List, Max: 1) The criteria to backup the storage
-                Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-                Such configurations will throw errors during execution.
-                Also, due to how UpCloud API works with simple backups and how Terraform orders the update operations,
-                it is advised to never switch between simple_backup on the server and individual storages backup_rules in one apply.
-                If you want to switch from using server simple backup to per-storage defined backup rules,
-                please first remove simple_backup block from a server, run 'terraform apply',
-                then add 'backup_rule' to desired storages and run 'terraform apply' again. (see below for nested schema)
+            backup_rule: '(Block List, Max: 1) The criteria to backup the storage.'
             boot_order: (String) The boot device order, cdrom|disk|network or comma separated combination of those values. Defaults to disk
             bootable: (Boolean) true if this interface should be used for network booting.
             cpu: (Number) The number of CPU for the server
@@ -2266,7 +2292,7 @@ resources:
             ip_address_family: (String) The type of the primary IP address of this interface (one of IPv4 or IPv6).
             ip_address_floating: (Boolean) true indicates that the primary IP address is a floating IP address.
             keys: (List of String) A list of ssh keys to access the server
-            labels: (Map of String) Key-value pairs to classify the server.
+            labels: (Map of String) User defined key-value pairs to classify the server.
             login: '(Block Set, Max: 1) Configure access credentials to the server (see below for nested schema)'
             mac_address: (String) The assigned MAC address.
             mem: (Number) The size of memory for the server (in megabytes)
@@ -2307,6 +2333,7 @@ resources:
             - terraform import upcloud_server.example_server ead4544f-10bf-42a3-b98a-a0fea2e2ad14
     upcloud_server_group:
         subCategory: Servers
+        description: Server groups allow grouping servers and defining anti-affinity for the servers.
         name: upcloud_server_group
         title: upcloud_server_group Resource - terraform-provider-upcloud
         examples:
@@ -2330,8 +2357,8 @@ resources:
             anti_affinity_policy: |-
                 (String) Defines if a server group is an anti-affinity group. Setting this to strict or yes will
                 result in all servers in the group being placed on separate compute hosts. The value can be strict, yes, or no.
-            id: (String) The ID of this resource.
-            labels: (Map of String) Key-value pairs to classify the server group.
+            id: (String) UUID of the server group.
+            labels: (Map of String) User defined key-value pairs to classify the server group.
             members: (Set of String) UUIDs of the servers that are members of this group. Servers can also be attached to the server group via server_group property of upcloud_server. See also track_members property.
             "no": refers to having no policy and thus no effect on server host affinity
             strict: policy doesn't allow servers in the same server group to be on the same host
@@ -2522,39 +2549,61 @@ resources:
                       "zone": "fi-hel1"
                     }
         argumentDocs:
-            backup_rule: |-
-                (Block List, Max: 1) The criteria to backup the storage
-                Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-                Such configurations will throw errors during execution.
-                Also, due to how UpCloud API works with simple backups and how Terraform orders the update operations,
-                it is advised to never switch between simple_backup on the server and individual storages backup_rules in one apply.
-                If you want to switch from using server simple backup to per-storage defined backup rules,
-                please first remove simple_backup block from a server, run 'terraform apply',
-                then add 'backup_rule' to desired storages and run 'terraform apply' again. (see below for nested schema)
-            clone: '(Block Set, Max: 1) Block defining another storage/template to clone to storage (see below for nested schema)'
+            backup_rule: (Block List) The criteria to backup the storage.
+            clone: (Block Set) Block defining another storage/template to clone to storage. (see below for nested schema)
             delete_autoresize_backup: (Boolean) If set to true, the backup taken before the partition and filesystem resize attempt will be deleted immediately after success.
-            encrypt: (Boolean) Sets if the storage is encrypted at rest
+            encrypt: (Boolean) Sets if the storage is encrypted at rest.
             filesystem_autoresize: |-
-                (Boolean) If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes.
-                Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used
-                to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
+                (Boolean) If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes. Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
                 Taking and keeping backups incure costs.
-            id: (String) The ID of this resource.
-            import: '(Block Set, Max: 1) Block defining external data to import to storage (see below for nested schema)'
+            id: (String) UUID of the storage.
+            import: (Block Set) Block defining external data to import to storage (see below for nested schema)
             interval: (String) The weekday when the backup is created
+            labels: (Map of String) User defined key-value pairs to classify the storage.
             retention: (Number) The number of days before a backup is automatically deleted
             sha256sum: (String) sha256 sum of the imported data
-            size: (Number) The size of the storage in gigabytes
+            simple_backup: on the server and individual storages backup_rules in one apply. If you want to switch from using server simple backup to per-storage defined backup rules,  please first remove simple_backup block from a server, run terraform apply, then add backup_rule to desired storages and run terraform apply again. (see below for nested schema)
+            size: (Number) The size of the storage in gigabytes.
             source: (String) The mode of the import task. One of http_import or direct_upload.
-            source_hash: (String) For direct_upload; an optional hash of the file to upload.
+            source_hash: (String) SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to sha256sum after the import has completed. Possible filename is automatically removed from the hash before comparison.
             source_location: (String) The location of the file to import. For http_import an accessible URL for direct_upload a local file.
-            tier: (String) The storage tier to use
+            system_labels: (Map of String) System defined key-value pairs to classify the storage. The keys of system defined labels are prefixed with underscore and can not be modified by the user.
+            tier: (String) The tier of the storage.
             time: (String) The time of day when the backup is created
-            title: (String) A short, informative description
+            title: (String) The title of the storage.
+            type: (String) The type of the storage.
             written_bytes: (Number) Number of bytes imported
-            zone: (String) The zone in which the storage will be created, e.g. de-fra1. You can list available zones with upctl zone list.
+            zone: (String) The zone the storage is in, e.g. de-fra1. You can list available zones with upctl zone list.
         importStatements:
             - terraform import upcloud_storage.example_storage 0128ae5a-91dd-4ebf-bd1e-304c47f2c652
+    upcloud_storage_template:
+        subCategory: Storage
+        description: Manages UpCloud storage templates. The storage templates are stored in the system as storages with template type.
+        name: upcloud_storage_template
+        title: upcloud_storage_template Resource - terraform-provider-upcloud
+        examples:
+            - name: template
+              manifest: |-
+                {
+                  "labels": {
+                    "os": "linux",
+                    "usage": "example"
+                  },
+                  "source_storage": "e0328f8a-9944-406b-99c3-656dcc03e671",
+                  "title": "custom-storage-template"
+                }
+        argumentDocs:
+            encrypt: (Boolean) Sets if the storage is encrypted at rest.
+            id: (String) UUID of the storage.
+            labels: (Map of String) User defined key-value pairs to classify the storage.
+            size: (Number) The size of the storage in gigabytes.
+            source_storage: (String) The source storage that is used as a base for this storage template.
+            system_labels: (Map of String) System defined key-value pairs to classify the storage. The keys of system defined labels are prefixed with underscore and can not be modified by the user.
+            tier: (String) The tier of the storage.
+            title: (String) The title of the storage.
+            type: (String) The type of the storage.
+            zone: (String) The zone the storage is in, e.g. de-fra1.
+        importStatements: []
     upcloud_tag Resource - terraform-provider-upcloud:
         subCategory: Cloud
         description: This resource is deprecated, use tags schema in server resource

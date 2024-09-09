@@ -17,15 +17,15 @@ type CustomPlanInitParameters struct {
 
 	// (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
 	// The number of CPU cores dedicated to individual node group nodes when using custom plan
-	Cores *int64 `json:"cores,omitempty" tf:"cores,omitempty"`
+	Cores *float64 `json:"cores,omitempty" tf:"cores,omitempty"`
 
 	// (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
 	// The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
-	Memory *int64 `json:"memory,omitempty" tf:"memory,omitempty"`
+	Memory *float64 `json:"memory,omitempty" tf:"memory,omitempty"`
 
 	// (Number) The size of the storage device in gigabytes.
 	// The size of the storage device in gigabytes.
-	StorageSize *int64 `json:"storageSize,omitempty" tf:"storage_size,omitempty"`
+	StorageSize *float64 `json:"storageSize,omitempty" tf:"storage_size,omitempty"`
 
 	// (String) The storage tier to use. Defaults to maxiops
 	// The storage tier to use. Defaults to maxiops
@@ -36,15 +36,15 @@ type CustomPlanObservation struct {
 
 	// (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
 	// The number of CPU cores dedicated to individual node group nodes when using custom plan
-	Cores *int64 `json:"cores,omitempty" tf:"cores,omitempty"`
+	Cores *float64 `json:"cores,omitempty" tf:"cores,omitempty"`
 
 	// (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
 	// The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
-	Memory *int64 `json:"memory,omitempty" tf:"memory,omitempty"`
+	Memory *float64 `json:"memory,omitempty" tf:"memory,omitempty"`
 
 	// (Number) The size of the storage device in gigabytes.
 	// The size of the storage device in gigabytes.
-	StorageSize *int64 `json:"storageSize,omitempty" tf:"storage_size,omitempty"`
+	StorageSize *float64 `json:"storageSize,omitempty" tf:"storage_size,omitempty"`
 
 	// (String) The storage tier to use. Defaults to maxiops
 	// The storage tier to use. Defaults to maxiops
@@ -56,17 +56,17 @@ type CustomPlanParameters struct {
 	// (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
 	// The number of CPU cores dedicated to individual node group nodes when using custom plan
 	// +kubebuilder:validation:Optional
-	Cores *int64 `json:"cores" tf:"cores,omitempty"`
+	Cores *float64 `json:"cores" tf:"cores,omitempty"`
 
 	// (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
 	// The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
 	// +kubebuilder:validation:Optional
-	Memory *int64 `json:"memory" tf:"memory,omitempty"`
+	Memory *float64 `json:"memory" tf:"memory,omitempty"`
 
 	// (Number) The size of the storage device in gigabytes.
 	// The size of the storage device in gigabytes.
 	// +kubebuilder:validation:Optional
-	StorageSize *int64 `json:"storageSize" tf:"storage_size,omitempty"`
+	StorageSize *float64 `json:"storageSize" tf:"storage_size,omitempty"`
 
 	// (String) The storage tier to use. Defaults to maxiops
 	// The storage tier to use. Defaults to maxiops
@@ -111,12 +111,11 @@ type KubeletArgsParameters struct {
 
 type KubernetesNodeGroupInitParameters struct {
 
-	// affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
-	// If set to true, nodes in this group will be placed on separate compute hosts.
-	// Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
+	// affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+	// If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
 	AntiAffinity *bool `json:"antiAffinity,omitempty" tf:"anti_affinity,omitempty"`
 
-	// (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+	// (Block List) Resource properties for custom plan (see below for nested schema)
 	// Resource properties for custom plan
 	CustomPlan []CustomPlanInitParameters `json:"customPlan,omitempty" tf:"custom_plan,omitempty"`
 
@@ -124,14 +123,14 @@ type KubernetesNodeGroupInitParameters struct {
 	// Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
 	KubeletArgs []KubeletArgsInitParameters `json:"kubeletArgs,omitempty" tf:"kubelet_args,omitempty"`
 
-	// value pairs to classify the node group.
-	// Key-value pairs to classify the node group.
+	// value pairs to classify the node_group.
+	// User defined key-value pairs to classify the node_group.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
 	// (Number) Amount of nodes to provision in the node group.
 	// Amount of nodes to provision in the node group.
-	NodeCount *int64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
+	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
 
 	// (String) The server plan used for the node group. You can list available plans with upctl server plans
 	// The server plan used for the node group. You can list available plans with `upctl server plans`
@@ -142,8 +141,8 @@ type KubernetesNodeGroupInitParameters struct {
 	// +listType=set
 	SSHKeys []*string `json:"sshKeys,omitempty" tf:"ssh_keys,omitempty"`
 
-	// (String) Storage encryption strategy for the nodes in this group.
-	// Storage encryption strategy for the nodes in this group.
+	// (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+	// The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
 	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
 
 	// (Block Set) Taints for the nodes in this group. (see below for nested schema)
@@ -157,34 +156,33 @@ type KubernetesNodeGroupInitParameters struct {
 
 type KubernetesNodeGroupObservation struct {
 
-	// affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
-	// If set to true, nodes in this group will be placed on separate compute hosts.
-	// Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
+	// affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+	// If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
 	AntiAffinity *bool `json:"antiAffinity,omitempty" tf:"anti_affinity,omitempty"`
 
 	// (String) UUID of the cluster.
 	// UUID of the cluster.
 	Cluster *string `json:"cluster,omitempty" tf:"cluster,omitempty"`
 
-	// (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+	// (Block List) Resource properties for custom plan (see below for nested schema)
 	// Resource properties for custom plan
 	CustomPlan []CustomPlanObservation `json:"customPlan,omitempty" tf:"custom_plan,omitempty"`
 
-	// (String) The ID of this resource.
+	// (String) Computed ID of the node group. This is a combination of the cluster UUID and the node group name, separated with a /.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
 	// Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
 	KubeletArgs []KubeletArgsObservation `json:"kubeletArgs,omitempty" tf:"kubelet_args,omitempty"`
 
-	// value pairs to classify the node group.
-	// Key-value pairs to classify the node group.
+	// value pairs to classify the node_group.
+	// User defined key-value pairs to classify the node_group.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
 	// (Number) Amount of nodes to provision in the node group.
 	// Amount of nodes to provision in the node group.
-	NodeCount *int64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
+	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
 
 	// (String) The server plan used for the node group. You can list available plans with upctl server plans
 	// The server plan used for the node group. You can list available plans with `upctl server plans`
@@ -195,8 +193,8 @@ type KubernetesNodeGroupObservation struct {
 	// +listType=set
 	SSHKeys []*string `json:"sshKeys,omitempty" tf:"ssh_keys,omitempty"`
 
-	// (String) Storage encryption strategy for the nodes in this group.
-	// Storage encryption strategy for the nodes in this group.
+	// (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+	// The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
 	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
 
 	// (Block Set) Taints for the nodes in this group. (see below for nested schema)
@@ -210,9 +208,8 @@ type KubernetesNodeGroupObservation struct {
 
 type KubernetesNodeGroupParameters struct {
 
-	// affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
-	// If set to true, nodes in this group will be placed on separate compute hosts.
-	// Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
+	// affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+	// If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
 	// +kubebuilder:validation:Optional
 	AntiAffinity *bool `json:"antiAffinity,omitempty" tf:"anti_affinity,omitempty"`
 
@@ -230,7 +227,7 @@ type KubernetesNodeGroupParameters struct {
 	// +kubebuilder:validation:Optional
 	ClusterSelector *v1.Selector `json:"clusterSelector,omitempty" tf:"-"`
 
-	// (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+	// (Block List) Resource properties for custom plan (see below for nested schema)
 	// Resource properties for custom plan
 	// +kubebuilder:validation:Optional
 	CustomPlan []CustomPlanParameters `json:"customPlan,omitempty" tf:"custom_plan,omitempty"`
@@ -240,8 +237,8 @@ type KubernetesNodeGroupParameters struct {
 	// +kubebuilder:validation:Optional
 	KubeletArgs []KubeletArgsParameters `json:"kubeletArgs,omitempty" tf:"kubelet_args,omitempty"`
 
-	// value pairs to classify the node group.
-	// Key-value pairs to classify the node group.
+	// value pairs to classify the node_group.
+	// User defined key-value pairs to classify the node_group.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
@@ -249,7 +246,7 @@ type KubernetesNodeGroupParameters struct {
 	// (Number) Amount of nodes to provision in the node group.
 	// Amount of nodes to provision in the node group.
 	// +kubebuilder:validation:Optional
-	NodeCount *int64 `json:"nodeCount" tf:"node_count,omitempty"`
+	NodeCount *float64 `json:"nodeCount" tf:"node_count,omitempty"`
 
 	// (String) The server plan used for the node group. You can list available plans with upctl server plans
 	// The server plan used for the node group. You can list available plans with `upctl server plans`
@@ -262,8 +259,8 @@ type KubernetesNodeGroupParameters struct {
 	// +listType=set
 	SSHKeys []*string `json:"sshKeys,omitempty" tf:"ssh_keys,omitempty"`
 
-	// (String) Storage encryption strategy for the nodes in this group.
-	// Storage encryption strategy for the nodes in this group.
+	// (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+	// The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
 	// +kubebuilder:validation:Optional
 	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
 
@@ -353,7 +350,7 @@ type KubernetesNodeGroupStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// KubernetesNodeGroup is the Schema for the KubernetesNodeGroups API. This resource represents a node group in a Managed Kubernetes cluster.
+// KubernetesNodeGroup is the Schema for the KubernetesNodeGroups API. This resource represents a Managed Kubernetes https://upcloud.com/products/managed-kubernetes cluster.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

@@ -16,7 +16,7 @@ import (
 type RouterInitParameters struct {
 
 	// value pairs to classify the router.
-	// Key-value pairs to classify the router.
+	// User defined key-value pairs to classify the router.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -24,8 +24,8 @@ type RouterInitParameters struct {
 	// Name of the router.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (Block Set) A collection of static routes for this router. (see below for nested schema)
-	// A collection of static routes for this router.
+	// (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+	// A collection of user managed static routes for this router.
 	StaticRoute []StaticRouteInitParameters `json:"staticRoute,omitempty" tf:"static_route,omitempty"`
 }
 
@@ -39,7 +39,7 @@ type RouterObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// value pairs to classify the router.
-	// Key-value pairs to classify the router.
+	// User defined key-value pairs to classify the router.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -47,9 +47,13 @@ type RouterObservation struct {
 	// Name of the router.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (Block Set) A collection of static routes for this router. (see below for nested schema)
-	// A collection of static routes for this router.
+	// (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+	// A collection of user managed static routes for this router.
 	StaticRoute []StaticRouteObservation `json:"staticRoute,omitempty" tf:"static_route,omitempty"`
+
+	// (Set of Object) A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as static_route blocks. (see below for nested schema)
+	// A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as `static_route` blocks.
+	StaticRoutes []StaticRoutesObservation `json:"staticRoutes,omitempty" tf:"static_routes,omitempty"`
 
 	// (String) Type of the router
 	// Type of the router
@@ -59,7 +63,7 @@ type RouterObservation struct {
 type RouterParameters struct {
 
 	// value pairs to classify the router.
-	// Key-value pairs to classify the router.
+	// User defined key-value pairs to classify the router.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Labels map[string]*string `json:"labels" tf:"labels,omitempty"`
@@ -69,8 +73,8 @@ type RouterParameters struct {
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name" tf:"name,omitempty"`
 
-	// (Block Set) A collection of static routes for this router. (see below for nested schema)
-	// A collection of static routes for this router.
+	// (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+	// A collection of user managed static routes for this router.
 	// +kubebuilder:validation:Optional
 	StaticRoute []StaticRouteParameters `json:"staticRoute" tf:"static_route,omitempty"`
 }
@@ -103,6 +107,10 @@ type StaticRouteObservation struct {
 	// (String) Destination prefix of the route.
 	// Destination prefix of the route.
 	Route *string `json:"route,omitempty" tf:"route,omitempty"`
+
+	// (String) Type of the router
+	// Type of the route.
+	Type *string `json:"type,omitempty" tf:"type,omitempty"`
 }
 
 type StaticRouteParameters struct {
@@ -121,6 +129,27 @@ type StaticRouteParameters struct {
 	// Destination prefix of the route.
 	// +kubebuilder:validation:Optional
 	Route *string `json:"route" tf:"route,omitempty"`
+}
+
+type StaticRoutesInitParameters struct {
+}
+
+type StaticRoutesObservation struct {
+
+	// (String) Name of the router.
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// (String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+	Nexthop *string `json:"nexthop,omitempty" tf:"nexthop,omitempty"`
+
+	// (String) Destination prefix of the route.
+	Route *string `json:"route,omitempty" tf:"route,omitempty"`
+
+	// (String) Type of the router
+	Type *string `json:"type,omitempty" tf:"type,omitempty"`
+}
+
+type StaticRoutesParameters struct {
 }
 
 // RouterSpec defines the desired state of Router

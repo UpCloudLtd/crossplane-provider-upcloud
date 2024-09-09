@@ -76,6 +76,14 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -502,6 +510,11 @@ spec:
                                   separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                   Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                 type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
                               method:
                                 description: |-
                                   (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
@@ -612,6 +625,12 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              maxPreparedStatements:
+                                description: |-
+                                  level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+                                  PgBouncer tracks protocol-level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+                                format: int64
+                                type: integer
                               minPoolSize:
                                 description: |-
                                   (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
@@ -771,6 +790,14 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -1197,6 +1224,11 @@ spec:
                                   separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                   Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                 type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
                               method:
                                 description: |-
                                   (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
@@ -1307,6 +1339,12 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              maxPreparedStatements:
+                                description: |-
+                                  level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+                                  PgBouncer tracks protocol-level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+                                format: int64
+                                type: integer
                               minPoolSize:
                                 description: |-
                                   (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
@@ -1680,6 +1718,14 @@ spec:
                   id:
                     description: (String) The ID of this resource.
                     type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -2026,6 +2072,11 @@ spec:
                                   separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                   Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                 type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
                               method:
                                 description: |-
                                   (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
@@ -2117,6 +2168,12 @@ spec:
                                 items:
                                   type: string
                                 type: array
+                              maxPreparedStatements:
+                                description: |-
+                                  level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+                                  PgBouncer tracks protocol-level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+                                format: int64
+                                type: integer
                               minPoolSize:
                                 description: |-
                                   (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.

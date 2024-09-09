@@ -86,6 +86,14 @@ spec:
                       level _mget, _msearch and _bulk APIs. Users are limited to perform operations on indices based on the user-specific access control rules.
                       Grant access to top-level `_mget`, `_msearch` and `_bulk` APIs. Users are limited to perform operations on indices based on the user-specific access control rules.
                     type: boolean
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -347,6 +355,58 @@ spec:
                             (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
                             Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
                           type: boolean
+                        azureMigration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              account:
+                                description: |-
+                                  (String) Account name. Azure account name.
+                                  Account name. Azure account name.
+                                type: string
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              container:
+                                description: |-
+                                  (String) Azure container name. Azure container name.
+                                  Azure container name. Azure container name.
+                                type: string
+                              endpointSuffix:
+                                description: |-
+                                  (String) Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+                                  Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+                                type: string
+                              key:
+                                description: |-
+                                  (String) Account secret key. Azure account secret key. One of key or sas_token should be specified.
+                                  Account secret key. Azure account secret key. One of key or sas_token should be specified.
+                                type: string
+                              sasToken:
+                                description: |-
+                                  (String) SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+                                  SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+                                type: string
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
+                          type: array
                         clusterMaxShardsPerNode:
                           description: |-
                             (Number) Controls the number of shards allowed in the cluster per data node.
@@ -398,6 +458,43 @@ spec:
                             (Boolean) Enable/Disable security audit.
                             Enable/Disable security audit.
                           type: boolean
+                        gcsMigration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              bucket:
+                                description: |-
+                                  (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+                                  The path to the repository data within its container. Google Cloud Storage bucket name.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              credentials:
+                                description: |-
+                                  (String) Credentials. Google Cloud Storage credentials file content.
+                                  Credentials. Google Cloud Storage credentials file content.
+                                type: string
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
+                          type: array
                         httpMaxContentLength:
                           description: |-
                             (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
@@ -422,6 +519,41 @@ spec:
                             Index patterns.
                           items:
                             type: string
+                          type: array
+                        indexRollup:
+                          description: |-
+                            (Block List, Max: 1) Index rollup settings. (see below for nested schema)
+                            Index rollup settings.
+                          items:
+                            properties:
+                              rollupDashboardsEnabled:
+                                description: |-
+                                  (Boolean) plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+                                  plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+                                type: boolean
+                              rollupEnabled:
+                                description: |-
+                                  (Boolean) plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+                                  plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+                                type: boolean
+                              rollupSearchBackoffCount:
+                                description: |-
+                                  (Number) plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+                                  plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+                                format: int64
+                                type: integer
+                              rollupSearchBackoffMillis:
+                                description: |-
+                                  (Number) plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+                                  plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+                                format: int64
+                                type: integer
+                              rollupSearchSearchAllJobs:
+                                description: |-
+                                  (Boolean) plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+                                  plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+                                type: boolean
+                            type: object
                           type: array
                         indexTemplate:
                           description: |-
@@ -543,6 +675,17 @@ spec:
                             (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                             Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                           type: boolean
+                        knnMemoryCircuitBreakerEnabled:
+                          description: |-
+                            (Boolean) Enable or disable KNN memory circuit breaker. Defaults to true.
+                            Enable or disable KNN memory circuit breaker. Defaults to true.
+                          type: boolean
+                        knnMemoryCircuitBreakerLimit:
+                          description: |-
+                            (Number) Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+                            Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+                          format: int64
+                          type: integer
                         openid:
                           description: |-
                             (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
@@ -659,6 +802,63 @@ spec:
                             Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
                           items:
                             type: string
+                          type: array
+                        s3Migration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              accessKey:
+                                description: |-
+                                  (String) AWS Access key. AWS Access key.
+                                  AWS Access key. AWS Access key.
+                                type: string
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              bucket:
+                                description: |-
+                                  (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+                                  S3 bucket name. S3 bucket name.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              endpoint:
+                                description: |-
+                                  compatible service then you should set this to the service’s endpoint.
+                                  The S3 service endpoint to connect. The S3 service endpoint to connect to. If you are using an S3-compatible service then you should set this to the service’s endpoint.
+                                type: string
+                              region:
+                                description: |-
+                                  (String) S3 region. S3 region.
+                                  S3 region. S3 region.
+                                type: string
+                              secretKey:
+                                description: |-
+                                  (String) AWS secret key. AWS secret key.
+                                  AWS secret key. AWS secret key.
+                                type: string
+                              serverSideEncryption:
+                                description: |-
+                                  (Boolean) Server side encryption. When set to true files are encrypted on server side.
+                                  Server side encryption. When set to true files are encrypted on server side.
+                                type: boolean
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
                           type: array
                         saml:
                           description: |-
@@ -826,6 +1026,14 @@ spec:
                       level _mget, _msearch and _bulk APIs. Users are limited to perform operations on indices based on the user-specific access control rules.
                       Grant access to top-level `_mget`, `_msearch` and `_bulk` APIs. Users are limited to perform operations on indices based on the user-specific access control rules.
                     type: boolean
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -1087,6 +1295,58 @@ spec:
                             (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
                             Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
                           type: boolean
+                        azureMigration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              account:
+                                description: |-
+                                  (String) Account name. Azure account name.
+                                  Account name. Azure account name.
+                                type: string
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              container:
+                                description: |-
+                                  (String) Azure container name. Azure container name.
+                                  Azure container name. Azure container name.
+                                type: string
+                              endpointSuffix:
+                                description: |-
+                                  (String) Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+                                  Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+                                type: string
+                              key:
+                                description: |-
+                                  (String) Account secret key. Azure account secret key. One of key or sas_token should be specified.
+                                  Account secret key. Azure account secret key. One of key or sas_token should be specified.
+                                type: string
+                              sasToken:
+                                description: |-
+                                  (String) SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+                                  SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+                                type: string
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
+                          type: array
                         clusterMaxShardsPerNode:
                           description: |-
                             (Number) Controls the number of shards allowed in the cluster per data node.
@@ -1138,6 +1398,43 @@ spec:
                             (Boolean) Enable/Disable security audit.
                             Enable/Disable security audit.
                           type: boolean
+                        gcsMigration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              bucket:
+                                description: |-
+                                  (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+                                  The path to the repository data within its container. Google Cloud Storage bucket name.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              credentials:
+                                description: |-
+                                  (String) Credentials. Google Cloud Storage credentials file content.
+                                  Credentials. Google Cloud Storage credentials file content.
+                                type: string
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
+                          type: array
                         httpMaxContentLength:
                           description: |-
                             (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
@@ -1162,6 +1459,41 @@ spec:
                             Index patterns.
                           items:
                             type: string
+                          type: array
+                        indexRollup:
+                          description: |-
+                            (Block List, Max: 1) Index rollup settings. (see below for nested schema)
+                            Index rollup settings.
+                          items:
+                            properties:
+                              rollupDashboardsEnabled:
+                                description: |-
+                                  (Boolean) plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+                                  plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+                                type: boolean
+                              rollupEnabled:
+                                description: |-
+                                  (Boolean) plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+                                  plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+                                type: boolean
+                              rollupSearchBackoffCount:
+                                description: |-
+                                  (Number) plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+                                  plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+                                format: int64
+                                type: integer
+                              rollupSearchBackoffMillis:
+                                description: |-
+                                  (Number) plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+                                  plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+                                format: int64
+                                type: integer
+                              rollupSearchSearchAllJobs:
+                                description: |-
+                                  (Boolean) plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+                                  plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+                                type: boolean
+                            type: object
                           type: array
                         indexTemplate:
                           description: |-
@@ -1283,6 +1615,17 @@ spec:
                             (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                             Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                           type: boolean
+                        knnMemoryCircuitBreakerEnabled:
+                          description: |-
+                            (Boolean) Enable or disable KNN memory circuit breaker. Defaults to true.
+                            Enable or disable KNN memory circuit breaker. Defaults to true.
+                          type: boolean
+                        knnMemoryCircuitBreakerLimit:
+                          description: |-
+                            (Number) Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+                            Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+                          format: int64
+                          type: integer
                         openid:
                           description: |-
                             (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
@@ -1399,6 +1742,63 @@ spec:
                             Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
                           items:
                             type: string
+                          type: array
+                        s3Migration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              accessKey:
+                                description: |-
+                                  (String) AWS Access key. AWS Access key.
+                                  AWS Access key. AWS Access key.
+                                type: string
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              bucket:
+                                description: |-
+                                  (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+                                  S3 bucket name. S3 bucket name.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              endpoint:
+                                description: |-
+                                  compatible service then you should set this to the service’s endpoint.
+                                  The S3 service endpoint to connect. The S3 service endpoint to connect to. If you are using an S3-compatible service then you should set this to the service’s endpoint.
+                                type: string
+                              region:
+                                description: |-
+                                  (String) S3 region. S3 region.
+                                  S3 region. S3 region.
+                                type: string
+                              secretKey:
+                                description: |-
+                                  (String) AWS secret key. AWS secret key.
+                                  AWS secret key. AWS secret key.
+                                type: string
+                              serverSideEncryption:
+                                description: |-
+                                  (Boolean) Server side encryption. When set to true files are encrypted on server side.
+                                  Server side encryption. When set to true files are encrypted on server side.
+                                type: boolean
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
                           type: array
                         saml:
                           description: |-
@@ -1780,6 +2180,14 @@ spec:
                   id:
                     description: (String) The ID of this resource.
                     type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -1980,6 +2388,58 @@ spec:
                             (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
                             Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
                           type: boolean
+                        azureMigration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              account:
+                                description: |-
+                                  (String) Account name. Azure account name.
+                                  Account name. Azure account name.
+                                type: string
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              container:
+                                description: |-
+                                  (String) Azure container name. Azure container name.
+                                  Azure container name. Azure container name.
+                                type: string
+                              endpointSuffix:
+                                description: |-
+                                  (String) Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+                                  Endpoint suffix. Defines the DNS suffix for Azure Storage endpoints.
+                                type: string
+                              key:
+                                description: |-
+                                  (String) Account secret key. Azure account secret key. One of key or sas_token should be specified.
+                                  Account secret key. Azure account secret key. One of key or sas_token should be specified.
+                                type: string
+                              sasToken:
+                                description: |-
+                                  (String) SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+                                  SAS token. A shared access signatures (SAS) token. One of key or sas_token should be specified.
+                                type: string
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
+                          type: array
                         clusterMaxShardsPerNode:
                           description: |-
                             (Number) Controls the number of shards allowed in the cluster per data node.
@@ -2012,6 +2472,43 @@ spec:
                             (Boolean) Enable/Disable security audit.
                             Enable/Disable security audit.
                           type: boolean
+                        gcsMigration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              bucket:
+                                description: |-
+                                  (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+                                  The path to the repository data within its container. Google Cloud Storage bucket name.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              credentials:
+                                description: |-
+                                  (String) Credentials. Google Cloud Storage credentials file content.
+                                  Credentials. Google Cloud Storage credentials file content.
+                                type: string
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
+                          type: array
                         httpMaxContentLength:
                           description: |-
                             (Number) Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
@@ -2036,6 +2533,41 @@ spec:
                             Index patterns.
                           items:
                             type: string
+                          type: array
+                        indexRollup:
+                          description: |-
+                            (Block List, Max: 1) Index rollup settings. (see below for nested schema)
+                            Index rollup settings.
+                          items:
+                            properties:
+                              rollupDashboardsEnabled:
+                                description: |-
+                                  (Boolean) plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+                                  plugins.rollup.dashboards.enabled. Whether rollups are enabled in OpenSearch Dashboards. Defaults to true.
+                                type: boolean
+                              rollupEnabled:
+                                description: |-
+                                  (Boolean) plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+                                  plugins.rollup.enabled. Whether the rollup plugin is enabled. Defaults to true.
+                                type: boolean
+                              rollupSearchBackoffCount:
+                                description: |-
+                                  (Number) plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+                                  plugins.rollup.search.backoff_count. How many retries the plugin should attempt for failed rollup jobs. Defaults to 5.
+                                format: int64
+                                type: integer
+                              rollupSearchBackoffMillis:
+                                description: |-
+                                  (Number) plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+                                  plugins.rollup.search.backoff_millis. The backoff time between retries for failed rollup jobs. Defaults to 1000ms.
+                                format: int64
+                                type: integer
+                              rollupSearchSearchAllJobs:
+                                description: |-
+                                  (Boolean) plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+                                  plugins.rollup.search.all_jobs. Whether OpenSearch should return all jobs that match all specified search terms. If disabled, OpenSearch returns just one, as opposed to all, of the jobs that matches the search terms. Defaults to false.
+                                type: boolean
+                            type: object
                           type: array
                         indexTemplate:
                           description: |-
@@ -2157,6 +2689,17 @@ spec:
                             (Boolean) Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                             Don't reset index.refresh_interval to the default value. Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
                           type: boolean
+                        knnMemoryCircuitBreakerEnabled:
+                          description: |-
+                            (Boolean) Enable or disable KNN memory circuit breaker. Defaults to true.
+                            Enable or disable KNN memory circuit breaker. Defaults to true.
+                          type: boolean
+                        knnMemoryCircuitBreakerLimit:
+                          description: |-
+                            (Number) Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+                            Maximum amount of memory that can be used for KNN index. Defaults to 50% of the JVM heap size.
+                          format: int64
+                          type: integer
                         openid:
                           description: |-
                             (Block List, Max: 1) OpenSearch OpenID Connect Configuration. (see below for nested schema)
@@ -2273,6 +2816,63 @@ spec:
                             Whitelisted addresses for reindexing. Changing this value will cause all OpenSearch instances to restart.
                           items:
                             type: string
+                          type: array
+                        s3Migration:
+                          description: '(Block List, Max: 1) (see below for nested
+                            schema)'
+                          items:
+                            properties:
+                              accessKey:
+                                description: |-
+                                  (String) AWS Access key. AWS Access key.
+                                  AWS Access key. AWS Access key.
+                                type: string
+                              basePath:
+                                description: |-
+                                  (String) The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                  The path to the repository data within its container. The path to the repository data within its container. The value of this setting should not start or end with a /.
+                                type: string
+                              bucket:
+                                description: |-
+                                  (String) The path to the repository data within its container. Google Cloud Storage bucket name.
+                                  S3 bucket name. S3 bucket name.
+                                type: string
+                              chunkSize:
+                                description: |-
+                                  (String) Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                  Chunk size. Big files can be broken down into chunks during snapshotting if needed. Should be the same as for the 3rd party repository.
+                                type: string
+                              compress:
+                                description: |-
+                                  (Boolean) Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                  Metadata files are stored in compressed format. when set to true metadata files are stored in compressed format.
+                                type: boolean
+                              endpoint:
+                                description: |-
+                                  compatible service then you should set this to the service’s endpoint.
+                                  The S3 service endpoint to connect. The S3 service endpoint to connect to. If you are using an S3-compatible service then you should set this to the service’s endpoint.
+                                type: string
+                              region:
+                                description: |-
+                                  (String) S3 region. S3 region.
+                                  S3 region. S3 region.
+                                type: string
+                              secretKey:
+                                description: |-
+                                  (String) AWS secret key. AWS secret key.
+                                  AWS secret key. AWS secret key.
+                                type: string
+                              serverSideEncryption:
+                                description: |-
+                                  (Boolean) Server side encryption. When set to true files are encrypted on server side.
+                                  Server side encryption. When set to true files are encrypted on server side.
+                                type: boolean
+                              snapshotName:
+                                description: |-
+                                  (String) The snapshot name to restore from. The snapshot name to restore from.
+                                  The snapshot name to restore from. The snapshot name to restore from.
+                                type: string
+                            type: object
                           type: array
                         saml:
                           description: |-

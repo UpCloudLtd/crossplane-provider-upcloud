@@ -87,7 +87,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the cluster.
-                      Key-value pairs to classify the cluster.
+                      User defined key-value pairs to classify the cluster.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -226,7 +226,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the cluster.
-                      Key-value pairs to classify the cluster.
+                      User defined key-value pairs to classify the cluster.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -544,7 +544,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the cluster.
-                      Key-value pairs to classify the cluster.
+                      User defined key-value pairs to classify the cluster.
                     type: object
                     x-kubernetes-map-type: granular
                   name:

@@ -45,7 +45,7 @@ type ManagedObjectStorageInitParameters struct {
 	ConfiguredStatus *string `json:"configuredStatus,omitempty" tf:"configured_status,omitempty"`
 
 	// value pairs to classify the managed object storage.
-	// Key-value pairs to classify the managed object storage.
+	// User defined key-value pairs to classify the managed object storage.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -80,7 +80,7 @@ type ManagedObjectStorageObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// value pairs to classify the managed object storage.
-	// Key-value pairs to classify the managed object storage.
+	// User defined key-value pairs to classify the managed object storage.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -113,7 +113,7 @@ type ManagedObjectStorageParameters struct {
 	ConfiguredStatus *string `json:"configuredStatus" tf:"configured_status,omitempty"`
 
 	// value pairs to classify the managed object storage.
-	// Key-value pairs to classify the managed object storage.
+	// User defined key-value pairs to classify the managed object storage.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`

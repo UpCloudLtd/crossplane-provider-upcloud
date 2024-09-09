@@ -18,17 +18,17 @@ func (in *CustomPlanInitParameters) DeepCopyInto(out *CustomPlanInitParameters) 
 	*out = *in
 	if in.Cores != nil {
 		in, out := &in.Cores, &out.Cores
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Memory != nil {
 		in, out := &in.Memory, &out.Memory
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.StorageSize != nil {
 		in, out := &in.StorageSize, &out.StorageSize
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.StorageTier != nil {
@@ -53,17 +53,17 @@ func (in *CustomPlanObservation) DeepCopyInto(out *CustomPlanObservation) {
 	*out = *in
 	if in.Cores != nil {
 		in, out := &in.Cores, &out.Cores
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Memory != nil {
 		in, out := &in.Memory, &out.Memory
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.StorageSize != nil {
 		in, out := &in.StorageSize, &out.StorageSize
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.StorageTier != nil {
@@ -88,17 +88,17 @@ func (in *CustomPlanParameters) DeepCopyInto(out *CustomPlanParameters) {
 	*out = *in
 	if in.Cores != nil {
 		in, out := &in.Cores, &out.Cores
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Memory != nil {
 		in, out := &in.Memory, &out.Memory
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.StorageSize != nil {
 		in, out := &in.StorageSize, &out.StorageSize
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.StorageTier != nil {
@@ -631,7 +631,7 @@ func (in *KubernetesNodeGroupInitParameters) DeepCopyInto(out *KubernetesNodeGro
 	}
 	if in.NodeCount != nil {
 		in, out := &in.NodeCount, &out.NodeCount
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Plan != nil {
@@ -761,7 +761,7 @@ func (in *KubernetesNodeGroupObservation) DeepCopyInto(out *KubernetesNodeGroupO
 	}
 	if in.NodeCount != nil {
 		in, out := &in.NodeCount, &out.NodeCount
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Plan != nil {
@@ -864,7 +864,7 @@ func (in *KubernetesNodeGroupParameters) DeepCopyInto(out *KubernetesNodeGroupPa
 	}
 	if in.NodeCount != nil {
 		in, out := &in.NodeCount, &out.NodeCount
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Plan != nil {

@@ -81,8 +81,8 @@ spec:
                     type: string
                   document:
                     description: |-
-                      encoded compliant with RFC 3986.
-                      Policy document, URL-encoded compliant with RFC 3986.
+                      encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
+                      Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
                     type: string
                   serviceUuid:
                     description: |-
@@ -186,8 +186,8 @@ spec:
                     type: string
                   document:
                     description: |-
-                      encoded compliant with RFC 3986.
-                      Policy document, URL-encoded compliant with RFC 3986.
+                      encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
+                      Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
                     type: string
                 type: object
               managementPolicies:
@@ -377,8 +377,7 @@ spec:
                     description: |-
                       (Number) Attachment count.
                       Attachment count.
-                    format: int64
-                    type: integer
+                    type: number
                   createdAt:
                     description: |-
                       (String) Creation time.
@@ -396,11 +395,12 @@ spec:
                     type: string
                   document:
                     description: |-
-                      encoded compliant with RFC 3986.
-                      Policy document, URL-encoded compliant with RFC 3986.
+                      encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
+                      Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
                     type: string
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) ID of the policy. ID is in {object storage
+                      UUID}/{policy name} format.
                     type: string
                   serviceUuid:
                     description: |-

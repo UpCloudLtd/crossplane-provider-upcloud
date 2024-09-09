@@ -9,12 +9,13 @@ import (
 // SDKResources is a list of all supported server resources implemented with Terraform legacy SDKv2.
 var SDKResources = []string{
 	"upcloud_server",
-	"upcloud_server_group",
 	"upcloud_firewall_rules",
 }
 
 // PluginFrameworkResources is a list of all supported server resources implemented with Terraform Plugin Framework.
-var PluginFrameworkResources = []string{}
+var PluginFrameworkResources = []string{
+	"upcloud_server_group",
+}
 
 // AllResources is a list of all supported server resources.
 var AllResources = append(SDKResources, PluginFrameworkResources...)

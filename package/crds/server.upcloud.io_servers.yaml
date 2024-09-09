@@ -105,7 +105,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the server.
-                      Key-value pairs to classify the server.
+                      User defined key-value pairs to classify the server.
                     type: object
                     x-kubernetes-map-type: granular
                   login:
@@ -447,10 +447,11 @@ spec:
                           type: string
                         backupRule:
                           description: |-
-                            (see below for nested schema)
-                            The criteria to backup the storage
-                            Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-                            Such configurations will throw errors during execution.
+                            (Block List, Max: 1) The criteria to backup the storage.
+                            The criteria to backup the storage.
+
+
+                            Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                           items:
                             properties:
                               interval:
@@ -581,7 +582,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the server.
-                      Key-value pairs to classify the server.
+                      User defined key-value pairs to classify the server.
                     type: object
                     x-kubernetes-map-type: granular
                   login:
@@ -923,10 +924,11 @@ spec:
                           type: string
                         backupRule:
                           description: |-
-                            (see below for nested schema)
-                            The criteria to backup the storage
-                            Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-                            Such configurations will throw errors during execution.
+                            (Block List, Max: 1) The criteria to backup the storage.
+                            The criteria to backup the storage.
+
+
+                            Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                           items:
                             properties:
                               interval:
@@ -1232,7 +1234,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the server.
-                      Key-value pairs to classify the server.
+                      User defined key-value pairs to classify the server.
                     type: object
                     x-kubernetes-map-type: granular
                   login:
@@ -1437,10 +1439,11 @@ spec:
                           type: string
                         backupRule:
                           description: |-
-                            (see below for nested schema)
-                            The criteria to backup the storage
-                            Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-                            Such configurations will throw errors during execution.
+                            (Block List, Max: 1) The criteria to backup the storage.
+                            The criteria to backup the storage.
+
+
+                            Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                           items:
                             properties:
                               interval:

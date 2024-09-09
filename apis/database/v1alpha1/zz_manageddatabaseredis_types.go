@@ -44,6 +44,11 @@ type ManagedDatabaseRedisComponentsParameters struct {
 
 type ManagedDatabaseRedisInitParameters struct {
 
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	MaintenanceWindowDow *string `json:"maintenanceWindowDow,omitempty" tf:"maintenance_window_dow,omitempty"`
@@ -203,6 +208,11 @@ type ManagedDatabaseRedisObservation struct {
 	// (String) The ID of this resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	MaintenanceWindowDow *string `json:"maintenanceWindowDow,omitempty" tf:"maintenance_window_dow,omitempty"`
@@ -269,6 +279,12 @@ type ManagedDatabaseRedisObservation struct {
 }
 
 type ManagedDatabaseRedisParameters struct {
+
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -406,6 +422,10 @@ type ManagedDatabaseRedisPropertiesMigrationInitParameters struct {
 	// Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
 	IgnoreDbs *string `json:"ignoreDbs,omitempty" tf:"ignore_dbs,omitempty"`
 
+	// separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	// Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	IgnoreRoles *string `json:"ignoreRoles,omitempty" tf:"ignore_roles,omitempty"`
+
 	// (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	Method *string `json:"method,omitempty" tf:"method,omitempty"`
@@ -441,6 +461,10 @@ type ManagedDatabaseRedisPropertiesMigrationObservation struct {
 	// Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
 	IgnoreDbs *string `json:"ignoreDbs,omitempty" tf:"ignore_dbs,omitempty"`
 
+	// separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	// Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	IgnoreRoles *string `json:"ignoreRoles,omitempty" tf:"ignore_roles,omitempty"`
+
 	// (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	Method *string `json:"method,omitempty" tf:"method,omitempty"`
@@ -474,6 +498,11 @@ type ManagedDatabaseRedisPropertiesMigrationParameters struct {
 	// Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
 	// +kubebuilder:validation:Optional
 	IgnoreDbs *string `json:"ignoreDbs,omitempty" tf:"ignore_dbs,omitempty"`
+
+	// separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	// Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	// +kubebuilder:validation:Optional
+	IgnoreRoles *string `json:"ignoreRoles,omitempty" tf:"ignore_roles,omitempty"`
 
 	// (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
