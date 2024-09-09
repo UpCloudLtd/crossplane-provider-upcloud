@@ -22,7 +22,7 @@ func (in *BackupRuleInitParameters) DeepCopyInto(out *BackupRuleInitParameters) 
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -52,7 +52,7 @@ func (in *BackupRuleObservation) DeepCopyInto(out *BackupRuleObservation) {
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -82,7 +82,7 @@ func (in *BackupRuleParameters) DeepCopyInto(out *BackupRuleParameters) {
 	}
 	if in.Retention != nil {
 		in, out := &in.Retention, &out.Retention
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Time != nil {
@@ -217,7 +217,7 @@ func (in *ImportObservation) DeepCopyInto(out *ImportObservation) {
 	}
 	if in.WrittenBytes != nil {
 		in, out := &in.WrittenBytes, &out.WrittenBytes
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 }
@@ -328,9 +328,25 @@ func (in *StorageInitParameters) DeepCopyInto(out *StorageInitParameters) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.Labels != nil {
+		in, out := &in.Labels, &out.Labels
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Tier != nil {
@@ -436,10 +452,42 @@ func (in *StorageObservation) DeepCopyInto(out *StorageObservation) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.Labels != nil {
+		in, out := &in.Labels, &out.Labels
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
+	}
+	if in.SystemLabels != nil {
+		in, out := &in.SystemLabels, &out.SystemLabels
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
 	}
 	if in.Tier != nil {
 		in, out := &in.Tier, &out.Tier
@@ -448,6 +496,11 @@ func (in *StorageObservation) DeepCopyInto(out *StorageObservation) {
 	}
 	if in.Title != nil {
 		in, out := &in.Title, &out.Title
+		*out = new(string)
+		**out = **in
+	}
+	if in.Type != nil {
+		in, out := &in.Type, &out.Type
 		*out = new(string)
 		**out = **in
 	}
@@ -507,9 +560,25 @@ func (in *StorageParameters) DeepCopyInto(out *StorageParameters) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.Labels != nil {
+		in, out := &in.Labels, &out.Labels
+		*out = make(map[string]*string, len(*in))
+		for key, val := range *in {
+			var outVal *string
+			if val == nil {
+				(*out)[key] = nil
+			} else {
+				inVal := (*in)[key]
+				in, out := &inVal, &outVal
+				*out = new(string)
+				**out = **in
+			}
+			(*out)[key] = outVal
+		}
+	}
 	if in.Size != nil {
 		in, out := &in.Size, &out.Size
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.Tier != nil {

@@ -310,7 +310,7 @@ type ServerInitParameters struct {
 	Hostname *string `json:"hostname,omitempty" tf:"hostname,omitempty"`
 
 	// value pairs to classify the server.
-	// Key-value pairs to classify the server.
+	// User defined key-value pairs to classify the server.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -409,7 +409,7 @@ type ServerObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// value pairs to classify the server.
-	// Key-value pairs to classify the server.
+	// User defined key-value pairs to classify the server.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -510,7 +510,7 @@ type ServerParameters struct {
 	Hostname *string `json:"hostname" tf:"hostname,omitempty"`
 
 	// value pairs to classify the server.
-	// Key-value pairs to classify the server.
+	// User defined key-value pairs to classify the server.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
@@ -724,10 +724,10 @@ type TemplateInitParameters struct {
 	// The device position in the given bus (defined via field `address`). For example `0:0`, or `0`. Leave empty to auto-select next available address in the given bus.
 	AddressPosition *string `json:"addressPosition,omitempty" tf:"address_position,omitempty"`
 
-	// (see below for nested schema)
-	// The criteria to backup the storage
-	// Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-	// Such configurations will throw errors during execution.
+	// (Block List, Max: 1) The criteria to backup the storage.
+	// The criteria to backup the storage.
+	//
+	// Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
 	BackupRule []BackupRuleInitParameters `json:"backupRule,omitempty" tf:"backup_rule,omitempty"`
 
 	// (Boolean) If set to true, the backup taken before the partition and filesystem resize attempt will be deleted immediately after success.
@@ -771,10 +771,10 @@ type TemplateObservation struct {
 	// The device position in the given bus (defined via field `address`). For example `0:0`, or `0`. Leave empty to auto-select next available address in the given bus.
 	AddressPosition *string `json:"addressPosition,omitempty" tf:"address_position,omitempty"`
 
-	// (see below for nested schema)
-	// The criteria to backup the storage
-	// Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-	// Such configurations will throw errors during execution.
+	// (Block List, Max: 1) The criteria to backup the storage.
+	// The criteria to backup the storage.
+	//
+	// Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
 	BackupRule []BackupRuleObservation `json:"backupRule,omitempty" tf:"backup_rule,omitempty"`
 
 	// (Boolean) If set to true, the backup taken before the partition and filesystem resize attempt will be deleted immediately after success.
@@ -828,10 +828,10 @@ type TemplateParameters struct {
 	// +kubebuilder:validation:Optional
 	AddressPosition *string `json:"addressPosition,omitempty" tf:"address_position,omitempty"`
 
-	// (see below for nested schema)
-	// The criteria to backup the storage
-	// Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-	// Such configurations will throw errors during execution.
+	// (Block List, Max: 1) The criteria to backup the storage.
+	// The criteria to backup the storage.
+	//
+	// Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
 	// +kubebuilder:validation:Optional
 	BackupRule []BackupRuleParameters `json:"backupRule,omitempty" tf:"backup_rule,omitempty"`
 

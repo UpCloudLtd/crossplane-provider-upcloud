@@ -84,7 +84,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the managed object storage.
-                      Key-value pairs to classify the managed object storage.
+                      User defined key-value pairs to classify the managed object storage.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -149,7 +149,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the managed object storage.
-                      Key-value pairs to classify the managed object storage.
+                      User defined key-value pairs to classify the managed object storage.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -423,7 +423,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the managed object storage.
-                      Key-value pairs to classify the managed object storage.
+                      User defined key-value pairs to classify the managed object storage.
                     type: object
                     x-kubernetes-map-type: granular
                   name:

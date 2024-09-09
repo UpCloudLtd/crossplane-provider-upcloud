@@ -19,8 +19,8 @@ type ManagedObjectStoragePolicyInitParameters struct {
 	// Description of the policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// encoded compliant with RFC 3986.
-	// Policy document, URL-encoded compliant with RFC 3986.
+	// encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
+	// Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
 	Document *string `json:"document,omitempty" tf:"document,omitempty"`
 }
 
@@ -32,7 +32,7 @@ type ManagedObjectStoragePolicyObservation struct {
 
 	// (Number) Attachment count.
 	// Attachment count.
-	AttachmentCount *int64 `json:"attachmentCount,omitempty" tf:"attachment_count,omitempty"`
+	AttachmentCount *float64 `json:"attachmentCount,omitempty" tf:"attachment_count,omitempty"`
 
 	// (String) Creation time.
 	// Creation time.
@@ -46,11 +46,11 @@ type ManagedObjectStoragePolicyObservation struct {
 	// Description of the policy.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// encoded compliant with RFC 3986.
-	// Policy document, URL-encoded compliant with RFC 3986.
+	// encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
+	// Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
 	Document *string `json:"document,omitempty" tf:"document,omitempty"`
 
-	// (String) The ID of this resource.
+	// (String) ID of the policy. ID is in {object storage UUID}/{policy name} format.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// (String) Managed Object Storage service UUID.
@@ -73,8 +73,8 @@ type ManagedObjectStoragePolicyParameters struct {
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// encoded compliant with RFC 3986.
-	// Policy document, URL-encoded compliant with RFC 3986.
+	// encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
+	// Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
 	// +kubebuilder:validation:Optional
 	Document *string `json:"document" tf:"document,omitempty"`
 

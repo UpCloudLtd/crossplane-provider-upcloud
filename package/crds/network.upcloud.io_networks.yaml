@@ -128,7 +128,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the network.
-                      Key-value pairs to classify the network.
+                      User defined key-value pairs to classify the network.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -288,7 +288,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the network.
-                      Key-value pairs to classify the network.
+                      User defined key-value pairs to classify the network.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
@@ -619,7 +619,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the network.
-                      Key-value pairs to classify the network.
+                      User defined key-value pairs to classify the network.
                     type: object
                     x-kubernetes-map-type: granular
                   name:

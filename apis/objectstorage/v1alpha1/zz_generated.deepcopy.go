@@ -417,7 +417,7 @@ func (in *ManagedObjectStoragePolicyObservation) DeepCopyInto(out *ManagedObject
 	}
 	if in.AttachmentCount != nil {
 		in, out := &in.AttachmentCount, &out.AttachmentCount
-		*out = new(int64)
+		*out = new(float64)
 		**out = **in
 	}
 	if in.CreatedAt != nil {

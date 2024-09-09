@@ -4,13 +4,13 @@ go 1.21
 
 require (
 	dario.cat/mergo v1.0.0
-	github.com/UpCloudLtd/terraform-provider-upcloud v0.0.0-20240702135255-a22e42b135e9
+	github.com/UpCloudLtd/terraform-provider-upcloud v0.0.0-20240821080234-b12c4f98f28a
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/crossplane/crossplane-runtime v1.16.0-rc.1.0.20240424114634-8641eb2ba384
 	github.com/crossplane/crossplane-tools v0.0.0-20230925130601-628280f8bf79
 	github.com/crossplane/upjet v1.4.1
-	github.com/hashicorp/terraform-plugin-framework v1.7.0
-	github.com/hashicorp/terraform-plugin-go v0.22.1
+	github.com/hashicorp/terraform-plugin-framework v1.11.0
+	github.com/hashicorp/terraform-plugin-go v0.23.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.33.0
 	github.com/pkg/errors v0.9.1
 	k8s.io/apimachinery v0.29.1
@@ -22,7 +22,7 @@ require (
 replace github.com/crossplane/upjet v1.4.1 => github.com/UpCloudLtd/upjet v0.0.0-20240702100100-462c160de63c
 
 require (
-	github.com/UpCloudLtd/upcloud-go-api/v8 v8.6.0 // indirect
+	github.com/UpCloudLtd/upcloud-go-api/v8 v8.7.1 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect

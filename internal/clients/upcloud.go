@@ -76,7 +76,7 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string, prov
 		}
 
 		// This configures the SDKv2 provider so that it knows how to get credentials and such
-		diag := provider.TerraformProvider.Configure(context.TODO(), &terraformsdk.ResourceConfig{
+		diag := provider.TerraformProvider.Configure(ctx, &terraformsdk.ResourceConfig{
 			Config: ps.Configuration,
 		})
 
@@ -88,10 +88,10 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string, prov
 
 		// This configures the Plugin Framework provider
 		schemaResponse := &terraformframework.SchemaResponse{}
-		provider.TerraformPluginFrameworkProvider.Schema(context.TODO(), terraformframework.SchemaRequest{}, schemaResponse)
+		provider.TerraformPluginFrameworkProvider.Schema(ctx, terraformframework.SchemaRequest{}, schemaResponse)
 
 		provider.TerraformPluginFrameworkProvider.Configure(
-			context.TODO(),
+			ctx,
 			terraformframework.ConfigureRequest{
 				TerraformVersion: version,
 				Config: tfsdk.Config{

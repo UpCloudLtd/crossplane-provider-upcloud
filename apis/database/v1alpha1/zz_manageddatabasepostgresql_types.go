@@ -44,6 +44,11 @@ type ManagedDatabasePostgresqlComponentsParameters struct {
 
 type ManagedDatabasePostgresqlInitParameters struct {
 
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	MaintenanceWindowDow *string `json:"maintenanceWindowDow,omitempty" tf:"maintenance_window_dow,omitempty"`
@@ -203,6 +208,11 @@ type ManagedDatabasePostgresqlObservation struct {
 	// (String) The ID of this resource.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	MaintenanceWindowDow *string `json:"maintenanceWindowDow,omitempty" tf:"maintenance_window_dow,omitempty"`
@@ -273,6 +283,12 @@ type ManagedDatabasePostgresqlObservation struct {
 }
 
 type ManagedDatabasePostgresqlParameters struct {
+
+	// value pairs to classify the managed database.
+	// User defined key-value pairs to classify the managed database.
+	// +kubebuilder:validation:Optional
+	// +mapType=granular
+	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
 	// (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
 	// Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -1223,6 +1239,10 @@ type PgbouncerInitParameters struct {
 	// List of parameters to ignore when given in startup packet.
 	IgnoreStartupParameters []*string `json:"ignoreStartupParameters,omitempty" tf:"ignore_startup_parameters,omitempty"`
 
+	// level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+	// PgBouncer tracks protocol-level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+	MaxPreparedStatements *int64 `json:"maxPreparedStatements,omitempty" tf:"max_prepared_statements,omitempty"`
+
 	// (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
 	// Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
 	MinPoolSize *int64 `json:"minPoolSize,omitempty" tf:"min_pool_size,omitempty"`
@@ -1261,6 +1281,10 @@ type PgbouncerObservation struct {
 	// (List of String) List of parameters to ignore when given in startup packet.
 	// List of parameters to ignore when given in startup packet.
 	IgnoreStartupParameters []*string `json:"ignoreStartupParameters,omitempty" tf:"ignore_startup_parameters,omitempty"`
+
+	// level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+	// PgBouncer tracks protocol-level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+	MaxPreparedStatements *int64 `json:"maxPreparedStatements,omitempty" tf:"max_prepared_statements,omitempty"`
 
 	// (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
 	// Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
@@ -1305,6 +1329,11 @@ type PgbouncerParameters struct {
 	// List of parameters to ignore when given in startup packet.
 	// +kubebuilder:validation:Optional
 	IgnoreStartupParameters []*string `json:"ignoreStartupParameters,omitempty" tf:"ignore_startup_parameters,omitempty"`
+
+	// level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+	// PgBouncer tracks protocol-level named prepared statements related commands sent by the client in transaction and statement pooling modes when max_prepared_statements is set to a non-zero value. Setting it to 0 disables prepared statements. max_prepared_statements defaults to 100, and its maximum is 3000.
+	// +kubebuilder:validation:Optional
+	MaxPreparedStatements *int64 `json:"maxPreparedStatements,omitempty" tf:"max_prepared_statements,omitempty"`
 
 	// (Number) Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
 	// Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
@@ -1363,6 +1392,10 @@ type PropertiesMigrationInitParameters struct {
 	// Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
 	IgnoreDbs *string `json:"ignoreDbs,omitempty" tf:"ignore_dbs,omitempty"`
 
+	// separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	// Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	IgnoreRoles *string `json:"ignoreRoles,omitempty" tf:"ignore_roles,omitempty"`
+
 	// (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	Method *string `json:"method,omitempty" tf:"method,omitempty"`
@@ -1398,6 +1431,10 @@ type PropertiesMigrationObservation struct {
 	// Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
 	IgnoreDbs *string `json:"ignoreDbs,omitempty" tf:"ignore_dbs,omitempty"`
 
+	// separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	// Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	IgnoreRoles *string `json:"ignoreRoles,omitempty" tf:"ignore_roles,omitempty"`
+
 	// (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	Method *string `json:"method,omitempty" tf:"method,omitempty"`
@@ -1431,6 +1468,11 @@ type PropertiesMigrationParameters struct {
 	// Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
 	// +kubebuilder:validation:Optional
 	IgnoreDbs *string `json:"ignoreDbs,omitempty" tf:"ignore_dbs,omitempty"`
+
+	// separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	// Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+	// +kubebuilder:validation:Optional
+	IgnoreRoles *string `json:"ignoreRoles,omitempty" tf:"ignore_roles,omitempty"`
 
 	// (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
 	// The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).

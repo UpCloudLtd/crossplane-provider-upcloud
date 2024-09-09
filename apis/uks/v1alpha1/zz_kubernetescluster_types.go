@@ -21,7 +21,7 @@ type KubernetesClusterInitParameters struct {
 	ControlPlaneIPFilter []*string `json:"controlPlaneIpFilter,omitempty" tf:"control_plane_ip_filter,omitempty"`
 
 	// value pairs to classify the cluster.
-	// Key-value pairs to classify the cluster.
+	// User defined key-value pairs to classify the cluster.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -74,7 +74,7 @@ type KubernetesClusterObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// value pairs to classify the cluster.
-	// Key-value pairs to classify the cluster.
+	// User defined key-value pairs to classify the cluster.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -128,7 +128,7 @@ type KubernetesClusterParameters struct {
 	ControlPlaneIPFilter []*string `json:"controlPlaneIpFilter" tf:"control_plane_ip_filter,omitempty"`
 
 	// value pairs to classify the cluster.
-	// Key-value pairs to classify the cluster.
+	// User defined key-value pairs to classify the cluster.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Labels map[string]*string `json:"labels" tf:"labels,omitempty"`

@@ -34,7 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ServerGroup is the Schema for the ServerGroups API.
+        description: ServerGroup is the Schema for the ServerGroups API. Server groups
+          allow grouping servers and defining anti-affinity for the servers.
         properties:
           apiVersion:
             description: |-
@@ -98,7 +99,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the server group.
-                      Key-value pairs to classify the server group.
+                      User defined key-value pairs to classify the server group.
                     type: object
                     x-kubernetes-map-type: granular
                   members:
@@ -237,7 +238,7 @@ spec:
                       type: string
                     description: |-
                       value pairs to classify the server group.
-                      Key-value pairs to classify the server group.
+                      User defined key-value pairs to classify the server group.
                     type: object
                     x-kubernetes-map-type: granular
                   members:
@@ -536,14 +537,14 @@ spec:
                       for example via API, UpCloud Control Panel or upctl (UpCloud CLI)
                     type: string
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) UUID of the server group.
                     type: string
                   labels:
                     additionalProperties:
                       type: string
                     description: |-
                       value pairs to classify the server group.
-                      Key-value pairs to classify the server group.
+                      User defined key-value pairs to classify the server group.
                     type: object
                     x-kubernetes-map-type: granular
                   members:

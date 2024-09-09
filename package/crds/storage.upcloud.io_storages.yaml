@@ -75,10 +75,11 @@ spec:
                 properties:
                   backupRule:
                     description: |-
-                      (see below for nested schema)
-                      The criteria to backup the storage
-                      Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-                      Such configurations will throw errors during execution.
+                      (Block List) The criteria to backup the storage.
+                      The criteria to backup the storage.
+
+
+                      Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                     items:
                       properties:
                         interval:
@@ -90,8 +91,7 @@ spec:
                           description: |-
                             (Number) The number of days before a backup is automatically deleted
                             The number of days before a backup is automatically deleted
-                          format: int64
-                          type: integer
+                          type: number
                         time:
                           description: |-
                             (String) The time of day when the backup is created
@@ -101,14 +101,14 @@ spec:
                     type: array
                   clone:
                     description: |-
-                      (Block Set, Max: 1) Block defining another storage/template to clone to storage (see below for nested schema)
-                      Block defining another storage/template to clone to storage
+                      (Block Set) Block defining another storage/template to clone to storage. (see below for nested schema)
+                      Block defining another storage/template to clone to storage.
                     items:
                       properties:
                         id:
                           description: |-
-                            (String) The ID of this resource.
-                            The unique identifier of the storage/template to clone
+                            (String) UUID of the storage.
+                            The unique identifier of the storage/template to clone.
                           type: string
                       type: object
                     type: array
@@ -119,23 +119,19 @@ spec:
                     type: boolean
                   encrypt:
                     description: |-
-                      (Boolean) Sets if the storage is encrypted at rest
-                      Sets if the storage is encrypted at rest
+                      (Boolean) Sets if the storage is encrypted at rest.
+                      Sets if the storage is encrypted at rest.
                     type: boolean
                   filesystemAutoresize:
                     description: |-
-                      (Boolean) If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes.
-                      Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used
-                      to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
+                      (Boolean) If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes. Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
                       Taking and keeping backups incure costs.
-                      If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes.
-                      Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used
-                      to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
+                      If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes. Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless `delete_autoresize_backup` option is set to true).
                       Taking and keeping backups incure costs.
                     type: boolean
                   import:
                     description: |-
-                      (Block Set, Max: 1) Block defining external data to import to storage (see below for nested schema)
+                      (Block Set) Block defining external data to import to storage (see below for nested schema)
                       Block defining external data to import to storage
                     items:
                       properties:
@@ -146,8 +142,8 @@ spec:
                           type: string
                         sourceHash:
                           description: |-
-                            (String) For direct_upload; an optional hash of the file to upload.
-                            For `direct_upload`; an optional hash of the file to upload.
+                            (String) SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to sha256sum after the import has completed. Possible filename is automatically removed from the hash before comparison.
+                            SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to `sha256sum` after the import has completed. Possible filename is automatically removed from the hash before comparison.
                           type: string
                         sourceLocation:
                           description: |-
@@ -156,26 +152,33 @@ spec:
                           type: string
                       type: object
                     type: array
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the storage.
+                      User defined key-value pairs to classify the storage.
+                    type: object
+                    x-kubernetes-map-type: granular
                   size:
                     description: |-
-                      (Number) The size of the storage in gigabytes
-                      The size of the storage in gigabytes
-                    format: int64
-                    type: integer
+                      (Number) The size of the storage in gigabytes.
+                      The size of the storage in gigabytes.
+                    type: number
                   tier:
                     description: |-
-                      (String) The storage tier to use
-                      The storage tier to use
+                      (String) The tier of the storage.
+                      The tier of the storage.
                     type: string
                   title:
                     description: |-
-                      (String) A short, informative description
-                      A short, informative description
+                      (String) The title of the storage.
+                      The title of the storage.
                     type: string
                   zone:
                     description: |-
                       fra1. You can list available zones with upctl zone list.
-                      The zone in which the storage will be created, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                      The zone the storage is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
                     type: string
                 type: object
               initProvider:
@@ -193,10 +196,11 @@ spec:
                 properties:
                   backupRule:
                     description: |-
-                      (see below for nested schema)
-                      The criteria to backup the storage
-                      Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-                      Such configurations will throw errors during execution.
+                      (Block List) The criteria to backup the storage.
+                      The criteria to backup the storage.
+
+
+                      Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                     items:
                       properties:
                         interval:
@@ -208,8 +212,7 @@ spec:
                           description: |-
                             (Number) The number of days before a backup is automatically deleted
                             The number of days before a backup is automatically deleted
-                          format: int64
-                          type: integer
+                          type: number
                         time:
                           description: |-
                             (String) The time of day when the backup is created
@@ -219,14 +222,14 @@ spec:
                     type: array
                   clone:
                     description: |-
-                      (Block Set, Max: 1) Block defining another storage/template to clone to storage (see below for nested schema)
-                      Block defining another storage/template to clone to storage
+                      (Block Set) Block defining another storage/template to clone to storage. (see below for nested schema)
+                      Block defining another storage/template to clone to storage.
                     items:
                       properties:
                         id:
                           description: |-
-                            (String) The ID of this resource.
-                            The unique identifier of the storage/template to clone
+                            (String) UUID of the storage.
+                            The unique identifier of the storage/template to clone.
                           type: string
                       type: object
                     type: array
@@ -237,23 +240,19 @@ spec:
                     type: boolean
                   encrypt:
                     description: |-
-                      (Boolean) Sets if the storage is encrypted at rest
-                      Sets if the storage is encrypted at rest
+                      (Boolean) Sets if the storage is encrypted at rest.
+                      Sets if the storage is encrypted at rest.
                     type: boolean
                   filesystemAutoresize:
                     description: |-
-                      (Boolean) If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes.
-                      Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used
-                      to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
+                      (Boolean) If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes. Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
                       Taking and keeping backups incure costs.
-                      If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes.
-                      Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used
-                      to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
+                      If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes. Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless `delete_autoresize_backup` option is set to true).
                       Taking and keeping backups incure costs.
                     type: boolean
                   import:
                     description: |-
-                      (Block Set, Max: 1) Block defining external data to import to storage (see below for nested schema)
+                      (Block Set) Block defining external data to import to storage (see below for nested schema)
                       Block defining external data to import to storage
                     items:
                       properties:
@@ -264,8 +263,8 @@ spec:
                           type: string
                         sourceHash:
                           description: |-
-                            (String) For direct_upload; an optional hash of the file to upload.
-                            For `direct_upload`; an optional hash of the file to upload.
+                            (String) SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to sha256sum after the import has completed. Possible filename is automatically removed from the hash before comparison.
+                            SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to `sha256sum` after the import has completed. Possible filename is automatically removed from the hash before comparison.
                           type: string
                         sourceLocation:
                           description: |-
@@ -274,26 +273,33 @@ spec:
                           type: string
                       type: object
                     type: array
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the storage.
+                      User defined key-value pairs to classify the storage.
+                    type: object
+                    x-kubernetes-map-type: granular
                   size:
                     description: |-
-                      (Number) The size of the storage in gigabytes
-                      The size of the storage in gigabytes
-                    format: int64
-                    type: integer
+                      (Number) The size of the storage in gigabytes.
+                      The size of the storage in gigabytes.
+                    type: number
                   tier:
                     description: |-
-                      (String) The storage tier to use
-                      The storage tier to use
+                      (String) The tier of the storage.
+                      The tier of the storage.
                     type: string
                   title:
                     description: |-
-                      (String) A short, informative description
-                      A short, informative description
+                      (String) The title of the storage.
+                      The title of the storage.
                     type: string
                   zone:
                     description: |-
                       fra1. You can list available zones with upctl zone list.
-                      The zone in which the storage will be created, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                      The zone the storage is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
                     type: string
                 type: object
               managementPolicies:
@@ -483,10 +489,11 @@ spec:
                 properties:
                   backupRule:
                     description: |-
-                      (see below for nested schema)
-                      The criteria to backup the storage
-                      Please keep in mind that it's not possible to have a server with backup_rule attached to a server with simple_backup specified.
-                      Such configurations will throw errors during execution.
+                      (Block List) The criteria to backup the storage.
+                      The criteria to backup the storage.
+
+
+                      Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                     items:
                       properties:
                         interval:
@@ -498,8 +505,7 @@ spec:
                           description: |-
                             (Number) The number of days before a backup is automatically deleted
                             The number of days before a backup is automatically deleted
-                          format: int64
-                          type: integer
+                          type: number
                         time:
                           description: |-
                             (String) The time of day when the backup is created
@@ -509,14 +515,14 @@ spec:
                     type: array
                   clone:
                     description: |-
-                      (Block Set, Max: 1) Block defining another storage/template to clone to storage (see below for nested schema)
-                      Block defining another storage/template to clone to storage
+                      (Block Set) Block defining another storage/template to clone to storage. (see below for nested schema)
+                      Block defining another storage/template to clone to storage.
                     items:
                       properties:
                         id:
                           description: |-
-                            (String) The ID of this resource.
-                            The unique identifier of the storage/template to clone
+                            (String) UUID of the storage.
+                            The unique identifier of the storage/template to clone.
                           type: string
                       type: object
                     type: array
@@ -527,26 +533,22 @@ spec:
                     type: boolean
                   encrypt:
                     description: |-
-                      (Boolean) Sets if the storage is encrypted at rest
-                      Sets if the storage is encrypted at rest
+                      (Boolean) Sets if the storage is encrypted at rest.
+                      Sets if the storage is encrypted at rest.
                     type: boolean
                   filesystemAutoresize:
                     description: |-
-                      (Boolean) If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes.
-                      Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used
-                      to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
+                      (Boolean) If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes. Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
                       Taking and keeping backups incure costs.
-                      If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes.
-                      Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used
-                      to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).
+                      If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes. Please note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used to restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless `delete_autoresize_backup` option is set to true).
                       Taking and keeping backups incure costs.
                     type: boolean
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) UUID of the storage.
                     type: string
                   import:
                     description: |-
-                      (Block Set, Max: 1) Block defining external data to import to storage (see below for nested schema)
+                      (Block Set) Block defining external data to import to storage (see below for nested schema)
                       Block defining external data to import to storage
                     items:
                       properties:
@@ -562,8 +564,8 @@ spec:
                           type: string
                         sourceHash:
                           description: |-
-                            (String) For direct_upload; an optional hash of the file to upload.
-                            For `direct_upload`; an optional hash of the file to upload.
+                            (String) SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to sha256sum after the import has completed. Possible filename is automatically removed from the hash before comparison.
+                            SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to `sha256sum` after the import has completed. Possible filename is automatically removed from the hash before comparison.
                           type: string
                         sourceLocation:
                           description: |-
@@ -574,30 +576,49 @@ spec:
                           description: |-
                             (Number) Number of bytes imported
                             Number of bytes imported
-                          format: int64
-                          type: integer
+                          type: number
                       type: object
                     type: array
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the storage.
+                      User defined key-value pairs to classify the storage.
+                    type: object
+                    x-kubernetes-map-type: granular
                   size:
                     description: |-
-                      (Number) The size of the storage in gigabytes
-                      The size of the storage in gigabytes
-                    format: int64
-                    type: integer
+                      (Number) The size of the storage in gigabytes.
+                      The size of the storage in gigabytes.
+                    type: number
+                  systemLabels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the storage. The keys of system defined labels are prefixed with underscore and can not be modified by the user.
+                      System defined key-value pairs to classify the storage. The keys of system defined labels are prefixed with underscore and can not be modified by the user.
+                    type: object
+                    x-kubernetes-map-type: granular
                   tier:
                     description: |-
-                      (String) The storage tier to use
-                      The storage tier to use
+                      (String) The tier of the storage.
+                      The tier of the storage.
                     type: string
                   title:
                     description: |-
-                      (String) A short, informative description
-                      A short, informative description
+                      (String) The title of the storage.
+                      The title of the storage.
+                    type: string
+                  type:
+                    description: |-
+                      (String) The type of the storage.
+                      The type of the storage.
                     type: string
                   zone:
                     description: |-
                       fra1. You can list available zones with upctl zone list.
-                      The zone in which the storage will be created, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                      The zone the storage is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
                     type: string
                 type: object
               conditions:

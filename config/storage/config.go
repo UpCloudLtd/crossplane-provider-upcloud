@@ -7,12 +7,12 @@ import (
 )
 
 // SDKResources is a list of all supported storage resources implemented with Terraform legacy SDKv2.
-var SDKResources = []string{
-	"upcloud_storage",
-}
+var SDKResources = []string{}
 
 // PluginFrameworkResources is a list of all supported storage resources implemented with Terraform Plugin Framework.
-var PluginFrameworkResources = []string{}
+var PluginFrameworkResources = []string{
+	"upcloud_storage",
+}
 
 // AllResources is a list of all supported storage resources.
 var AllResources = append(SDKResources, PluginFrameworkResources...)

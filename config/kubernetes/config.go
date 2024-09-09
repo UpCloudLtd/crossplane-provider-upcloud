@@ -7,13 +7,12 @@ import (
 )
 
 // SDKResources is a list of all supported kubernetes resources implemented with Terraform legacy SDKv2.
-var SDKResources = []string{
-	"upcloud_kubernetes_node_group",
-}
+var SDKResources = []string{}
 
 // PluginFrameworkResources is a list of all supported network resources implemented with Terraform Plugin Framework.
 var PluginFrameworkResources = []string{
 	"upcloud_kubernetes_cluster",
+	"upcloud_kubernetes_node_group",
 }
 
 // AllResources is a list of all supported network resources.

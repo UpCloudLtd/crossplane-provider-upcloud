@@ -35,7 +35,8 @@ spec:
     schema:
       openAPIV3Schema:
         description: KubernetesNodeGroup is the Schema for the KubernetesNodeGroups
-          API. This resource represents a node group in a Managed Kubernetes cluster.
+          API. This resource represents a Managed Kubernetes https://upcloud.com/products/managed-kubernetes
+          cluster.
         properties:
           apiVersion:
             description: |-
@@ -75,9 +76,8 @@ spec:
                 properties:
                   antiAffinity:
                     description: |-
-                      affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
-                      If set to true, nodes in this group will be placed on separate compute hosts.
-                      Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                     type: boolean
                   cluster:
                     description: |-
@@ -162,7 +162,7 @@ spec:
                     type: object
                   customPlan:
                     description: |-
-                      (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+                      (Block List) Resource properties for custom plan (see below for nested schema)
                       Resource properties for custom plan
                     items:
                       properties:
@@ -170,20 +170,17 @@ spec:
                           description: |-
                             (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
                             The number of CPU cores dedicated to individual node group nodes when using custom plan
-                          format: int64
-                          type: integer
+                          type: number
                         memory:
                           description: |-
                             (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
                             The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
-                          format: int64
-                          type: integer
+                          type: number
                         storageSize:
                           description: |-
                             (Number) The size of the storage device in gigabytes.
                             The size of the storage device in gigabytes.
-                          format: int64
-                          type: integer
+                          type: number
                         storageTier:
                           description: |-
                             (String) The storage tier to use. Defaults to maxiops
@@ -213,16 +210,15 @@ spec:
                     additionalProperties:
                       type: string
                     description: |-
-                      value pairs to classify the node group.
-                      Key-value pairs to classify the node group.
+                      value pairs to classify the node_group.
+                      User defined key-value pairs to classify the node_group.
                     type: object
                     x-kubernetes-map-type: granular
                   nodeCount:
                     description: |-
                       (Number) Amount of nodes to provision in the node group.
                       Amount of nodes to provision in the node group.
-                    format: int64
-                    type: integer
+                    type: number
                   plan:
                     description: |-
                       (String) The server plan used for the node group. You can list available plans with upctl server plans
@@ -238,8 +234,8 @@ spec:
                     x-kubernetes-list-type: set
                   storageEncryption:
                     description: |-
-                      (String) Storage encryption strategy for the nodes in this group.
-                      Storage encryption strategy for the nodes in this group.
+                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
                     type: string
                   taint:
                     description: |-
@@ -285,13 +281,12 @@ spec:
                 properties:
                   antiAffinity:
                     description: |-
-                      affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
-                      If set to true, nodes in this group will be placed on separate compute hosts.
-                      Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                     type: boolean
                   customPlan:
                     description: |-
-                      (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+                      (Block List) Resource properties for custom plan (see below for nested schema)
                       Resource properties for custom plan
                     items:
                       properties:
@@ -299,20 +294,17 @@ spec:
                           description: |-
                             (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
                             The number of CPU cores dedicated to individual node group nodes when using custom plan
-                          format: int64
-                          type: integer
+                          type: number
                         memory:
                           description: |-
                             (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
                             The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
-                          format: int64
-                          type: integer
+                          type: number
                         storageSize:
                           description: |-
                             (Number) The size of the storage device in gigabytes.
                             The size of the storage device in gigabytes.
-                          format: int64
-                          type: integer
+                          type: number
                         storageTier:
                           description: |-
                             (String) The storage tier to use. Defaults to maxiops
@@ -342,16 +334,15 @@ spec:
                     additionalProperties:
                       type: string
                     description: |-
-                      value pairs to classify the node group.
-                      Key-value pairs to classify the node group.
+                      value pairs to classify the node_group.
+                      User defined key-value pairs to classify the node_group.
                     type: object
                     x-kubernetes-map-type: granular
                   nodeCount:
                     description: |-
                       (Number) Amount of nodes to provision in the node group.
                       Amount of nodes to provision in the node group.
-                    format: int64
-                    type: integer
+                    type: number
                   plan:
                     description: |-
                       (String) The server plan used for the node group. You can list available plans with upctl server plans
@@ -367,8 +358,8 @@ spec:
                     x-kubernetes-list-type: set
                   storageEncryption:
                     description: |-
-                      (String) Storage encryption strategy for the nodes in this group.
-                      Storage encryption strategy for the nodes in this group.
+                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
                     type: string
                   taint:
                     description: |-
@@ -582,9 +573,8 @@ spec:
                 properties:
                   antiAffinity:
                     description: |-
-                      affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
-                      If set to true, nodes in this group will be placed on separate compute hosts.
-                      Please note that anti-affinity policy is considered "best effort" and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                     type: boolean
                   cluster:
                     description: |-
@@ -593,7 +583,7 @@ spec:
                     type: string
                   customPlan:
                     description: |-
-                      (Block List, Max: 1) Resource properties for custom plan (see below for nested schema)
+                      (Block List) Resource properties for custom plan (see below for nested schema)
                       Resource properties for custom plan
                     items:
                       properties:
@@ -601,20 +591,17 @@ spec:
                           description: |-
                             (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
                             The number of CPU cores dedicated to individual node group nodes when using custom plan
-                          format: int64
-                          type: integer
+                          type: number
                         memory:
                           description: |-
                             (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
                             The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
-                          format: int64
-                          type: integer
+                          type: number
                         storageSize:
                           description: |-
                             (Number) The size of the storage device in gigabytes.
                             The size of the storage device in gigabytes.
-                          format: int64
-                          type: integer
+                          type: number
                         storageTier:
                           description: |-
                             (String) The storage tier to use. Defaults to maxiops
@@ -623,7 +610,9 @@ spec:
                       type: object
                     type: array
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) Computed ID of the node group. This is a
+                      combination of the cluster UUID and the node group name, separated
+                      with a /.
                     type: string
                   kubeletArgs:
                     description: |-
@@ -647,16 +636,15 @@ spec:
                     additionalProperties:
                       type: string
                     description: |-
-                      value pairs to classify the node group.
-                      Key-value pairs to classify the node group.
+                      value pairs to classify the node_group.
+                      User defined key-value pairs to classify the node_group.
                     type: object
                     x-kubernetes-map-type: granular
                   nodeCount:
                     description: |-
                       (Number) Amount of nodes to provision in the node group.
                       Amount of nodes to provision in the node group.
-                    format: int64
-                    type: integer
+                    type: number
                   plan:
                     description: |-
                       (String) The server plan used for the node group. You can list available plans with upctl server plans
@@ -672,8 +660,8 @@ spec:
                     x-kubernetes-list-type: set
                   storageEncryption:
                     description: |-
-                      (String) Storage encryption strategy for the nodes in this group.
-                      Storage encryption strategy for the nodes in this group.
+                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
                     type: string
                   taint:
                     description: |-

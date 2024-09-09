@@ -12,14 +12,15 @@ import (
 // SDKResources is a list of all supported object storage resources implemented with Terraform legacy SDKv2.
 var SDKResources = []string{
 	"upcloud_managed_object_storage",
-	"upcloud_managed_object_storage_policy",
 	"upcloud_managed_object_storage_user",
 	"upcloud_managed_object_storage_user_access_key",
 	"upcloud_managed_object_storage_user_policy",
 }
 
 // PluginFrameworkResources is a list of all supported object storage resources implemented with Terraform Plugin Framework.
-var PluginFrameworkResources = []string{}
+var PluginFrameworkResources = []string{
+	"upcloud_managed_object_storage_policy",
+}
 
 // AllResources is a list of all supported object storage resources.
 var AllResources = append(SDKResources, PluginFrameworkResources...)

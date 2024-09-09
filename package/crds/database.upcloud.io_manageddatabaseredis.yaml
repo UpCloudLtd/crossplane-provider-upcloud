@@ -75,6 +75,14 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -255,6 +263,11 @@ spec:
                                 description: |-
                                   separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                   Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
                                 type: string
                               method:
                                 description: |-
@@ -400,6 +413,14 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -580,6 +601,11 @@ spec:
                                 description: |-
                                   separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                   Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
                                 type: string
                               method:
                                 description: |-
@@ -939,6 +965,14 @@ spec:
                   id:
                     description: (String) The ID of this resource.
                     type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
                   maintenanceWindowDow:
                     description: |-
                       (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
@@ -1058,6 +1092,11 @@ spec:
                                 description: |-
                                   separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
                                   Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
                                 type: string
                               method:
                                 description: |-

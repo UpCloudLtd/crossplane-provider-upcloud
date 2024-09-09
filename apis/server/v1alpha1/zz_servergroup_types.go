@@ -33,7 +33,7 @@ type ServerGroupInitParameters struct {
 	AntiAffinityPolicy *string `json:"antiAffinityPolicy,omitempty" tf:"anti_affinity_policy,omitempty"`
 
 	// value pairs to classify the server group.
-	// Key-value pairs to classify the server group.
+	// User defined key-value pairs to classify the server group.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -79,11 +79,11 @@ type ServerGroupObservation struct {
 	// for example via API, UpCloud Control Panel or upctl (UpCloud CLI)
 	AntiAffinityPolicy *string `json:"antiAffinityPolicy,omitempty" tf:"anti_affinity_policy,omitempty"`
 
-	// (String) The ID of this resource.
+	// (String) UUID of the server group.
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// value pairs to classify the server group.
-	// Key-value pairs to classify the server group.
+	// User defined key-value pairs to classify the server group.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -122,7 +122,7 @@ type ServerGroupParameters struct {
 	AntiAffinityPolicy *string `json:"antiAffinityPolicy,omitempty" tf:"anti_affinity_policy,omitempty"`
 
 	// value pairs to classify the server group.
-	// Key-value pairs to classify the server group.
+	// User defined key-value pairs to classify the server group.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
@@ -180,7 +180,7 @@ type ServerGroupStatus struct {
 // +kubebuilder:subresource:status
 // +kubebuilder:storageversion
 
-// ServerGroup is the Schema for the ServerGroups API.
+// ServerGroup is the Schema for the ServerGroups API. Server groups allow grouping servers and defining anti-affinity for the servers.
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"

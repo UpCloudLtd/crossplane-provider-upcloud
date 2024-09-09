@@ -126,7 +126,7 @@ type NetworkInitParameters struct {
 	IPNetwork []IPNetworkInitParameters `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
 
 	// value pairs to classify the network.
-	// Key-value pairs to classify the network.
+	// User defined key-value pairs to classify the network.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -162,7 +162,7 @@ type NetworkObservation struct {
 	IPNetwork []IPNetworkObservation `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
 
 	// value pairs to classify the network.
-	// Key-value pairs to classify the network.
+	// User defined key-value pairs to classify the network.
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
 
@@ -191,7 +191,7 @@ type NetworkParameters struct {
 	IPNetwork []IPNetworkParameters `json:"ipNetwork,omitempty" tf:"ip_network,omitempty"`
 
 	// value pairs to classify the network.
-	// Key-value pairs to classify the network.
+	// User defined key-value pairs to classify the network.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
 	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
