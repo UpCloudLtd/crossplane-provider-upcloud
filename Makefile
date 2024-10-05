@@ -2,7 +2,8 @@
 # Setup Project
 
 PROJECT_NAME ?= provider-upcloud
-PROJECT_REPO ?= github.com/UpCloudLtd/$(PROJECT_NAME)
+GITHUB_PROJECT_NAME ?= crossplane-provider-upcloud
+PROJECT_REPO ?= github.com/UpCloudLtd/$(GITHUB_PROJECT_NAME)
 
 export TERRAFORM_VERSION ?= 1.5.7
 
@@ -12,12 +13,12 @@ TERRAFORM_VERSION_VALID := $(shell [ "$(TERRAFORM_VERSION)" = "`printf "$(TERRAF
 
 export TERRAFORM_PROVIDER_SOURCE ?= UpCloudLtd/upcloud
 export TERRAFORM_PROVIDER_REPO ?= https://github.com/UpCloudLtd/terraform-provider-upcloud
-export TERRAFORM_PROVIDER_VERSION ?= 5.10.1
+export TERRAFORM_PROVIDER_VERSION ?= 5.11.2
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-upcloud
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://github.com/UpCloudLtd/terraform-provider-upcloud/releases/download/v${TERRAFORM_PROVIDER_VERSION}
 export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-upcloud_v${TERRAFORM_PROVIDER_VERSION}
 export TERRAFORM_DOCS_PATH ?= docs/resources
-
+export UPCLOUD_TERRAFORM_PROVIDER_USER_AGENT ?= $(GITHUB_PROJECT_NAME)/$(VERSION)
 
 PLATFORMS ?= linux_amd64 linux_arm64
 

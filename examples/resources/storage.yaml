@@ -1,4 +1,4 @@
-apiVersion: storage.upcloud.io/v1alpha1
+apiVersion: storage.upcloud.com/v1alpha1
 kind: Storage
 metadata:
   name: example

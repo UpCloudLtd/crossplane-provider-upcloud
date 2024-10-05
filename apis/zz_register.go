@@ -10,14 +10,14 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/UpCloudLtd/provider-upcloud/apis/database/v1alpha1"
-	v1alpha1network "github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1"
-	v1alpha1objectstorage "github.com/UpCloudLtd/provider-upcloud/apis/objectstorage/v1alpha1"
-	v1alpha1server "github.com/UpCloudLtd/provider-upcloud/apis/server/v1alpha1"
-	v1alpha1storage "github.com/UpCloudLtd/provider-upcloud/apis/storage/v1alpha1"
-	v1alpha1uks "github.com/UpCloudLtd/provider-upcloud/apis/uks/v1alpha1"
-	v1alpha1apis "github.com/UpCloudLtd/provider-upcloud/apis/v1alpha1"
-	v1beta1 "github.com/UpCloudLtd/provider-upcloud/apis/v1beta1"
+	v1alpha1 "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/database/v1alpha1"
+	v1alpha1network "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/network/v1alpha1"
+	v1alpha1objectstorage "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/objectstorage/v1alpha1"
+	v1alpha1server "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/server/v1alpha1"
+	v1alpha1storage "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/storage/v1alpha1"
+	v1alpha1uks "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/uks/v1alpha1"
+	v1alpha1apis "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/v1alpha1"
+	v1beta1 "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/v1beta1"
 )
 
 func init() {

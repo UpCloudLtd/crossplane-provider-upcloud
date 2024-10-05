@@ -1,4 +1,4 @@
-apiVersion: server.upcloud.io/v1alpha1
+apiVersion: server.upcloud.com/v1alpha1
 kind: ServerGroup
 metadata:
   annotations:

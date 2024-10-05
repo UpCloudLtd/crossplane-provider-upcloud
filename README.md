@@ -21,7 +21,7 @@ Please note that this project is currently in early alpha version, we do not rec
     metadata:
       name: provider-upcloud
     spec:
-      package: xpkg.upbound.io/upcloud/provider-upcloud:v0.0.4
+      package: xpkg.upbound.io/upcloud/provider-upcloud:v0.0.7
     ```
 
  Make sure to change the version to the latest one.
@@ -41,7 +41,7 @@ Please note that this project is currently in early alpha version, we do not rec
           "password": "password123"
         }
     ---
-    apiVersion: provider.upcloud.io/v1beta1
+    apiVersion: provider.upcloud.com/v1beta1
     kind: ProviderConfig
     metadata:
       name: default
@@ -68,7 +68,7 @@ We are currently working on adding support for them, thank you for your patience
 ## Report a Bug
 
 For filing bugs, suggesting improvements, or requesting new features, please
-open an [issue](https://github.com/UpCloudLtd/provider-upcloud/issues).
+open an [issue](https://github.com/UpCloudLtd/crossplane-provider-upcloud/issues).
 
 ## Developing
 

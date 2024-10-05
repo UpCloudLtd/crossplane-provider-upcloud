@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: servergroups.server.upcloud.io
+  name: manageddatabaselogicaldatabases.database.upcloud.com
 spec:
-  group: server.upcloud.io
+  group: database.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: ServerGroup
-    listKind: ServerGroupList
-    plural: servergroups
-    singular: servergroup
+    kind: ManagedDatabaseLogicalDatabase
+    listKind: ManagedDatabaseLogicalDatabaseList
+    plural: manageddatabaselogicaldatabases
+    singular: manageddatabaselogicaldatabase
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ServerGroup is the Schema for the ServerGroups API. Server groups
-          allow grouping servers and defining anti-affinity for the servers.
+        description: ManagedDatabaseLogicalDatabase is the Schema for the ManagedDatabaseLogicalDatabases
+          API. This resource represents a logical database in managed database
         properties:
           apiVersion:
             description: |-
@@ -55,7 +55,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: ServerGroupSpec defines the desired state of ServerGroup
+            description: ManagedDatabaseLogicalDatabaseSpec defines the desired state
+              of ManagedDatabaseLogicalDatabase
             properties:
               deletionPolicy:
                 default: Delete
@@ -73,83 +74,59 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  antiAffinityPolicy:
+                  characterSet:
                     description: |-
-                      affinity group. Setting this to strict or yes will
-                      result in all servers in the group being placed on separate compute hosts. The value can be strict, yes, or no.
-                      Defines if a server group is an anti-affinity group. Setting this to `strict` or `yes` will
-                      result in all servers in the group being placed on separate compute hosts. The value can be `strict`, `yes`, or `no`.
-
-
-                      * `strict` policy doesn't allow servers in the same server group to be on the same host
-                      * `yes` refers to best-effort policy and tries to put servers on different hosts, but this is not guaranteed
-                      * `no` refers to having no policy and thus no effect on server host affinity
-
-
-                      To verify if the anti-affinity policies are met by requesting a server group details from API. For more information
-                      please see UpCloud API documentation on server groups.
-
-
-                      Plese also note that anti-affinity policies are only applied on server start. This means that if anti-affinity
-                      policies in server group are not met, you need to manually restart the servers in said group,
-                      for example via API, UpCloud Control Panel or upctl (UpCloud CLI)
+                      (String) Default character set for the database (LC_CTYPE)
+                      Default character set for the database (LC_CTYPE)
                     type: string
-                  labels:
-                    additionalProperties:
-                      type: string
+                  collation:
                     description: |-
-                      value pairs to classify the server group.
-                      User defined key-value pairs to classify the server group.
+                      (String) Default collation for the database (LC_COLLATE)
+                      Default collation for the database (LC_COLLATE)
+                    type: string
+                  service:
+                    description: |-
+                      (String) Service's UUID for which this user belongs to
+                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to logical database `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
+                    type: string
+                  serviceRef:
+                    description: Reference to a ManagedDatabasePostgresql in database
+                      to populate service.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
+                            type: string
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
+                            type: string
+                        type: object
+                    required:
+                    - name
                     type: object
-                    x-kubernetes-map-type: granular
-                  members:
-                    description: |-
-                      (Set of String) UUIDs of the servers that are members of this group. Servers can also be attached to the server group via server_group property of upcloud_server. See also track_members property.
-                      UUIDs of the servers that are members of this group. Servers can also be attached to the server group via `server_group` property of `upcloud_server`. See also `track_members` property.
-                    items:
-                      type: string
-                    type: array
-                    x-kubernetes-list-type: set
-                  membersRefs:
-                    description: References to Server in server to populate members.
-                    items:
-                      description: A Reference to a named object.
-                      properties:
-                        name:
-                          description: Name of the referenced object.
-                          type: string
-                        policy:
-                          description: Policies for referencing.
-                          properties:
-                            resolution:
-                              default: Required
-                              description: |-
-                                Resolution specifies whether resolution of this reference is required.
-                                The default is 'Required', which means the reconcile will fail if the
-                                reference cannot be resolved. 'Optional' means this reference will be
-                                a no-op if it cannot be resolved.
-                              enum:
-                              - Required
-                              - Optional
-                              type: string
-                            resolve:
-                              description: |-
-                                Resolve specifies when this reference should be resolved. The default
-                                is 'IfNotPresent', which will attempt to resolve the reference only when
-                                the corresponding field is not present. Use 'Always' to resolve the
-                                reference on every reconcile.
-                              enum:
-                              - Always
-                              - IfNotPresent
-                              type: string
-                          type: object
-                      required:
-                      - name
-                      type: object
-                    type: array
-                  membersSelector:
-                    description: Selector for a list of Server in server to populate
-                      members.
+                  serviceSelector:
+                    description: Selector for a ManagedDatabasePostgresql in database
+                      to populate service.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -188,16 +165,6 @@ spec:
                             type: string
                         type: object
                     type: object
-                  title:
-                    description: |-
-                      (String) Title of your server group
-                      Title of your server group
-                    type: string
-                  trackMembers:
-                    description: |-
-                      (Boolean) Controls if members of the server group are being tracked in this resource. Set to false when using server_group property of upcloud_server to attach servers to the server group to avoid delayed state updates.
-                      Controls if members of the server group are being tracked in this resource. Set to `false` when using `server_group` property of `upcloud_server` to attach servers to the server group to avoid delayed state updates.
-                    type: boolean
                 type: object
               initProvider:
                 description: |-
@@ -212,131 +179,16 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  antiAffinityPolicy:
+                  characterSet:
                     description: |-
-                      affinity group. Setting this to strict or yes will
-                      result in all servers in the group being placed on separate compute hosts. The value can be strict, yes, or no.
-                      Defines if a server group is an anti-affinity group. Setting this to `strict` or `yes` will
-                      result in all servers in the group being placed on separate compute hosts. The value can be `strict`, `yes`, or `no`.
-
-
-                      * `strict` policy doesn't allow servers in the same server group to be on the same host
-                      * `yes` refers to best-effort policy and tries to put servers on different hosts, but this is not guaranteed
-                      * `no` refers to having no policy and thus no effect on server host affinity
-
-
-                      To verify if the anti-affinity policies are met by requesting a server group details from API. For more information
-                      please see UpCloud API documentation on server groups.
-
-
-                      Plese also note that anti-affinity policies are only applied on server start. This means that if anti-affinity
-                      policies in server group are not met, you need to manually restart the servers in said group,
-                      for example via API, UpCloud Control Panel or upctl (UpCloud CLI)
+                      (String) Default character set for the database (LC_CTYPE)
+                      Default character set for the database (LC_CTYPE)
                     type: string
-                  labels:
-                    additionalProperties:
-                      type: string
+                  collation:
                     description: |-
-                      value pairs to classify the server group.
-                      User defined key-value pairs to classify the server group.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  members:
-                    description: |-
-                      (Set of String) UUIDs of the servers that are members of this group. Servers can also be attached to the server group via server_group property of upcloud_server. See also track_members property.
-                      UUIDs of the servers that are members of this group. Servers can also be attached to the server group via `server_group` property of `upcloud_server`. See also `track_members` property.
-                    items:
-                      type: string
-                    type: array
-                    x-kubernetes-list-type: set
-                  membersRefs:
-                    description: References to Server in server to populate members.
-                    items:
-                      description: A Reference to a named object.
-                      properties:
-                        name:
-                          description: Name of the referenced object.
-                          type: string
-                        policy:
-                          description: Policies for referencing.
-                          properties:
-                            resolution:
-                              default: Required
-                              description: |-
-                                Resolution specifies whether resolution of this reference is required.
-                                The default is 'Required', which means the reconcile will fail if the
-                                reference cannot be resolved. 'Optional' means this reference will be
-                                a no-op if it cannot be resolved.
-                              enum:
-                              - Required
-                              - Optional
-                              type: string
-                            resolve:
-                              description: |-
-                                Resolve specifies when this reference should be resolved. The default
-                                is 'IfNotPresent', which will attempt to resolve the reference only when
-                                the corresponding field is not present. Use 'Always' to resolve the
-                                reference on every reconcile.
-                              enum:
-                              - Always
-                              - IfNotPresent
-                              type: string
-                          type: object
-                      required:
-                      - name
-                      type: object
-                    type: array
-                  membersSelector:
-                    description: Selector for a list of Server in server to populate
-                      members.
-                    properties:
-                      matchControllerRef:
-                        description: |-
-                          MatchControllerRef ensures an object with the same controller reference
-                          as the selecting object is selected.
-                        type: boolean
-                      matchLabels:
-                        additionalProperties:
-                          type: string
-                        description: MatchLabels ensures an object with matching labels
-                          is selected.
-                        type: object
-                      policy:
-                        description: Policies for selection.
-                        properties:
-                          resolution:
-                            default: Required
-                            description: |-
-                              Resolution specifies whether resolution of this reference is required.
-                              The default is 'Required', which means the reconcile will fail if the
-                              reference cannot be resolved. 'Optional' means this reference will be
-                              a no-op if it cannot be resolved.
-                            enum:
-                            - Required
-                            - Optional
-                            type: string
-                          resolve:
-                            description: |-
-                              Resolve specifies when this reference should be resolved. The default
-                              is 'IfNotPresent', which will attempt to resolve the reference only when
-                              the corresponding field is not present. Use 'Always' to resolve the
-                              reference on every reconcile.
-                            enum:
-                            - Always
-                            - IfNotPresent
-                            type: string
-                        type: object
-                    type: object
-                  title:
-                    description: |-
-                      (String) Title of your server group
-                      Title of your server group
+                      (String) Default collation for the database (LC_COLLATE)
+                      Default collation for the database (LC_COLLATE)
                     type: string
-                  trackMembers:
-                    description: |-
-                      (Boolean) Controls if members of the server group are being tracked in this resource. Set to false when using server_group property of upcloud_server to attach servers to the server group to avoid delayed state updates.
-                      Controls if members of the server group are being tracked in this resource. Set to `false` when using `server_group` property of `upcloud_server` to attach servers to the server group to avoid delayed state updates.
-                    type: boolean
                 type: object
               managementPolicies:
                 default:
@@ -505,66 +357,30 @@ spec:
             required:
             - forProvider
             type: object
-            x-kubernetes-validations:
-            - message: spec.forProvider.title is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.title)
-                || (has(self.initProvider) && has(self.initProvider.title))'
           status:
-            description: ServerGroupStatus defines the observed state of ServerGroup.
+            description: ManagedDatabaseLogicalDatabaseStatus defines the observed
+              state of ManagedDatabaseLogicalDatabase.
             properties:
               atProvider:
                 properties:
-                  antiAffinityPolicy:
+                  characterSet:
                     description: |-
-                      affinity group. Setting this to strict or yes will
-                      result in all servers in the group being placed on separate compute hosts. The value can be strict, yes, or no.
-                      Defines if a server group is an anti-affinity group. Setting this to `strict` or `yes` will
-                      result in all servers in the group being placed on separate compute hosts. The value can be `strict`, `yes`, or `no`.
-
-
-                      * `strict` policy doesn't allow servers in the same server group to be on the same host
-                      * `yes` refers to best-effort policy and tries to put servers on different hosts, but this is not guaranteed
-                      * `no` refers to having no policy and thus no effect on server host affinity
-
-
-                      To verify if the anti-affinity policies are met by requesting a server group details from API. For more information
-                      please see UpCloud API documentation on server groups.
-
-
-                      Plese also note that anti-affinity policies are only applied on server start. This means that if anti-affinity
-                      policies in server group are not met, you need to manually restart the servers in said group,
-                      for example via API, UpCloud Control Panel or upctl (UpCloud CLI)
+                      (String) Default character set for the database (LC_CTYPE)
+                      Default character set for the database (LC_CTYPE)
+                    type: string
+                  collation:
+                    description: |-
+                      (String) Default collation for the database (LC_COLLATE)
+                      Default collation for the database (LC_COLLATE)
                     type: string
                   id:
-                    description: (String) UUID of the server group.
+                    description: (String) The ID of this resource.
                     type: string
-                  labels:
-                    additionalProperties:
-                      type: string
+                  service:
                     description: |-
-                      value pairs to classify the server group.
-                      User defined key-value pairs to classify the server group.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  members:
-                    description: |-
-                      (Set of String) UUIDs of the servers that are members of this group. Servers can also be attached to the server group via server_group property of upcloud_server. See also track_members property.
-                      UUIDs of the servers that are members of this group. Servers can also be attached to the server group via `server_group` property of `upcloud_server`. See also `track_members` property.
-                    items:
-                      type: string
-                    type: array
-                    x-kubernetes-list-type: set
-                  title:
-                    description: |-
-                      (String) Title of your server group
-                      Title of your server group
+                      (String) Service's UUID for which this user belongs to
+                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to logical database `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
                     type: string
-                  trackMembers:
-                    description: |-
-                      (Boolean) Controls if members of the server group are being tracked in this resource. Set to false when using server_group property of upcloud_server to attach servers to the server group to avoid delayed state updates.
-                      Controls if members of the server group are being tracked in this resource. Set to `false` when using `server_group` property of `upcloud_server` to attach servers to the server group to avoid delayed state updates.
-                    type: boolean
                 type: object
               conditions:
                 description: Conditions of the resource.

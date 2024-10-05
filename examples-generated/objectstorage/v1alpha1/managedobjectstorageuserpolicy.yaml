@@ -1,4 +1,4 @@
-apiVersion: objectstorage.upcloud.io/v1alpha1
+apiVersion: objectstorage.upcloud.com/v1alpha1
 kind: ManagedObjectStorageUserPolicy
 metadata:
   annotations:
@@ -20,7 +20,7 @@ spec:
 
 ---
 
-apiVersion: objectstorage.upcloud.io/v1alpha1
+apiVersion: objectstorage.upcloud.com/v1alpha1
 kind: ManagedObjectStorage
 metadata:
   annotations:
@@ -36,7 +36,7 @@ spec:
 
 ---
 
-apiVersion: objectstorage.upcloud.io/v1alpha1
+apiVersion: objectstorage.upcloud.com/v1alpha1
 kind: ManagedObjectStoragePolicy
 metadata:
   annotations:
@@ -54,7 +54,7 @@ spec:
 
 ---
 
-apiVersion: objectstorage.upcloud.io/v1alpha1
+apiVersion: objectstorage.upcloud.com/v1alpha1
 kind: ManagedObjectStorageUser
 metadata:
   annotations:

@@ -3,4 +3,4 @@ kind: Provider
 metadata:
   name: provider-upcloud
 spec:
-  package: UpCloudLtd/provider-upcloud:v0.0.5
+  package: UpCloudLtd/crossplane-provider-upcloud:v0.0.5

@@ -1,4 +1,4 @@
-apiVersion: server.upcloud.io/v1alpha1
+apiVersion: server.upcloud.com/v1alpha1
 kind: Server
 metadata:
   name: example
@@ -28,7 +28,7 @@ spec:
     zone: de-fra1
     firewall: true
 ---
-apiVersion: server.upcloud.io/v1alpha1
+apiVersion: server.upcloud.com/v1alpha1
 kind: ServerGroup
 metadata:
   name: example
@@ -42,7 +42,7 @@ spec:
     - name: example
     title: crossplane-example
 ---
-apiVersion: server.upcloud.io/v1alpha1
+apiVersion: server.upcloud.com/v1alpha1
 kind: FirewallRules
 metadata:
   name: example

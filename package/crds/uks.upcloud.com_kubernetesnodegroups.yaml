@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: networks.network.upcloud.io
+  name: kubernetesnodegroups.uks.upcloud.com
 spec:
-  group: network.upcloud.io
+  group: uks.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: Network
-    listKind: NetworkList
-    plural: networks
-    singular: network
+    kind: KubernetesNodeGroup
+    listKind: KubernetesNodeGroupList
+    plural: kubernetesnodegroups
+    singular: kubernetesnodegroup
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,9 +34,9 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Network is the Schema for the Networks API. This resource represents
-          an SDN private network that cloud servers and other resources from the same
-          zone can be attached to.
+        description: KubernetesNodeGroup is the Schema for the KubernetesNodeGroups
+          API. This resource represents a Managed Kubernetes https://upcloud.com/products/managed-kubernetes
+          cluster.
         properties:
           apiVersion:
             description: |-
@@ -56,7 +56,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: NetworkSpec defines the desired state of Network
+            description: KubernetesNodeGroupSpec defines the desired state of KubernetesNodeGroup
             properties:
               deletionPolicy:
                 default: Delete
@@ -74,75 +74,19 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  ipNetwork:
+                  antiAffinity:
                     description: |-
-                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
-                      IP subnet within the network. Network must have exactly one IP subnet.
-                    items:
-                      properties:
-                        address:
-                          description: |-
-                            (String) The CIDR range of the subnet
-                            The CIDR range of the subnet
-                          type: string
-                        dhcp:
-                          description: |-
-                            (Boolean) Is DHCP enabled?
-                            Is DHCP enabled?
-                          type: boolean
-                        dhcpDefaultRoute:
-                          description: |-
-                            (Boolean) Is the gateway the DHCP default route?
-                            Is the gateway the DHCP default route?
-                          type: boolean
-                        dhcpDns:
-                          description: |-
-                            (Set of String) The DNS servers given by DHCP
-                            The DNS servers given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        dhcpRoutes:
-                          description: |-
-                            (Set of String) The additional DHCP classless static routes given by DHCP
-                            The additional DHCP classless static routes given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        family:
-                          description: |-
-                            (String) IP address family
-                            IP address family
-                          type: string
-                        gateway:
-                          description: |-
-                            (String) Gateway address given by DHCP
-                            Gateway address given by DHCP
-                          type: string
-                      type: object
-                    type: array
-                  labels:
-                    additionalProperties:
-                      type: string
+                      affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                    type: boolean
+                  cluster:
                     description: |-
-                      value pairs to classify the network.
-                      User defined key-value pairs to classify the network.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  name:
-                    description: |-
-                      (String) Name of the network.
-                      Name of the network.
+                      (String) UUID of the cluster.
+                      UUID of the cluster.
                     type: string
-                  router:
-                    description: |-
-                      (String) UUID of a router to attach to this network.
-                      UUID of a router to attach to this network.
-                    type: string
-                  routerRef:
-                    description: Reference to a Router in network to populate router.
+                  clusterRef:
+                    description: Reference to a KubernetesCluster in uks to populate
+                      cluster.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -175,8 +119,9 @@ spec:
                     required:
                     - name
                     type: object
-                  routerSelector:
-                    description: Selector for a Router in network to populate router.
+                  clusterSelector:
+                    description: Selector for a KubernetesCluster in uks to populate
+                      cluster.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -215,11 +160,111 @@ spec:
                             type: string
                         type: object
                     type: object
-                  zone:
+                  customPlan:
                     description: |-
-                      fra1. You can list available zones with upctl zone list.
-                      The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                      (Block List) Resource properties for custom plan (see below for nested schema)
+                      Resource properties for custom plan
+                    items:
+                      properties:
+                        cores:
+                          description: |-
+                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                          type: number
+                        memory:
+                          description: |-
+                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                          type: number
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use. Defaults to maxiops
+                            The storage tier to use. Defaults to maxiops
+                          type: string
+                      type: object
+                    type: array
+                  kubeletArgs:
+                    description: |-
+                      those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
+                      Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
+                    items:
+                      properties:
+                        key:
+                          description: |-
+                            (String) Kubelet argument key.
+                            Kubelet argument key.
+                          type: string
+                        value:
+                          description: |-
+                            (String) Kubelet argument value.
+                            Kubelet argument value.
+                          type: string
+                      type: object
+                    type: array
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the node_group.
+                      User defined key-value pairs to classify the node_group.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  nodeCount:
+                    description: |-
+                      (Number) Amount of nodes to provision in the node group.
+                      Amount of nodes to provision in the node group.
+                    type: number
+                  plan:
+                    description: |-
+                      (String) The server plan used for the node group. You can list available plans with upctl server plans
+                      The server plan used for the node group. You can list available plans with `upctl server plans`
                     type: string
+                  sshKeys:
+                    description: |-
+                      (Set of String) You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
+                      You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  storageEncryption:
+                    description: |-
+                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                    type: string
+                  taint:
+                    description: |-
+                      (Block Set) Taints for the nodes in this group. (see below for nested schema)
+                      Taints for the nodes in this group.
+                    items:
+                      properties:
+                        effect:
+                          description: |-
+                            (String) Taint effect.
+                            Taint effect.
+                          type: string
+                        key:
+                          description: |-
+                            (String) Kubelet argument key.
+                            Taint key.
+                          type: string
+                        value:
+                          description: |-
+                            (String) Kubelet argument value.
+                            Taint value.
+                          type: string
+                      type: object
+                    type: array
+                  utilityNetworkAccess:
+                    description: |-
+                      (Boolean) If set to false, nodes in this group will not have access to utility network.
+                      If set to false, nodes in this group will not have access to utility network.
+                    type: boolean
                 type: object
               initProvider:
                 description: |-
@@ -234,52 +279,54 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  ipNetwork:
+                  antiAffinity:
                     description: |-
-                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
-                      IP subnet within the network. Network must have exactly one IP subnet.
+                      affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                    type: boolean
+                  customPlan:
+                    description: |-
+                      (Block List) Resource properties for custom plan (see below for nested schema)
+                      Resource properties for custom plan
                     items:
                       properties:
-                        address:
+                        cores:
                           description: |-
-                            (String) The CIDR range of the subnet
-                            The CIDR range of the subnet
+                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                          type: number
+                        memory:
+                          description: |-
+                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                          type: number
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use. Defaults to maxiops
+                            The storage tier to use. Defaults to maxiops
                           type: string
-                        dhcp:
+                      type: object
+                    type: array
+                  kubeletArgs:
+                    description: |-
+                      those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
+                      Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
+                    items:
+                      properties:
+                        key:
                           description: |-
-                            (Boolean) Is DHCP enabled?
-                            Is DHCP enabled?
-                          type: boolean
-                        dhcpDefaultRoute:
-                          description: |-
-                            (Boolean) Is the gateway the DHCP default route?
-                            Is the gateway the DHCP default route?
-                          type: boolean
-                        dhcpDns:
-                          description: |-
-                            (Set of String) The DNS servers given by DHCP
-                            The DNS servers given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        dhcpRoutes:
-                          description: |-
-                            (Set of String) The additional DHCP classless static routes given by DHCP
-                            The additional DHCP classless static routes given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        family:
-                          description: |-
-                            (String) IP address family
-                            IP address family
+                            (String) Kubelet argument key.
+                            Kubelet argument key.
                           type: string
-                        gateway:
+                        value:
                           description: |-
-                            (String) Gateway address given by DHCP
-                            Gateway address given by DHCP
+                            (String) Kubelet argument value.
+                            Kubelet argument value.
                           type: string
                       type: object
                     type: array
@@ -287,99 +334,61 @@ spec:
                     additionalProperties:
                       type: string
                     description: |-
-                      value pairs to classify the network.
-                      User defined key-value pairs to classify the network.
+                      value pairs to classify the node_group.
+                      User defined key-value pairs to classify the node_group.
                     type: object
                     x-kubernetes-map-type: granular
-                  name:
+                  nodeCount:
                     description: |-
-                      (String) Name of the network.
-                      Name of the network.
-                    type: string
-                  router:
+                      (Number) Amount of nodes to provision in the node group.
+                      Amount of nodes to provision in the node group.
+                    type: number
+                  plan:
                     description: |-
-                      (String) UUID of a router to attach to this network.
-                      UUID of a router to attach to this network.
+                      (String) The server plan used for the node group. You can list available plans with upctl server plans
+                      The server plan used for the node group. You can list available plans with `upctl server plans`
                     type: string
-                  routerRef:
-                    description: Reference to a Router in network to populate router.
-                    properties:
-                      name:
-                        description: Name of the referenced object.
-                        type: string
-                      policy:
-                        description: Policies for referencing.
-                        properties:
-                          resolution:
-                            default: Required
-                            description: |-
-                              Resolution specifies whether resolution of this reference is required.
-                              The default is 'Required', which means the reconcile will fail if the
-                              reference cannot be resolved. 'Optional' means this reference will be
-                              a no-op if it cannot be resolved.
-                            enum:
-                            - Required
-                            - Optional
-                            type: string
-                          resolve:
-                            description: |-
-                              Resolve specifies when this reference should be resolved. The default
-                              is 'IfNotPresent', which will attempt to resolve the reference only when
-                              the corresponding field is not present. Use 'Always' to resolve the
-                              reference on every reconcile.
-                            enum:
-                            - Always
-                            - IfNotPresent
-                            type: string
-                        type: object
-                    required:
-                    - name
-                    type: object
-                  routerSelector:
-                    description: Selector for a Router in network to populate router.
-                    properties:
-                      matchControllerRef:
-                        description: |-
-                          MatchControllerRef ensures an object with the same controller reference
-                          as the selecting object is selected.
-                        type: boolean
-                      matchLabels:
-                        additionalProperties:
+                  sshKeys:
+                    description: |-
+                      (Set of String) You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
+                      You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  storageEncryption:
+                    description: |-
+                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                    type: string
+                  taint:
+                    description: |-
+                      (Block Set) Taints for the nodes in this group. (see below for nested schema)
+                      Taints for the nodes in this group.
+                    items:
+                      properties:
+                        effect:
+                          description: |-
+                            (String) Taint effect.
+                            Taint effect.
                           type: string
-                        description: MatchLabels ensures an object with matching labels
-                          is selected.
-                        type: object
-                      policy:
-                        description: Policies for selection.
-                        properties:
-                          resolution:
-                            default: Required
-                            description: |-
-                              Resolution specifies whether resolution of this reference is required.
-                              The default is 'Required', which means the reconcile will fail if the
-                              reference cannot be resolved. 'Optional' means this reference will be
-                              a no-op if it cannot be resolved.
-                            enum:
-                            - Required
-                            - Optional
-                            type: string
-                          resolve:
-                            description: |-
-                              Resolve specifies when this reference should be resolved. The default
-                              is 'IfNotPresent', which will attempt to resolve the reference only when
-                              the corresponding field is not present. Use 'Always' to resolve the
-                              reference on every reconcile.
-                            enum:
-                            - Always
-                            - IfNotPresent
-                            type: string
-                        type: object
-                    type: object
-                  zone:
+                        key:
+                          description: |-
+                            (String) Kubelet argument key.
+                            Taint key.
+                          type: string
+                        value:
+                          description: |-
+                            (String) Kubelet argument value.
+                            Taint value.
+                          type: string
+                      type: object
+                    type: array
+                  utilityNetworkAccess:
                     description: |-
-                      fra1. You can list available zones with upctl zone list.
-                      The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
-                    type: string
+                      (Boolean) If set to false, nodes in this group will not have access to utility network.
+                      If set to false, nodes in this group will not have access to utility network.
+                    type: boolean
                 type: object
               managementPolicies:
                 default:
@@ -549,68 +558,77 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.name is a required parameter
+            - message: spec.forProvider.nodeCount is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
-                || (has(self.initProvider) && has(self.initProvider.name))'
-            - message: spec.forProvider.zone is a required parameter
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.nodeCount)
+                || (has(self.initProvider) && has(self.initProvider.nodeCount))'
+            - message: spec.forProvider.plan is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.zone)
-                || (has(self.initProvider) && has(self.initProvider.zone))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.plan)
+                || (has(self.initProvider) && has(self.initProvider.plan))'
           status:
-            description: NetworkStatus defines the observed state of Network.
+            description: KubernetesNodeGroupStatus defines the observed state of KubernetesNodeGroup.
             properties:
               atProvider:
                 properties:
-                  id:
-                    description: (String) UUID of the network.
-                    type: string
-                  ipNetwork:
+                  antiAffinity:
                     description: |-
-                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
-                      IP subnet within the network. Network must have exactly one IP subnet.
+                      affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                      If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
+                    type: boolean
+                  cluster:
+                    description: |-
+                      (String) UUID of the cluster.
+                      UUID of the cluster.
+                    type: string
+                  customPlan:
+                    description: |-
+                      (Block List) Resource properties for custom plan (see below for nested schema)
+                      Resource properties for custom plan
                     items:
                       properties:
-                        address:
+                        cores:
                           description: |-
-                            (String) The CIDR range of the subnet
-                            The CIDR range of the subnet
+                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                          type: number
+                        memory:
+                          description: |-
+                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                          type: number
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use. Defaults to maxiops
+                            The storage tier to use. Defaults to maxiops
                           type: string
-                        dhcp:
+                      type: object
+                    type: array
+                  id:
+                    description: (String) Computed ID of the node group. This is a
+                      combination of the cluster UUID and the node group name, separated
+                      with a /.
+                    type: string
+                  kubeletArgs:
+                    description: |-
+                      those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
+                      Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
+                    items:
+                      properties:
+                        key:
                           description: |-
-                            (Boolean) Is DHCP enabled?
-                            Is DHCP enabled?
-                          type: boolean
-                        dhcpDefaultRoute:
-                          description: |-
-                            (Boolean) Is the gateway the DHCP default route?
-                            Is the gateway the DHCP default route?
-                          type: boolean
-                        dhcpDns:
-                          description: |-
-                            (Set of String) The DNS servers given by DHCP
-                            The DNS servers given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        dhcpRoutes:
-                          description: |-
-                            (Set of String) The additional DHCP classless static routes given by DHCP
-                            The additional DHCP classless static routes given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        family:
-                          description: |-
-                            (String) IP address family
-                            IP address family
+                            (String) Kubelet argument key.
+                            Kubelet argument key.
                           type: string
-                        gateway:
+                        value:
                           description: |-
-                            (String) Gateway address given by DHCP
-                            Gateway address given by DHCP
+                            (String) Kubelet argument value.
+                            Kubelet argument value.
                           type: string
                       type: object
                     type: array
@@ -618,30 +636,61 @@ spec:
                     additionalProperties:
                       type: string
                     description: |-
-                      value pairs to classify the network.
-                      User defined key-value pairs to classify the network.
+                      value pairs to classify the node_group.
+                      User defined key-value pairs to classify the node_group.
                     type: object
                     x-kubernetes-map-type: granular
-                  name:
+                  nodeCount:
                     description: |-
-                      (String) Name of the network.
-                      Name of the network.
-                    type: string
-                  router:
+                      (Number) Amount of nodes to provision in the node group.
+                      Amount of nodes to provision in the node group.
+                    type: number
+                  plan:
                     description: |-
-                      (String) UUID of a router to attach to this network.
-                      UUID of a router to attach to this network.
+                      (String) The server plan used for the node group. You can list available plans with upctl server plans
+                      The server plan used for the node group. You can list available plans with `upctl server plans`
                     type: string
-                  type:
+                  sshKeys:
                     description: |-
-                      (String) The network type
-                      The network type
-                    type: string
-                  zone:
+                      (Set of String) You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
+                      You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
+                  storageEncryption:
                     description: |-
-                      fra1. You can list available zones with upctl zone list.
-                      The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
                     type: string
+                  taint:
+                    description: |-
+                      (Block Set) Taints for the nodes in this group. (see below for nested schema)
+                      Taints for the nodes in this group.
+                    items:
+                      properties:
+                        effect:
+                          description: |-
+                            (String) Taint effect.
+                            Taint effect.
+                          type: string
+                        key:
+                          description: |-
+                            (String) Kubelet argument key.
+                            Taint key.
+                          type: string
+                        value:
+                          description: |-
+                            (String) Kubelet argument value.
+                            Taint value.
+                          type: string
+                      type: object
+                    type: array
+                  utilityNetworkAccess:
+                    description: |-
+                      (Boolean) If set to false, nodes in this group will not have access to utility network.
+                      If set to false, nodes in this group will not have access to utility network.
+                    type: boolean
                 type: object
               conditions:
                 description: Conditions of the resource.

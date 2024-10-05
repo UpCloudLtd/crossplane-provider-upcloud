@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: managedobjectstorageuserpolicies.objectstorage.upcloud.io
+  name: managedobjectstorageuserpolicies.objectstorage.upcloud.com
 spec:
-  group: objectstorage.upcloud.io
+  group: objectstorage.upcloud.com
   names:
     categories:
     - crossplane

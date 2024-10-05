@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: manageddatabaselogicaldatabases.database.upcloud.io
+  name: managedobjectstorageusers.objectstorage.upcloud.com
 spec:
-  group: database.upcloud.io
+  group: objectstorage.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: ManagedDatabaseLogicalDatabase
-    listKind: ManagedDatabaseLogicalDatabaseList
-    plural: manageddatabaselogicaldatabases
-    singular: manageddatabaselogicaldatabase
+    kind: ManagedObjectStorageUser
+    listKind: ManagedObjectStorageUserList
+    plural: managedobjectstorageusers
+    singular: managedobjectstorageuser
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,9 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ManagedDatabaseLogicalDatabase is the Schema for the ManagedDatabaseLogicalDatabases
-          API. This resource represents a logical database in managed database
+        description: ManagedObjectStorageUser is the Schema for the ManagedObjectStorageUsers
+          API. This resource represents an UpCloud Managed Object Storage user. No
+          relation to UpCloud API accounts.
         properties:
           apiVersion:
             description: |-
@@ -55,8 +56,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: ManagedDatabaseLogicalDatabaseSpec defines the desired state
-              of ManagedDatabaseLogicalDatabase
+            description: ManagedObjectStorageUserSpec defines the desired state of
+              ManagedObjectStorageUser
             properties:
               deletionPolicy:
                 default: Delete
@@ -74,24 +75,14 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  characterSet:
+                  serviceUuid:
                     description: |-
-                      (String) Default character set for the database (LC_CTYPE)
-                      Default character set for the database (LC_CTYPE)
+                      (String) Managed Object Storage service UUID.
+                      Managed Object Storage service UUID.
                     type: string
-                  collation:
-                    description: |-
-                      (String) Default collation for the database (LC_COLLATE)
-                      Default collation for the database (LC_COLLATE)
-                    type: string
-                  service:
-                    description: |-
-                      (String) Service's UUID for which this user belongs to
-                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to logical database `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
-                    type: string
-                  serviceRef:
-                    description: Reference to a ManagedDatabasePostgresql in database
-                      to populate service.
+                  serviceUuidRef:
+                    description: Reference to a ManagedObjectStorage in objectstorage
+                      to populate serviceUuid.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -124,9 +115,9 @@ spec:
                     required:
                     - name
                     type: object
-                  serviceSelector:
-                    description: Selector for a ManagedDatabasePostgresql in database
-                      to populate service.
+                  serviceUuidSelector:
+                    description: Selector for a ManagedObjectStorage in objectstorage
+                      to populate serviceUuid.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -178,17 +169,6 @@ spec:
                   required on creation, but we do not desire to update them after creation,
                   for example because of an external controller is managing them, like an
                   autoscaler.
-                properties:
-                  characterSet:
-                    description: |-
-                      (String) Default character set for the database (LC_CTYPE)
-                      Default character set for the database (LC_CTYPE)
-                    type: string
-                  collation:
-                    description: |-
-                      (String) Default collation for the database (LC_COLLATE)
-                      Default collation for the database (LC_COLLATE)
-                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -358,28 +338,28 @@ spec:
             - forProvider
             type: object
           status:
-            description: ManagedDatabaseLogicalDatabaseStatus defines the observed
-              state of ManagedDatabaseLogicalDatabase.
+            description: ManagedObjectStorageUserStatus defines the observed state
+              of ManagedObjectStorageUser.
             properties:
               atProvider:
                 properties:
-                  characterSet:
+                  arn:
                     description: |-
-                      (String) Default character set for the database (LC_CTYPE)
-                      Default character set for the database (LC_CTYPE)
+                      (String) User ARN.
+                      User ARN.
                     type: string
-                  collation:
+                  createdAt:
                     description: |-
-                      (String) Default collation for the database (LC_COLLATE)
-                      Default collation for the database (LC_COLLATE)
+                      (String) Creation time.
+                      Creation time.
                     type: string
                   id:
                     description: (String) The ID of this resource.
                     type: string
-                  service:
+                  serviceUuid:
                     description: |-
-                      (String) Service's UUID for which this user belongs to
-                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to logical database `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
+                      (String) Managed Object Storage service UUID.
+                      Managed Object Storage service UUID.
                     type: string
                 type: object
               conditions:

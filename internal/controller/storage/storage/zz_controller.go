@@ -21,8 +21,8 @@ import (
 	"github.com/pkg/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	v1alpha1 "github.com/UpCloudLtd/provider-upcloud/apis/storage/v1alpha1"
-	features "github.com/UpCloudLtd/provider-upcloud/internal/features"
+	v1alpha1 "github.com/UpCloudLtd/crossplane-provider-upcloud/apis/storage/v1alpha1"
+	features "github.com/UpCloudLtd/crossplane-provider-upcloud/internal/features"
 )
 
 // Setup adds a controller that reconciles Storage managed resources.

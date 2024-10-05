@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: providerconfigs.provider.upcloud.io
+  name: providerconfigs.provider.upcloud.com
 spec:
-  group: provider.upcloud.io
+  group: provider.upcloud.com
   names:
     categories:
     - crossplane

@@ -17,7 +17,7 @@ type ManagedObjectStorageUserPolicyInitParameters struct {
 
 	// (String) Policy name.
 	// Policy name.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStoragePolicy
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStoragePolicy
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// Reference to a ManagedObjectStoragePolicy in objectstorage to populate name.
@@ -30,7 +30,7 @@ type ManagedObjectStorageUserPolicyInitParameters struct {
 
 	// (String) Managed Object Storage service UUID.
 	// Managed Object Storage service UUID.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorage
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorage
 	ServiceUUID *string `json:"serviceUuid,omitempty" tf:"service_uuid,omitempty"`
 
 	// Reference to a ManagedObjectStorage in objectstorage to populate serviceUuid.
@@ -43,7 +43,7 @@ type ManagedObjectStorageUserPolicyInitParameters struct {
 
 	// (String) Username.
 	// Username.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorageUser
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorageUser
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 
 	// Reference to a ManagedObjectStorageUser in objectstorage to populate username.
@@ -77,7 +77,7 @@ type ManagedObjectStorageUserPolicyParameters struct {
 
 	// (String) Policy name.
 	// Policy name.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStoragePolicy
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStoragePolicy
 	// +kubebuilder:validation:Optional
 	Name *string `json:"name" tf:"name,omitempty"`
 
@@ -91,7 +91,7 @@ type ManagedObjectStorageUserPolicyParameters struct {
 
 	// (String) Managed Object Storage service UUID.
 	// Managed Object Storage service UUID.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorage
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorage
 	// +kubebuilder:validation:Optional
 	ServiceUUID *string `json:"serviceUuid" tf:"service_uuid,omitempty"`
 
@@ -105,7 +105,7 @@ type ManagedObjectStorageUserPolicyParameters struct {
 
 	// (String) Username.
 	// Username.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorageUser
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/objectstorage/v1alpha1.ManagedObjectStorageUser
 	// +kubebuilder:validation:Optional
 	Username *string `json:"username" tf:"username,omitempty"`
 

@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: manageddatabaseusers.database.upcloud.io
+  name: kubernetesclusters.uks.upcloud.com
 spec:
-  group: database.upcloud.io
+  group: uks.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: ManagedDatabaseUser
-    listKind: ManagedDatabaseUserList
-    plural: manageddatabaseusers
-    singular: manageddatabaseuser
+    kind: KubernetesCluster
+    listKind: KubernetesClusterList
+    plural: kubernetesclusters
+    singular: kubernetescluster
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,9 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ManagedDatabaseUser is the Schema for the ManagedDatabaseUsers
-          API. This resource represents a user in managed database
+        description: KubernetesCluster is the Schema for the KubernetesClusters API.
+          This resource represents a Managed Kubernetes https://upcloud.com/products/managed-kubernetes
+          cluster.
         properties:
           apiVersion:
             description: |-
@@ -55,7 +56,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ManagedDatabaseUserSpec defines the desired state of ManagedDatabaseUser
+            description: KubernetesClusterSpec defines the desired state of KubernetesCluster
             properties:
               deletionPolicy:
                 default: Delete
@@ -73,113 +74,34 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  authentication:
+                  controlPlaneIpFilter:
                     description: |-
-                      (String) MySQL only, authentication type.
-                      MySQL only, authentication type.
-                    type: string
-                  opensearchAccessControl:
-                    description: |-
-                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
-                      OpenSearch access control object.
+                      (Set of String) IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use ["0.0.0.0/0"]. To deny access from all sources, use []. Values set here do not restrict access to node groups or exposed Kubernetes services.
+                      IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use `["0.0.0.0/0"]`. To deny access from all sources, use `[]`. Values set here do not restrict access to node groups or exposed Kubernetes services.
                     items:
-                      properties:
-                        rules:
-                          description: |-
-                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
-                            Set user access control rules.
-                          items:
-                            properties:
-                              index:
-                                description: |-
-                                  (String) Set index name, pattern or top level API.
-                                  Set index name, pattern or top level API.
-                                type: string
-                              permission:
-                                description: |-
-                                  (String) Set permission access.
-                                  Set permission access.
-                                type: string
-                            type: object
-                          type: array
-                      type: object
+                      type: string
                     type: array
-                  passwordSecretRef:
+                    x-kubernetes-list-type: set
+                  labels:
+                    additionalProperties:
+                      type: string
                     description: |-
-                      (String, Sensitive) Password for the database user. Defaults to a random value
-                      Password for the database user. Defaults to a random value
-                    properties:
-                      key:
-                        description: The key to select.
-                        type: string
-                      name:
-                        description: Name of the secret.
-                        type: string
-                      namespace:
-                        description: Namespace of the secret.
-                        type: string
-                    required:
-                    - key
-                    - name
-                    - namespace
+                      value pairs to classify the cluster.
+                      User defined key-value pairs to classify the cluster.
                     type: object
-                  pgAccessControl:
+                    x-kubernetes-map-type: granular
+                  name:
                     description: |-
-                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
-                      PostgreSQL access control object.
-                    items:
-                      properties:
-                        allowReplication:
-                          description: |-
-                            (Boolean) Grant replication privilege
-                            Grant replication privilege
-                          type: boolean
-                      type: object
-                    type: array
-                  redisAccessControl:
-                    description: |-
-                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
-                      Redis access control object.
-                    items:
-                      properties:
-                        categories:
-                          description: |-
-                            (List of String) Set access control to all commands in specified categories.
-                            Set access control to all commands in specified categories.
-                          items:
-                            type: string
-                          type: array
-                        channels:
-                          description: |-
-                            (List of String) Set access control to Pub/Sub channels.
-                            Set access control to Pub/Sub channels.
-                          items:
-                            type: string
-                          type: array
-                        commands:
-                          description: |-
-                            (List of String) Set access control to commands.
-                            Set access control to commands.
-                          items:
-                            type: string
-                          type: array
-                        keys:
-                          description: |-
-                            (List of String) Set access control to keys.
-                            Set access control to keys.
-                          items:
-                            type: string
-                          type: array
-                      type: object
-                    type: array
-                  service:
-                    description: |-
-                      (String) Service's UUID for which this user belongs to
-                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to database user `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
+                      (String) Cluster name. Needs to be unique within the account.
+                      Cluster name. Needs to be unique within the account.
                     type: string
-                  serviceRef:
-                    description: Reference to a ManagedDatabasePostgresql in database
-                      to populate service.
+                  network:
+                    description: |-
+                      (String) Network ID for the cluster to run in.
+                      Network ID for the cluster to run in.
+                    type: string
+                  networkRef:
+                    description: Reference to a Network in network to populate network.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -212,9 +134,8 @@ spec:
                     required:
                     - name
                     type: object
-                  serviceSelector:
-                    description: Selector for a ManagedDatabasePostgresql in database
-                      to populate service.
+                  networkSelector:
+                    description: Selector for a Network in network to populate network.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -253,6 +174,31 @@ spec:
                             type: string
                         type: object
                     type: object
+                  plan:
+                    description: |-
+                      (String) The pricing plan used for the cluster. Default plan is development. You can list available plans with upctl kubernetes plans.
+                      The pricing plan used for the cluster. Default plan is `development`. You can list available plans with `upctl kubernetes plans`.
+                    type: string
+                  privateNodeGroups:
+                    description: |-
+                      (Boolean) Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
+                      Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
+                    type: boolean
+                  storageEncryption:
+                    description: |-
+                      (String) Set default storage encryption strategy for all nodes in the cluster.
+                      Set default storage encryption strategy for all nodes in the cluster.
+                    type: string
+                  version:
+                    description: |-
+                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone in which the Kubernetes cluster will be hosted, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -267,105 +213,131 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  authentication:
+                  controlPlaneIpFilter:
                     description: |-
-                      (String) MySQL only, authentication type.
-                      MySQL only, authentication type.
-                    type: string
-                  opensearchAccessControl:
-                    description: |-
-                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
-                      OpenSearch access control object.
+                      (Set of String) IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use ["0.0.0.0/0"]. To deny access from all sources, use []. Values set here do not restrict access to node groups or exposed Kubernetes services.
+                      IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use `["0.0.0.0/0"]`. To deny access from all sources, use `[]`. Values set here do not restrict access to node groups or exposed Kubernetes services.
                     items:
-                      properties:
-                        rules:
-                          description: |-
-                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
-                            Set user access control rules.
-                          items:
-                            properties:
-                              index:
-                                description: |-
-                                  (String) Set index name, pattern or top level API.
-                                  Set index name, pattern or top level API.
-                                type: string
-                              permission:
-                                description: |-
-                                  (String) Set permission access.
-                                  Set permission access.
-                                type: string
-                            type: object
-                          type: array
-                      type: object
+                      type: string
                     type: array
-                  passwordSecretRef:
+                    x-kubernetes-list-type: set
+                  labels:
+                    additionalProperties:
+                      type: string
                     description: |-
-                      (String, Sensitive) Password for the database user. Defaults to a random value
-                      Password for the database user. Defaults to a random value
-                    properties:
-                      key:
-                        description: The key to select.
-                        type: string
-                      name:
-                        description: Name of the secret.
-                        type: string
-                      namespace:
-                        description: Namespace of the secret.
-                        type: string
-                    required:
-                    - key
-                    - name
-                    - namespace
+                      value pairs to classify the cluster.
+                      User defined key-value pairs to classify the cluster.
                     type: object
-                  pgAccessControl:
+                    x-kubernetes-map-type: granular
+                  name:
                     description: |-
-                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
-                      PostgreSQL access control object.
-                    items:
-                      properties:
-                        allowReplication:
-                          description: |-
-                            (Boolean) Grant replication privilege
-                            Grant replication privilege
-                          type: boolean
-                      type: object
-                    type: array
-                  redisAccessControl:
+                      (String) Cluster name. Needs to be unique within the account.
+                      Cluster name. Needs to be unique within the account.
+                    type: string
+                  network:
                     description: |-
-                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
-                      Redis access control object.
-                    items:
-                      properties:
-                        categories:
-                          description: |-
-                            (List of String) Set access control to all commands in specified categories.
-                            Set access control to all commands in specified categories.
-                          items:
+                      (String) Network ID for the cluster to run in.
+                      Network ID for the cluster to run in.
+                    type: string
+                  networkRef:
+                    description: Reference to a Network in network to populate network.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                      policy:
+                        description: Policies for referencing.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
                             type: string
-                          type: array
-                        channels:
-                          description: |-
-                            (List of String) Set access control to Pub/Sub channels.
-                            Set access control to Pub/Sub channels.
-                          items:
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
                             type: string
-                          type: array
-                        commands:
-                          description: |-
-                            (List of String) Set access control to commands.
-                            Set access control to commands.
-                          items:
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  networkSelector:
+                    description: Selector for a Network in network to populate network.
+                    properties:
+                      matchControllerRef:
+                        description: |-
+                          MatchControllerRef ensures an object with the same controller reference
+                          as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                      policy:
+                        description: Policies for selection.
+                        properties:
+                          resolution:
+                            default: Required
+                            description: |-
+                              Resolution specifies whether resolution of this reference is required.
+                              The default is 'Required', which means the reconcile will fail if the
+                              reference cannot be resolved. 'Optional' means this reference will be
+                              a no-op if it cannot be resolved.
+                            enum:
+                            - Required
+                            - Optional
                             type: string
-                          type: array
-                        keys:
-                          description: |-
-                            (List of String) Set access control to keys.
-                            Set access control to keys.
-                          items:
+                          resolve:
+                            description: |-
+                              Resolve specifies when this reference should be resolved. The default
+                              is 'IfNotPresent', which will attempt to resolve the reference only when
+                              the corresponding field is not present. Use 'Always' to resolve the
+                              reference on every reconcile.
+                            enum:
+                            - Always
+                            - IfNotPresent
                             type: string
-                          type: array
-                      type: object
-                    type: array
+                        type: object
+                    type: object
+                  plan:
+                    description: |-
+                      (String) The pricing plan used for the cluster. Default plan is development. You can list available plans with upctl kubernetes plans.
+                      The pricing plan used for the cluster. Default plan is `development`. You can list available plans with `upctl kubernetes plans`.
+                    type: string
+                  privateNodeGroups:
+                    description: |-
+                      (Boolean) Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
+                      Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
+                    type: boolean
+                  storageEncryption:
+                    description: |-
+                      (String) Set default storage encryption strategy for all nodes in the cluster.
+                      Set default storage encryption strategy for all nodes in the cluster.
+                    type: string
+                  version:
+                    description: |-
+                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone in which the Kubernetes cluster will be hosted, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -534,103 +506,98 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.controlPlaneIpFilter is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.controlPlaneIpFilter)
+                || (has(self.initProvider) && has(self.initProvider.controlPlaneIpFilter))'
+            - message: spec.forProvider.labels is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.labels)
+                || (has(self.initProvider) && has(self.initProvider.labels))'
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.zone is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.zone)
+                || (has(self.initProvider) && has(self.initProvider.zone))'
           status:
-            description: ManagedDatabaseUserStatus defines the observed state of ManagedDatabaseUser.
+            description: KubernetesClusterStatus defines the observed state of KubernetesCluster.
             properties:
               atProvider:
                 properties:
-                  authentication:
+                  controlPlaneIpFilter:
                     description: |-
-                      (String) MySQL only, authentication type.
-                      MySQL only, authentication type.
-                    type: string
+                      (Set of String) IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use ["0.0.0.0/0"]. To deny access from all sources, use []. Values set here do not restrict access to node groups or exposed Kubernetes services.
+                      IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use `["0.0.0.0/0"]`. To deny access from all sources, use `[]`. Values set here do not restrict access to node groups or exposed Kubernetes services.
+                    items:
+                      type: string
+                    type: array
+                    x-kubernetes-list-type: set
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) UUID of the cluster.
                     type: string
-                  opensearchAccessControl:
+                  labels:
+                    additionalProperties:
+                      type: string
                     description: |-
-                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
-                      OpenSearch access control object.
-                    items:
-                      properties:
-                        rules:
-                          description: |-
-                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
-                            Set user access control rules.
-                          items:
-                            properties:
-                              index:
-                                description: |-
-                                  (String) Set index name, pattern or top level API.
-                                  Set index name, pattern or top level API.
-                                type: string
-                              permission:
-                                description: |-
-                                  (String) Set permission access.
-                                  Set permission access.
-                                type: string
-                            type: object
-                          type: array
-                      type: object
-                    type: array
-                  pgAccessControl:
+                      value pairs to classify the cluster.
+                      User defined key-value pairs to classify the cluster.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  name:
                     description: |-
-                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
-                      PostgreSQL access control object.
-                    items:
-                      properties:
-                        allowReplication:
-                          description: |-
-                            (Boolean) Grant replication privilege
-                            Grant replication privilege
-                          type: boolean
-                      type: object
-                    type: array
-                  redisAccessControl:
-                    description: |-
-                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
-                      Redis access control object.
-                    items:
-                      properties:
-                        categories:
-                          description: |-
-                            (List of String) Set access control to all commands in specified categories.
-                            Set access control to all commands in specified categories.
-                          items:
-                            type: string
-                          type: array
-                        channels:
-                          description: |-
-                            (List of String) Set access control to Pub/Sub channels.
-                            Set access control to Pub/Sub channels.
-                          items:
-                            type: string
-                          type: array
-                        commands:
-                          description: |-
-                            (List of String) Set access control to commands.
-                            Set access control to commands.
-                          items:
-                            type: string
-                          type: array
-                        keys:
-                          description: |-
-                            (List of String) Set access control to keys.
-                            Set access control to keys.
-                          items:
-                            type: string
-                          type: array
-                      type: object
-                    type: array
-                  service:
-                    description: |-
-                      (String) Service's UUID for which this user belongs to
-                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to database user `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
+                      (String) Cluster name. Needs to be unique within the account.
+                      Cluster name. Needs to be unique within the account.
                     type: string
-                  type:
+                  network:
                     description: |-
-                      (String) Type of the user. Only normal type users can be created
-                      Type of the user. Only normal type users can be created
+                      (String) Network ID for the cluster to run in.
+                      Network ID for the cluster to run in.
+                    type: string
+                  networkCidr:
+                    description: |-
+                      (String) Network CIDR for the given network. Computed automatically.
+                      Network CIDR for the given network. Computed automatically.
+                    type: string
+                  nodeGroups:
+                    description: |-
+                      (List of String) Names of the node groups configured to cluster
+                      Names of the node groups configured to cluster
+                    items:
+                      type: string
+                    type: array
+                  plan:
+                    description: |-
+                      (String) The pricing plan used for the cluster. Default plan is development. You can list available plans with upctl kubernetes plans.
+                      The pricing plan used for the cluster. Default plan is `development`. You can list available plans with `upctl kubernetes plans`.
+                    type: string
+                  privateNodeGroups:
+                    description: |-
+                      (Boolean) Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
+                      Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
+                    type: boolean
+                  state:
+                    description: |-
+                      (String) Operational state of the cluster.
+                      Operational state of the cluster.
+                    type: string
+                  storageEncryption:
+                    description: |-
+                      (String) Set default storage encryption strategy for all nodes in the cluster.
+                      Set default storage encryption strategy for all nodes in the cluster.
+                    type: string
+                  version:
+                    description: |-
+                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone in which the Kubernetes cluster will be hosted, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
                     type: string
                 type: object
               conditions:

@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: managedobjectstorageusers.objectstorage.upcloud.io
+  name: managedobjectstorages.objectstorage.upcloud.com
 spec:
-  group: objectstorage.upcloud.io
+  group: objectstorage.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: ManagedObjectStorageUser
-    listKind: ManagedObjectStorageUserList
-    plural: managedobjectstorageusers
-    singular: managedobjectstorageuser
+    kind: ManagedObjectStorage
+    listKind: ManagedObjectStorageList
+    plural: managedobjectstorages
+    singular: managedobjectstorage
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,9 +34,9 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ManagedObjectStorageUser is the Schema for the ManagedObjectStorageUsers
-          API. This resource represents an UpCloud Managed Object Storage user. No
-          relation to UpCloud API accounts.
+        description: ManagedObjectStorage is the Schema for the ManagedObjectStorages
+          API. This resource represents an UpCloud Managed Object Storage instance,
+          which provides S3 compatible storage.
         properties:
           apiVersion:
             description: |-
@@ -56,8 +56,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ManagedObjectStorageUserSpec defines the desired state of
-              ManagedObjectStorageUser
+            description: ManagedObjectStorageSpec defines the desired state of ManagedObjectStorage
             properties:
               deletionPolicy:
                 default: Delete
@@ -75,87 +74,57 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  serviceUuid:
+                  configuredStatus:
                     description: |-
-                      (String) Managed Object Storage service UUID.
-                      Managed Object Storage service UUID.
+                      (String) Service status managed by the end user.
+                      Service status managed by the end user.
                     type: string
-                  serviceUuidRef:
-                    description: Reference to a ManagedObjectStorage in objectstorage
-                      to populate serviceUuid.
-                    properties:
-                      name:
-                        description: Name of the referenced object.
-                        type: string
-                      policy:
-                        description: Policies for referencing.
-                        properties:
-                          resolution:
-                            default: Required
-                            description: |-
-                              Resolution specifies whether resolution of this reference is required.
-                              The default is 'Required', which means the reconcile will fail if the
-                              reference cannot be resolved. 'Optional' means this reference will be
-                              a no-op if it cannot be resolved.
-                            enum:
-                            - Required
-                            - Optional
-                            type: string
-                          resolve:
-                            description: |-
-                              Resolve specifies when this reference should be resolved. The default
-                              is 'IfNotPresent', which will attempt to resolve the reference only when
-                              the corresponding field is not present. Use 'Always' to resolve the
-                              reference on every reconcile.
-                            enum:
-                            - Always
-                            - IfNotPresent
-                            type: string
-                        type: object
-                    required:
-                    - name
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed object storage.
+                      User defined key-value pairs to classify the managed object storage.
                     type: object
-                  serviceUuidSelector:
-                    description: Selector for a ManagedObjectStorage in objectstorage
-                      to populate serviceUuid.
-                    properties:
-                      matchControllerRef:
-                        description: |-
-                          MatchControllerRef ensures an object with the same controller reference
-                          as the selecting object is selected.
-                        type: boolean
-                      matchLabels:
-                        additionalProperties:
+                    x-kubernetes-map-type: granular
+                  name:
+                    description: |-
+                      (String) Name of the Managed Object Storage service. Must be unique within account.
+                      Name of the Managed Object Storage service. Must be unique within account.
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set) Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network. (see below for nested schema)
+                      Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network.
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. IPv6 currently not supported.
+                            Network family. IPv6 currently not supported.
                           type: string
-                        description: MatchLabels ensures an object with matching labels
-                          is selected.
-                        type: object
-                      policy:
-                        description: Policies for selection.
-                        properties:
-                          resolution:
-                            default: Required
-                            description: |-
-                              Resolution specifies whether resolution of this reference is required.
-                              The default is 'Required', which means the reconcile will fail if the
-                              reference cannot be resolved. 'Optional' means this reference will be
-                              a no-op if it cannot be resolved.
-                            enum:
-                            - Required
-                            - Optional
-                            type: string
-                          resolve:
-                            description: |-
-                              Resolve specifies when this reference should be resolved. The default
-                              is 'IfNotPresent', which will attempt to resolve the reference only when
-                              the corresponding field is not present. Use 'Always' to resolve the
-                              reference on every reconcile.
-                            enum:
-                            - Always
-                            - IfNotPresent
-                            type: string
-                        type: object
-                    type: object
+                        name:
+                          description: |-
+                            (String) Name of the Managed Object Storage service. Must be unique within account.
+                            Network name. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Network type.
+                            Network type.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network uuid. For public networks the field should be omitted.
+                            Private network uuid. For public networks the field should be omitted.
+                          type: string
+                      type: object
+                    type: array
+                  region:
+                    description: |-
+                      (String) Region in which the service will be hosted, see upcloud_managed_object_storage_regions data source.
+                      Region in which the service will be hosted, see `upcloud_managed_object_storage_regions` data source.
+                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -169,6 +138,58 @@ spec:
                   required on creation, but we do not desire to update them after creation,
                   for example because of an external controller is managing them, like an
                   autoscaler.
+                properties:
+                  configuredStatus:
+                    description: |-
+                      (String) Service status managed by the end user.
+                      Service status managed by the end user.
+                    type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed object storage.
+                      User defined key-value pairs to classify the managed object storage.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  name:
+                    description: |-
+                      (String) Name of the Managed Object Storage service. Must be unique within account.
+                      Name of the Managed Object Storage service. Must be unique within account.
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set) Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network. (see below for nested schema)
+                      Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network.
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. IPv6 currently not supported.
+                            Network family. IPv6 currently not supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the Managed Object Storage service. Must be unique within account.
+                            Network name. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Network type.
+                            Network type.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network uuid. For public networks the field should be omitted.
+                            Private network uuid. For public networks the field should be omitted.
+                          type: string
+                      type: object
+                    type: array
+                  region:
+                    description: |-
+                      (String) Region in which the service will be hosted, see upcloud_managed_object_storage_regions data source.
+                      Region in which the service will be hosted, see `upcloud_managed_object_storage_regions` data source.
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -337,29 +358,121 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.configuredStatus is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.configuredStatus)
+                || (has(self.initProvider) && has(self.initProvider.configuredStatus))'
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.region is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.region)
+                || (has(self.initProvider) && has(self.initProvider.region))'
           status:
-            description: ManagedObjectStorageUserStatus defines the observed state
-              of ManagedObjectStorageUser.
+            description: ManagedObjectStorageStatus defines the observed state of
+              ManagedObjectStorage.
             properties:
               atProvider:
                 properties:
-                  arn:
+                  configuredStatus:
                     description: |-
-                      (String) User ARN.
-                      User ARN.
+                      (String) Service status managed by the end user.
+                      Service status managed by the end user.
                     type: string
                   createdAt:
                     description: |-
                       (String) Creation time.
                       Creation time.
                     type: string
+                  endpoint:
+                    description: |-
+                      (Set of Object) Endpoints for accessing the Managed Object Storage service. (see below for nested schema)
+                      Endpoints for accessing the Managed Object Storage service.
+                    items:
+                      properties:
+                        domainName:
+                          description: |-
+                            (String)
+                            Domain name of the endpoint.
+                          type: string
+                        iamUrl:
+                          description: |-
+                            (String)
+                            URL for IAM.
+                          type: string
+                        stsUrl:
+                          description: |-
+                            (String)
+                            URL for STS.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Network type.
+                            Type of the endpoint (`private` / `public`).
+                          type: string
+                      type: object
+                    type: array
                   id:
                     description: (String) The ID of this resource.
                     type: string
-                  serviceUuid:
+                  labels:
+                    additionalProperties:
+                      type: string
                     description: |-
-                      (String) Managed Object Storage service UUID.
-                      Managed Object Storage service UUID.
+                      value pairs to classify the managed object storage.
+                      User defined key-value pairs to classify the managed object storage.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  name:
+                    description: |-
+                      (String) Name of the Managed Object Storage service. Must be unique within account.
+                      Name of the Managed Object Storage service. Must be unique within account.
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set) Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network. (see below for nested schema)
+                      Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network.
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. IPv6 currently not supported.
+                            Network family. IPv6 currently not supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the Managed Object Storage service. Must be unique within account.
+                            Network name. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Network type.
+                            Network type.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network uuid. For public networks the field should be omitted.
+                            Private network uuid. For public networks the field should be omitted.
+                          type: string
+                      type: object
+                    type: array
+                  operationalState:
+                    description: |-
+                      (String) Operational state of the Managed Object Storage service.
+                      Operational state of the Managed Object Storage service.
+                    type: string
+                  region:
+                    description: |-
+                      (String) Region in which the service will be hosted, see upcloud_managed_object_storage_regions data source.
+                      Region in which the service will be hosted, see `upcloud_managed_object_storage_regions` data source.
+                    type: string
+                  updatedAt:
+                    description: |-
+                      (String) Creation time.
+                      Creation time.
                     type: string
                 type: object
               conditions:

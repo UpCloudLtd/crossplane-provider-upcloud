@@ -10,6 +10,13 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/apis"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/apis/v1alpha1"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/internal/clients"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/internal/controller"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/internal/features"
+
 	"github.com/alecthomas/kingpin/v2"
 	xpv1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 	xpcontroller "github.com/crossplane/crossplane-runtime/pkg/controller"
@@ -25,13 +32,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
-
-	"github.com/UpCloudLtd/provider-upcloud/apis"
-	"github.com/UpCloudLtd/provider-upcloud/apis/v1alpha1"
-	"github.com/UpCloudLtd/provider-upcloud/config"
-	"github.com/UpCloudLtd/provider-upcloud/internal/clients"
-	"github.com/UpCloudLtd/provider-upcloud/internal/controller"
-	"github.com/UpCloudLtd/provider-upcloud/internal/features"
 )
 
 func main() {
@@ -50,6 +50,8 @@ func main() {
 		namespace                  = app.Flag("namespace", "Namespace used to set as default scope in default secret store config.").Default("crossplane-system").Envar("POD_NAMESPACE").String()
 		enableExternalSecretStores = app.Flag("enable-external-secret-stores", "Enable support for ExternalSecretStores.").Default("false").Envar("ENABLE_EXTERNAL_SECRET_STORES").Bool()
 		enableManagementPolicies   = app.Flag("enable-management-policies", "Enable support for Management Policies.").Default("true").Envar("ENABLE_MANAGEMENT_POLICIES").Bool()
+
+		userAgent = app.Flag("upcloud-terraform-provider-user-agent", "UpCloud Terraform provider User-Agent header value.").Required().Envar("UPCLOUD_TERRAFORM_PROVIDER_USER_AGENT").String()
 	)
 
 	kingpin.MustParse(app.Parse(os.Args[1:]))
@@ -122,6 +124,10 @@ func main() {
 	if *enableManagementPolicies {
 		o.Features.Enable(features.EnableBetaManagementPolicies)
 		log.Info("Beta feature enabled", "flag", features.EnableBetaManagementPolicies)
+	}
+
+	if userAgent != nil {
+		log.Debug("UpCloud Terraform provider User-Agent set", "upcloud-terraform-provider-user-agent", *userAgent)
 	}
 
 	kingpin.FatalIfError(controller.Setup(mgr, o), "Cannot setup UpCloud controllers")
