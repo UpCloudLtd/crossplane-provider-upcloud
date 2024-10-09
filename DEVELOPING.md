@@ -74,7 +74,8 @@ If you use VSCode, you can use the following run configuration and run the contr
            "TERRAFORM_PROVIDER_DOWNLOAD_NAME": "terraform-provider-upcloud",
            "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.10.1",
            "TERRAFORM_NATIVE_PROVIDER_BINARY": "terraform-provider-upcloud_v5.10.1",
-           "TERRAFORM_DOCS_PATH": "docs/resources"
+           "TERRAFORM_DOCS_PATH": "docs/resources",
+           "UPCLOUD_TERRAFORM_PROVIDER_USER_AGENT": "provider-upcloud/v0.0.6"
        }
    }
    ```
@@ -132,6 +133,6 @@ Currently, the release process is entirely manual and goes as follows:
     ```
 5. Push the package to the repository with the same version as the tag from step 1. You need to have `crossplane.yaml` file in the directory you run the push command:
     ```
-    cd package && up xpkg push upcloud/provider-upcloud:v0.0.2 -f ../_output/xpkg/linux_amd64/provider-upcloud-vXX.XX.XX.xpkg
+    cd package && up xpkg push upcloud/provider-upcloud:v0.0.6 -f ../_output/xpkg/linux_amd64/provider-upcloud-vXX.XX.XX.xpkg
     ```
 6. Verify that it is published by going to [Upbound marketplace](https://marketplace.upbound.io/account/upcloud/provider-upcloud).
