@@ -1,4 +1,4 @@
-apiVersion: objectstorage.upcloud.io/v1alpha1
+apiVersion: objectstorage.upcloud.com/v1alpha1
 kind: ManagedObjectStorage
 metadata:
   name: crossplane-example
@@ -8,7 +8,7 @@ spec:
     name: crossplane-example
     region: europe-1
 ---
-apiVersion: objectstorage.upcloud.io/v1alpha1
+apiVersion: objectstorage.upcloud.com/v1alpha1
 kind: ManagedObjectStoragePolicy
 metadata:
   name: crossplane-example
@@ -19,7 +19,7 @@ spec:
     serviceUuidRef:
       name: crossplane-example
 ---
-apiVersion: objectstorage.upcloud.io/v1alpha1
+apiVersion: objectstorage.upcloud.com/v1alpha1
 kind: ManagedObjectStorageUser
 metadata:
   name: crossplane-example-janusz
@@ -28,7 +28,7 @@ spec:
     serviceUuidRef:
       name: crossplane-example
 ---
-apiVersion: objectstorage.upcloud.io/v1alpha1
+apiVersion: objectstorage.upcloud.com/v1alpha1
 kind: ManagedObjectStorageUserAccessKey
 metadata:
   name: crossplane-example
@@ -40,7 +40,7 @@ spec:
     usernameRef:
       name: crossplane-example-janusz
 # ---
-# apiVersion: objectstorage.upcloud.io/v1alpha1
+# apiVersion: objectstorage.upcloud.com/v1alpha1
 # kind: ManagedObjectStorageUserPolicy
 # metadata:
 #   name: crossplane-example

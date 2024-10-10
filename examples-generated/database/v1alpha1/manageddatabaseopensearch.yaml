@@ -1,4 +1,4 @@
-apiVersion: database.upcloud.io/v1alpha1
+apiVersion: database.upcloud.com/v1alpha1
 kind: ManagedDatabaseOpensearch
 metadata:
   annotations:

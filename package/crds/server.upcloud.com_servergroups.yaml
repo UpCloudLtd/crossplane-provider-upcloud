@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: servergroups.server.upcloud.io
+  name: servergroups.server.upcloud.com
 spec:
-  group: server.upcloud.io
+  group: server.upcloud.com
   names:
     categories:
     - crossplane

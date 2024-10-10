@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: kubernetesnodegroups.uks.upcloud.io
+  name: kubernetesnodegroups.uks.upcloud.com
 spec:
-  group: uks.upcloud.io
+  group: uks.upcloud.com
   names:
     categories:
     - crossplane

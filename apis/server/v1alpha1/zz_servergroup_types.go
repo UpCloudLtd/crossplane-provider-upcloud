@@ -39,7 +39,7 @@ type ServerGroupInitParameters struct {
 
 	// (Set of String) UUIDs of the servers that are members of this group. Servers can also be attached to the server group via server_group property of upcloud_server. See also track_members property.
 	// UUIDs of the servers that are members of this group. Servers can also be attached to the server group via `server_group` property of `upcloud_server`. See also `track_members` property.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/server/v1alpha1.Server
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/server/v1alpha1.Server
 	// +listType=set
 	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
 
@@ -129,7 +129,7 @@ type ServerGroupParameters struct {
 
 	// (Set of String) UUIDs of the servers that are members of this group. Servers can also be attached to the server group via server_group property of upcloud_server. See also track_members property.
 	// UUIDs of the servers that are members of this group. Servers can also be attached to the server group via `server_group` property of `upcloud_server`. See also `track_members` property.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/server/v1alpha1.Server
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/server/v1alpha1.Server
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	Members []*string `json:"members,omitempty" tf:"members,omitempty"`

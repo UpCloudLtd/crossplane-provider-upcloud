@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: manageddatabaseusers.database.upcloud.io
+  name: manageddatabaselogicaldatabases.database.upcloud.com
 spec:
-  group: database.upcloud.io
+  group: database.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: ManagedDatabaseUser
-    listKind: ManagedDatabaseUserList
-    plural: manageddatabaseusers
-    singular: manageddatabaseuser
+    kind: ManagedDatabaseLogicalDatabase
+    listKind: ManagedDatabaseLogicalDatabaseList
+    plural: manageddatabaselogicaldatabases
+    singular: manageddatabaselogicaldatabase
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ManagedDatabaseUser is the Schema for the ManagedDatabaseUsers
-          API. This resource represents a user in managed database
+        description: ManagedDatabaseLogicalDatabase is the Schema for the ManagedDatabaseLogicalDatabases
+          API. This resource represents a logical database in managed database
         properties:
           apiVersion:
             description: |-
@@ -55,7 +55,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: ManagedDatabaseUserSpec defines the desired state of ManagedDatabaseUser
+            description: ManagedDatabaseLogicalDatabaseSpec defines the desired state
+              of ManagedDatabaseLogicalDatabase
             properties:
               deletionPolicy:
                 default: Delete
@@ -73,109 +74,20 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  authentication:
+                  characterSet:
                     description: |-
-                      (String) MySQL only, authentication type.
-                      MySQL only, authentication type.
+                      (String) Default character set for the database (LC_CTYPE)
+                      Default character set for the database (LC_CTYPE)
                     type: string
-                  opensearchAccessControl:
+                  collation:
                     description: |-
-                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
-                      OpenSearch access control object.
-                    items:
-                      properties:
-                        rules:
-                          description: |-
-                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
-                            Set user access control rules.
-                          items:
-                            properties:
-                              index:
-                                description: |-
-                                  (String) Set index name, pattern or top level API.
-                                  Set index name, pattern or top level API.
-                                type: string
-                              permission:
-                                description: |-
-                                  (String) Set permission access.
-                                  Set permission access.
-                                type: string
-                            type: object
-                          type: array
-                      type: object
-                    type: array
-                  passwordSecretRef:
-                    description: |-
-                      (String, Sensitive) Password for the database user. Defaults to a random value
-                      Password for the database user. Defaults to a random value
-                    properties:
-                      key:
-                        description: The key to select.
-                        type: string
-                      name:
-                        description: Name of the secret.
-                        type: string
-                      namespace:
-                        description: Namespace of the secret.
-                        type: string
-                    required:
-                    - key
-                    - name
-                    - namespace
-                    type: object
-                  pgAccessControl:
-                    description: |-
-                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
-                      PostgreSQL access control object.
-                    items:
-                      properties:
-                        allowReplication:
-                          description: |-
-                            (Boolean) Grant replication privilege
-                            Grant replication privilege
-                          type: boolean
-                      type: object
-                    type: array
-                  redisAccessControl:
-                    description: |-
-                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
-                      Redis access control object.
-                    items:
-                      properties:
-                        categories:
-                          description: |-
-                            (List of String) Set access control to all commands in specified categories.
-                            Set access control to all commands in specified categories.
-                          items:
-                            type: string
-                          type: array
-                        channels:
-                          description: |-
-                            (List of String) Set access control to Pub/Sub channels.
-                            Set access control to Pub/Sub channels.
-                          items:
-                            type: string
-                          type: array
-                        commands:
-                          description: |-
-                            (List of String) Set access control to commands.
-                            Set access control to commands.
-                          items:
-                            type: string
-                          type: array
-                        keys:
-                          description: |-
-                            (List of String) Set access control to keys.
-                            Set access control to keys.
-                          items:
-                            type: string
-                          type: array
-                      type: object
-                    type: array
+                      (String) Default collation for the database (LC_COLLATE)
+                      Default collation for the database (LC_COLLATE)
+                    type: string
                   service:
                     description: |-
                       (String) Service's UUID for which this user belongs to
-                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to database user `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
+                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to logical database `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
                     type: string
                   serviceRef:
                     description: Reference to a ManagedDatabasePostgresql in database
@@ -267,105 +179,16 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  authentication:
+                  characterSet:
                     description: |-
-                      (String) MySQL only, authentication type.
-                      MySQL only, authentication type.
+                      (String) Default character set for the database (LC_CTYPE)
+                      Default character set for the database (LC_CTYPE)
                     type: string
-                  opensearchAccessControl:
+                  collation:
                     description: |-
-                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
-                      OpenSearch access control object.
-                    items:
-                      properties:
-                        rules:
-                          description: |-
-                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
-                            Set user access control rules.
-                          items:
-                            properties:
-                              index:
-                                description: |-
-                                  (String) Set index name, pattern or top level API.
-                                  Set index name, pattern or top level API.
-                                type: string
-                              permission:
-                                description: |-
-                                  (String) Set permission access.
-                                  Set permission access.
-                                type: string
-                            type: object
-                          type: array
-                      type: object
-                    type: array
-                  passwordSecretRef:
-                    description: |-
-                      (String, Sensitive) Password for the database user. Defaults to a random value
-                      Password for the database user. Defaults to a random value
-                    properties:
-                      key:
-                        description: The key to select.
-                        type: string
-                      name:
-                        description: Name of the secret.
-                        type: string
-                      namespace:
-                        description: Namespace of the secret.
-                        type: string
-                    required:
-                    - key
-                    - name
-                    - namespace
-                    type: object
-                  pgAccessControl:
-                    description: |-
-                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
-                      PostgreSQL access control object.
-                    items:
-                      properties:
-                        allowReplication:
-                          description: |-
-                            (Boolean) Grant replication privilege
-                            Grant replication privilege
-                          type: boolean
-                      type: object
-                    type: array
-                  redisAccessControl:
-                    description: |-
-                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
-                      Redis access control object.
-                    items:
-                      properties:
-                        categories:
-                          description: |-
-                            (List of String) Set access control to all commands in specified categories.
-                            Set access control to all commands in specified categories.
-                          items:
-                            type: string
-                          type: array
-                        channels:
-                          description: |-
-                            (List of String) Set access control to Pub/Sub channels.
-                            Set access control to Pub/Sub channels.
-                          items:
-                            type: string
-                          type: array
-                        commands:
-                          description: |-
-                            (List of String) Set access control to commands.
-                            Set access control to commands.
-                          items:
-                            type: string
-                          type: array
-                        keys:
-                          description: |-
-                            (List of String) Set access control to keys.
-                            Set access control to keys.
-                          items:
-                            type: string
-                          type: array
-                      type: object
-                    type: array
+                      (String) Default collation for the database (LC_COLLATE)
+                      Default collation for the database (LC_COLLATE)
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -535,102 +358,28 @@ spec:
             - forProvider
             type: object
           status:
-            description: ManagedDatabaseUserStatus defines the observed state of ManagedDatabaseUser.
+            description: ManagedDatabaseLogicalDatabaseStatus defines the observed
+              state of ManagedDatabaseLogicalDatabase.
             properties:
               atProvider:
                 properties:
-                  authentication:
+                  characterSet:
                     description: |-
-                      (String) MySQL only, authentication type.
-                      MySQL only, authentication type.
+                      (String) Default character set for the database (LC_CTYPE)
+                      Default character set for the database (LC_CTYPE)
+                    type: string
+                  collation:
+                    description: |-
+                      (String) Default collation for the database (LC_COLLATE)
+                      Default collation for the database (LC_COLLATE)
                     type: string
                   id:
                     description: (String) The ID of this resource.
                     type: string
-                  opensearchAccessControl:
-                    description: |-
-                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
-                      OpenSearch access control object.
-                    items:
-                      properties:
-                        rules:
-                          description: |-
-                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
-                            Set user access control rules.
-                          items:
-                            properties:
-                              index:
-                                description: |-
-                                  (String) Set index name, pattern or top level API.
-                                  Set index name, pattern or top level API.
-                                type: string
-                              permission:
-                                description: |-
-                                  (String) Set permission access.
-                                  Set permission access.
-                                type: string
-                            type: object
-                          type: array
-                      type: object
-                    type: array
-                  pgAccessControl:
-                    description: |-
-                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
-                      PostgreSQL access control object.
-                    items:
-                      properties:
-                        allowReplication:
-                          description: |-
-                            (Boolean) Grant replication privilege
-                            Grant replication privilege
-                          type: boolean
-                      type: object
-                    type: array
-                  redisAccessControl:
-                    description: |-
-                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
-                      Redis access control object.
-                    items:
-                      properties:
-                        categories:
-                          description: |-
-                            (List of String) Set access control to all commands in specified categories.
-                            Set access control to all commands in specified categories.
-                          items:
-                            type: string
-                          type: array
-                        channels:
-                          description: |-
-                            (List of String) Set access control to Pub/Sub channels.
-                            Set access control to Pub/Sub channels.
-                          items:
-                            type: string
-                          type: array
-                        commands:
-                          description: |-
-                            (List of String) Set access control to commands.
-                            Set access control to commands.
-                          items:
-                            type: string
-                          type: array
-                        keys:
-                          description: |-
-                            (List of String) Set access control to keys.
-                            Set access control to keys.
-                          items:
-                            type: string
-                          type: array
-                      type: object
-                    type: array
                   service:
                     description: |-
                       (String) Service's UUID for which this user belongs to
-                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to database user `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
-                    type: string
-                  type:
-                    description: |-
-                      (String) Type of the user. Only normal type users can be created
-                      Type of the user. Only normal type users can be created
+                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to logical database `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
                     type: string
                 type: object
               conditions:

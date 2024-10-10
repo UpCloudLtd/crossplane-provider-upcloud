@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: managedobjectstoragepolicies.objectstorage.upcloud.io
+  name: manageddatabaseusers.database.upcloud.com
 spec:
-  group: objectstorage.upcloud.io
+  group: database.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: ManagedObjectStoragePolicy
-    listKind: ManagedObjectStoragePolicyList
-    plural: managedobjectstoragepolicies
-    singular: managedobjectstoragepolicy
+    kind: ManagedDatabaseUser
+    listKind: ManagedDatabaseUserList
+    plural: manageddatabaseusers
+    singular: manageddatabaseuser
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,8 +34,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ManagedObjectStoragePolicy is the Schema for the ManagedObjectStoragePolicys
-          API. This resource represents an UpCloud Managed Object Storage policy.
+        description: ManagedDatabaseUser is the Schema for the ManagedDatabaseUsers
+          API. This resource represents a user in managed database
         properties:
           apiVersion:
             description: |-
@@ -55,8 +55,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ManagedObjectStoragePolicySpec defines the desired state
-              of ManagedObjectStoragePolicy
+            description: ManagedDatabaseUserSpec defines the desired state of ManagedDatabaseUser
             properties:
               deletionPolicy:
                 default: Delete
@@ -74,24 +73,113 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  description:
+                  authentication:
                     description: |-
-                      (String) Description of the policy.
-                      Description of the policy.
+                      (String) MySQL only, authentication type.
+                      MySQL only, authentication type.
                     type: string
-                  document:
+                  opensearchAccessControl:
                     description: |-
-                      encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
-                      Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
-                    type: string
-                  serviceUuid:
+                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
+                      OpenSearch access control object.
+                    items:
+                      properties:
+                        rules:
+                          description: |-
+                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
+                            Set user access control rules.
+                          items:
+                            properties:
+                              index:
+                                description: |-
+                                  (String) Set index name, pattern or top level API.
+                                  Set index name, pattern or top level API.
+                                type: string
+                              permission:
+                                description: |-
+                                  (String) Set permission access.
+                                  Set permission access.
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  passwordSecretRef:
                     description: |-
-                      (String) Managed Object Storage service UUID.
-                      Managed Object Storage service UUID.
+                      (String, Sensitive) Password for the database user. Defaults to a random value
+                      Password for the database user. Defaults to a random value
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  pgAccessControl:
+                    description: |-
+                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
+                      PostgreSQL access control object.
+                    items:
+                      properties:
+                        allowReplication:
+                          description: |-
+                            (Boolean) Grant replication privilege
+                            Grant replication privilege
+                          type: boolean
+                      type: object
+                    type: array
+                  redisAccessControl:
+                    description: |-
+                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
+                      Redis access control object.
+                    items:
+                      properties:
+                        categories:
+                          description: |-
+                            (List of String) Set access control to all commands in specified categories.
+                            Set access control to all commands in specified categories.
+                          items:
+                            type: string
+                          type: array
+                        channels:
+                          description: |-
+                            (List of String) Set access control to Pub/Sub channels.
+                            Set access control to Pub/Sub channels.
+                          items:
+                            type: string
+                          type: array
+                        commands:
+                          description: |-
+                            (List of String) Set access control to commands.
+                            Set access control to commands.
+                          items:
+                            type: string
+                          type: array
+                        keys:
+                          description: |-
+                            (List of String) Set access control to keys.
+                            Set access control to keys.
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    type: array
+                  service:
+                    description: |-
+                      (String) Service's UUID for which this user belongs to
+                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to database user `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
                     type: string
-                  serviceUuidRef:
-                    description: Reference to a ManagedObjectStorage in objectstorage
-                      to populate serviceUuid.
+                  serviceRef:
+                    description: Reference to a ManagedDatabasePostgresql in database
+                      to populate service.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -124,9 +212,9 @@ spec:
                     required:
                     - name
                     type: object
-                  serviceUuidSelector:
-                    description: Selector for a ManagedObjectStorage in objectstorage
-                      to populate serviceUuid.
+                  serviceSelector:
+                    description: Selector for a ManagedDatabasePostgresql in database
+                      to populate service.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -179,16 +267,105 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  description:
+                  authentication:
                     description: |-
-                      (String) Description of the policy.
-                      Description of the policy.
+                      (String) MySQL only, authentication type.
+                      MySQL only, authentication type.
                     type: string
-                  document:
+                  opensearchAccessControl:
                     description: |-
-                      encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
-                      Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
-                    type: string
+                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
+                      OpenSearch access control object.
+                    items:
+                      properties:
+                        rules:
+                          description: |-
+                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
+                            Set user access control rules.
+                          items:
+                            properties:
+                              index:
+                                description: |-
+                                  (String) Set index name, pattern or top level API.
+                                  Set index name, pattern or top level API.
+                                type: string
+                              permission:
+                                description: |-
+                                  (String) Set permission access.
+                                  Set permission access.
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  passwordSecretRef:
+                    description: |-
+                      (String, Sensitive) Password for the database user. Defaults to a random value
+                      Password for the database user. Defaults to a random value
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  pgAccessControl:
+                    description: |-
+                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
+                      PostgreSQL access control object.
+                    items:
+                      properties:
+                        allowReplication:
+                          description: |-
+                            (Boolean) Grant replication privilege
+                            Grant replication privilege
+                          type: boolean
+                      type: object
+                    type: array
+                  redisAccessControl:
+                    description: |-
+                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
+                      Redis access control object.
+                    items:
+                      properties:
+                        categories:
+                          description: |-
+                            (List of String) Set access control to all commands in specified categories.
+                            Set access control to all commands in specified categories.
+                          items:
+                            type: string
+                          type: array
+                        channels:
+                          description: |-
+                            (List of String) Set access control to Pub/Sub channels.
+                            Set access control to Pub/Sub channels.
+                          items:
+                            type: string
+                          type: array
+                        commands:
+                          description: |-
+                            (List of String) Set access control to commands.
+                            Set access control to commands.
+                          items:
+                            type: string
+                          type: array
+                        keys:
+                          description: |-
+                            (List of String) Set access control to keys.
+                            Set access control to keys.
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    type: array
                 type: object
               managementPolicies:
                 default:
@@ -357,65 +534,103 @@ spec:
             required:
             - forProvider
             type: object
-            x-kubernetes-validations:
-            - message: spec.forProvider.document is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.document)
-                || (has(self.initProvider) && has(self.initProvider.document))'
           status:
-            description: ManagedObjectStoragePolicyStatus defines the observed state
-              of ManagedObjectStoragePolicy.
+            description: ManagedDatabaseUserStatus defines the observed state of ManagedDatabaseUser.
             properties:
               atProvider:
                 properties:
-                  arn:
+                  authentication:
                     description: |-
-                      (String) Policy ARN.
-                      Policy ARN.
-                    type: string
-                  attachmentCount:
-                    description: |-
-                      (Number) Attachment count.
-                      Attachment count.
-                    type: number
-                  createdAt:
-                    description: |-
-                      (String) Creation time.
-                      Creation time.
-                    type: string
-                  defaultVersionId:
-                    description: |-
-                      (String) Default version id.
-                      Default version id.
-                    type: string
-                  description:
-                    description: |-
-                      (String) Description of the policy.
-                      Description of the policy.
-                    type: string
-                  document:
-                    description: |-
-                      encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
-                      Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
+                      (String) MySQL only, authentication type.
+                      MySQL only, authentication type.
                     type: string
                   id:
-                    description: (String) ID of the policy. ID is in {object storage
-                      UUID}/{policy name} format.
+                    description: (String) The ID of this resource.
                     type: string
-                  serviceUuid:
+                  opensearchAccessControl:
                     description: |-
-                      (String) Managed Object Storage service UUID.
-                      Managed Object Storage service UUID.
+                      (Block List, Max: 1) OpenSearch access control object. (see below for nested schema)
+                      OpenSearch access control object.
+                    items:
+                      properties:
+                        rules:
+                          description: |-
+                            (Block List, Min: 1) Set user access control rules. (see below for nested schema)
+                            Set user access control rules.
+                          items:
+                            properties:
+                              index:
+                                description: |-
+                                  (String) Set index name, pattern or top level API.
+                                  Set index name, pattern or top level API.
+                                type: string
+                              permission:
+                                description: |-
+                                  (String) Set permission access.
+                                  Set permission access.
+                                type: string
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  pgAccessControl:
+                    description: |-
+                      (Block List, Max: 1) PostgreSQL access control object. (see below for nested schema)
+                      PostgreSQL access control object.
+                    items:
+                      properties:
+                        allowReplication:
+                          description: |-
+                            (Boolean) Grant replication privilege
+                            Grant replication privilege
+                          type: boolean
+                      type: object
+                    type: array
+                  redisAccessControl:
+                    description: |-
+                      (Block List, Max: 1) Redis access control object. (see below for nested schema)
+                      Redis access control object.
+                    items:
+                      properties:
+                        categories:
+                          description: |-
+                            (List of String) Set access control to all commands in specified categories.
+                            Set access control to all commands in specified categories.
+                          items:
+                            type: string
+                          type: array
+                        channels:
+                          description: |-
+                            (List of String) Set access control to Pub/Sub channels.
+                            Set access control to Pub/Sub channels.
+                          items:
+                            type: string
+                          type: array
+                        commands:
+                          description: |-
+                            (List of String) Set access control to commands.
+                            Set access control to commands.
+                          items:
+                            type: string
+                          type: array
+                        keys:
+                          description: |-
+                            (List of String) Set access control to keys.
+                            Set access control to keys.
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    type: array
+                  service:
+                    description: |-
+                      (String) Service's UUID for which this user belongs to
+                      The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to database user `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
                     type: string
-                  system:
+                  type:
                     description: |-
-                      (Boolean) Defines whether the policy was set up by the system.
-                      Defines whether the policy was set up by the system.
-                    type: boolean
-                  updatedAt:
-                    description: |-
-                      (String) Update time.
-                      Update time.
+                      (String) Type of the user. Only normal type users can be created
+                      Type of the user. Only normal type users can be created
                     type: string
                 type: object
               conditions:

@@ -1,4 +1,4 @@
-apiVersion: database.upcloud.io/v1alpha1
+apiVersion: database.upcloud.com/v1alpha1
 kind: ManagedDatabasePostgresql
 metadata:
   name: crossplane-example-postgres
@@ -15,7 +15,7 @@ spec:
       uuidRef:
         name: example-2
 ---
-apiVersion: database.upcloud.io/v1alpha1
+apiVersion: database.upcloud.com/v1alpha1
 kind: ManagedDatabaseUser
 metadata:
   name: crossplane-example-user
@@ -28,7 +28,7 @@ spec:
     serviceRef:
       name: crossplane-example-postgres
 ---
-apiVersion: database.upcloud.io/v1alpha1
+apiVersion: database.upcloud.com/v1alpha1
 kind: ManagedDatabaseLogicalDatabase
 metadata:
   name: example
@@ -37,7 +37,7 @@ spec:
     serviceRef:
       name: crossplane-example-postgres
 ---
-apiVersion: database.upcloud.io/v1alpha1
+apiVersion: database.upcloud.com/v1alpha1
 kind: ManagedDatabaseOpensearch
 metadata:
   name: crossplane-example-opensearch
@@ -48,7 +48,7 @@ spec:
     title: crossplane-example-opensearch
     zone: fi-hel2
 ---
-apiVersion: database.upcloud.io/v1alpha1
+apiVersion: database.upcloud.com/v1alpha1
 kind: ManagedDatabaseRedis
 metadata:
   name: crossplane-example-redis
@@ -59,7 +59,7 @@ spec:
     title: crossplane-example-redis
     zone: fi-hel2
 ---
-apiVersion: database.upcloud.io/v1alpha1
+apiVersion: database.upcloud.com/v1alpha1
 kind: ManagedDatabaseMysql
 metadata:
   name: crossplane-example-mysql

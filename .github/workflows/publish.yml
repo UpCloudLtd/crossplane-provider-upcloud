@@ -29,3 +29,5 @@ jobs:
         run: /tmp/up login
       - name: Publish to UpBound Marketplace
         run: /tmp/up xpkg push upcloud/provider-upcloud:${{ steps.get_tag.outputs.tag }} -f ./_output/xpkg/linux_amd64/provider-upcloud-${{ steps.get_tag.outputs.tag }}.xpkg
+      - name: Log out from UpBound Marketplace
+        run: /tmp/up logout

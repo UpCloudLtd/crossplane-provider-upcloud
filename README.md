@@ -1,9 +1,11 @@
 # Crossplane Provider UpCloud
 
-`provider-upcloud` is a [Crossplane](https://crossplane.io/) provider that
+`crossplane-provider-upcloud` is a [Crossplane](https://crossplane.io/) provider that
 is built using [Upjet](https://github.com/crossplane/upjet) code
 generation tools and exposes XRM-conformant managed resources for the
 UpCloud API.
+
+The name of the provider in UpBound Marketplace is `provider-upcloud`.
 
 Please note that this project is currently in early alpha version, we do not recommend running it in production yet.
 
@@ -41,7 +43,7 @@ Please note that this project is currently in early alpha version, we do not rec
           "password": "password123"
         }
     ---
-    apiVersion: provider.upcloud.io/v1beta1
+    apiVersion: provider.upcloud.com/v1beta1
     kind: ProviderConfig
     metadata:
       name: default
@@ -68,7 +70,7 @@ We are currently working on adding support for them, thank you for your patience
 ## Report a Bug
 
 For filing bugs, suggesting improvements, or requesting new features, please
-open an [issue](https://github.com/UpCloudLtd/provider-upcloud/issues).
+open an [issue](https://github.com/UpCloudLtd/crossplane-provider-upcloud/issues).
 
 ## Developing
 
