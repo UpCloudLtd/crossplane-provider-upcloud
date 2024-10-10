@@ -191,8 +191,8 @@ spec:
                     type: string
                   version:
                     description: |-
-                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
-                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+                      (String) Kubernetes version ID, e.g. 1.29. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.29`. You can list available version IDs with `upctl kubernetes versions`.
                     type: string
                   zone:
                     description: |-
@@ -330,8 +330,8 @@ spec:
                     type: string
                   version:
                     description: |-
-                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
-                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+                      (String) Kubernetes version ID, e.g. 1.29. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.29`. You can list available version IDs with `upctl kubernetes versions`.
                     type: string
                   zone:
                     description: |-
@@ -591,8 +591,8 @@ spec:
                     type: string
                   version:
                     description: |-
-                      (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
-                      Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+                      (String) Kubernetes version ID, e.g. 1.29. You can list available version IDs with upctl kubernetes versions.
+                      Kubernetes version ID, e.g. `1.29`. You can list available version IDs with `upctl kubernetes versions`.
                     type: string
                   zone:
                     description: |-

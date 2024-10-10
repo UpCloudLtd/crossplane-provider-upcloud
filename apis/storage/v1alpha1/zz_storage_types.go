@@ -93,8 +93,8 @@ type ImportInitParameters struct {
 	// SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to `sha256sum` after the import has completed. Possible filename is automatically removed from the hash before comparison.
 	SourceHash *string `json:"sourceHash,omitempty" tf:"source_hash,omitempty"`
 
-	// (String) The location of the file to import. For http_import an accessible URL for direct_upload a local file.
-	// The location of the file to import. For `http_import` an accessible URL for `direct_upload` a local file.
+	// Type header of the PUT request is set automatically based on the file extension (.gz or .xz, case-insensitive).
+	// The location of the file to import. For `http_import` an accessible URL. For `direct_upload` a local file. When direct uploading a compressed image, `Content-Type` header of the PUT request is set automatically based on the file extension (`.gz` or `.xz`, case-insensitive).
 	SourceLocation *string `json:"sourceLocation,omitempty" tf:"source_location,omitempty"`
 }
 
@@ -112,8 +112,8 @@ type ImportObservation struct {
 	// SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to `sha256sum` after the import has completed. Possible filename is automatically removed from the hash before comparison.
 	SourceHash *string `json:"sourceHash,omitempty" tf:"source_hash,omitempty"`
 
-	// (String) The location of the file to import. For http_import an accessible URL for direct_upload a local file.
-	// The location of the file to import. For `http_import` an accessible URL for `direct_upload` a local file.
+	// Type header of the PUT request is set automatically based on the file extension (.gz or .xz, case-insensitive).
+	// The location of the file to import. For `http_import` an accessible URL. For `direct_upload` a local file. When direct uploading a compressed image, `Content-Type` header of the PUT request is set automatically based on the file extension (`.gz` or `.xz`, case-insensitive).
 	SourceLocation *string `json:"sourceLocation,omitempty" tf:"source_location,omitempty"`
 
 	// (Number) Number of bytes imported
@@ -133,8 +133,8 @@ type ImportParameters struct {
 	// +kubebuilder:validation:Optional
 	SourceHash *string `json:"sourceHash,omitempty" tf:"source_hash,omitempty"`
 
-	// (String) The location of the file to import. For http_import an accessible URL for direct_upload a local file.
-	// The location of the file to import. For `http_import` an accessible URL for `direct_upload` a local file.
+	// Type header of the PUT request is set automatically based on the file extension (.gz or .xz, case-insensitive).
+	// The location of the file to import. For `http_import` an accessible URL. For `direct_upload` a local file. When direct uploading a compressed image, `Content-Type` header of the PUT request is set automatically based on the file extension (`.gz` or `.xz`, case-insensitive).
 	// +kubebuilder:validation:Optional
 	SourceLocation *string `json:"sourceLocation" tf:"source_location,omitempty"`
 }

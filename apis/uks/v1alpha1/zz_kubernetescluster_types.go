@@ -54,8 +54,8 @@ type KubernetesClusterInitParameters struct {
 	// Set default storage encryption strategy for all nodes in the cluster.
 	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
 
-	// (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
-	// Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+	// (String) Kubernetes version ID, e.g. 1.29. You can list available version IDs with upctl kubernetes versions.
+	// Kubernetes version ID, e.g. `1.29`. You can list available version IDs with `upctl kubernetes versions`.
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
@@ -110,8 +110,8 @@ type KubernetesClusterObservation struct {
 	// Set default storage encryption strategy for all nodes in the cluster.
 	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
 
-	// (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
-	// Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+	// (String) Kubernetes version ID, e.g. 1.29. You can list available version IDs with upctl kubernetes versions.
+	// Kubernetes version ID, e.g. `1.29`. You can list available version IDs with `upctl kubernetes versions`.
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
@@ -167,8 +167,8 @@ type KubernetesClusterParameters struct {
 	// +kubebuilder:validation:Optional
 	StorageEncryption *string `json:"storageEncryption,omitempty" tf:"storage_encryption,omitempty"`
 
-	// (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
-	// Kubernetes version ID, e.g. `1.28`. You can list available version IDs with `upctl kubernetes versions`.
+	// (String) Kubernetes version ID, e.g. 1.29. You can list available version IDs with upctl kubernetes versions.
+	// Kubernetes version ID, e.g. `1.29`. You can list available version IDs with `upctl kubernetes versions`.
 	// +kubebuilder:validation:Optional
 	Version *string `json:"version,omitempty" tf:"version,omitempty"`
 
