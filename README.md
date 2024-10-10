@@ -21,7 +21,7 @@ Please note that this project is currently in early alpha version, we do not rec
     metadata:
       name: provider-upcloud
     spec:
-      package: xpkg.upbound.io/upcloud/provider-upcloud:v0.0.4
+      package: xpkg.upbound.io/upcloud/provider-upcloud:v0.0.6
     ```
 
  Make sure to change the version to the latest one.

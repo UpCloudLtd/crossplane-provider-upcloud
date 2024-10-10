@@ -994,6 +994,7 @@ resources:
             inverse: (Boolean) Defines if the condition should be inverted. Works similarly to logical NOT operator.
             location: (String) Target location.
             matchers: (Block List) Set of rule matchers. If rule doesn't have matchers, then action applies to all incoming requests. (see below for nested schema)
+            matching_condition: (String) Defines boolean operator used to combine multiple matchers. Defaults to and.
             method: (String) Match method (equal, greater, greater_or_equal, less, less_or_equal).
             name: (String) The name of the frontend rule. Must be unique within the frontend.
             num_members_up: (Block List) Matches by number of healthy backend members. (see below for nested schema)

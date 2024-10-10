@@ -6,7 +6,7 @@ toolchain go1.22.3
 
 require (
 	dario.cat/mergo v1.0.0
-	github.com/UpCloudLtd/terraform-provider-upcloud v0.0.0-20241010084558-73789ac31d57
+	github.com/UpCloudLtd/terraform-provider-upcloud v0.0.0-20241010110310-46b0473e325f
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/crossplane/crossplane-runtime v1.16.0-rc.1.0.20240424114634-8641eb2ba384
 	github.com/crossplane/crossplane-tools v0.0.0-20230925130601-628280f8bf79
