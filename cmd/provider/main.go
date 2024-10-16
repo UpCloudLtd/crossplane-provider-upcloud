@@ -10,6 +10,13 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/apis"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/apis/v1alpha1"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/internal/clients"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/internal/controller"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/internal/features"
+
 	"github.com/alecthomas/kingpin/v2"
 	xpv1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 	xpcontroller "github.com/crossplane/crossplane-runtime/pkg/controller"
@@ -25,13 +32,6 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
-
-	"github.com/UpCloudLtd/provider-upcloud/apis"
-	"github.com/UpCloudLtd/provider-upcloud/apis/v1alpha1"
-	"github.com/UpCloudLtd/provider-upcloud/config"
-	"github.com/UpCloudLtd/provider-upcloud/internal/clients"
-	"github.com/UpCloudLtd/provider-upcloud/internal/controller"
-	"github.com/UpCloudLtd/provider-upcloud/internal/features"
 )
 
 func main() {

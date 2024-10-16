@@ -1,4 +1,4 @@
-module github.com/UpCloudLtd/provider-upcloud
+module github.com/UpCloudLtd/crossplane-provider-upcloud
 
 go 1.22
 

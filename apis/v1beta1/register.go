@@ -13,7 +13,7 @@ import (
 
 // Package type metadata.
 const (
-	Group   = "provider.upcloud.io"
+	Group   = "provider.upcloud.com"
 	Version = "v1beta1"
 )
 

@@ -9,12 +9,12 @@ import (
 	_ "embed"
 	"fmt"
 
-	"github.com/UpCloudLtd/provider-upcloud/config/database"
-	"github.com/UpCloudLtd/provider-upcloud/config/kubernetes"
-	"github.com/UpCloudLtd/provider-upcloud/config/network"
-	"github.com/UpCloudLtd/provider-upcloud/config/objectstorage"
-	"github.com/UpCloudLtd/provider-upcloud/config/server"
-	"github.com/UpCloudLtd/provider-upcloud/config/storage"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/database"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/kubernetes"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/network"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/objectstorage"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/server"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/storage"
 
 	"github.com/UpCloudLtd/terraform-provider-upcloud/upcloud"
 	ujconfig "github.com/crossplane/upjet/pkg/config"
@@ -25,7 +25,7 @@ import (
 
 const (
 	resourcePrefix = "upcloud"
-	modulePath     = "github.com/UpCloudLtd/provider-upcloud"
+	modulePath     = "github.com/UpCloudLtd/crossplane-provider-upcloud"
 )
 
 //go:embed schema.json
@@ -37,7 +37,7 @@ var providerMetadata string
 // GetProvider returns provider configuration
 func GetProvider() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
-		ujconfig.WithRootGroup("upcloud.io"),
+		ujconfig.WithRootGroup("upcloud.com"),
 		ujconfig.WithIncludeList([]string{}),
 		ujconfig.WithTerraformPluginSDKIncludeList(sdkResourcesList()),
 		ujconfig.WithTerraformProvider(terraformProvider()),

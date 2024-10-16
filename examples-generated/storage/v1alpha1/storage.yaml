@@ -1,4 +1,4 @@
-apiVersion: storage.upcloud.io/v1alpha1
+apiVersion: storage.upcloud.com/v1alpha1
 kind: Storage
 metadata:
   annotations:
@@ -15,7 +15,7 @@ spec:
 
 ---
 
-apiVersion: server.upcloud.io/v1alpha1
+apiVersion: server.upcloud.com/v1alpha1
 kind: Server
 metadata:
   annotations:

@@ -9,19 +9,18 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/apis/v1beta1"
+
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/crossplane/upjet/pkg/config"
 	"github.com/crossplane/upjet/pkg/terraform"
-	"github.com/pkg/errors"
-	"k8s.io/apimachinery/pkg/types"
-	"sigs.k8s.io/controller-runtime/pkg/client"
-
 	terraformframework "github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/tfsdk"
 	"github.com/hashicorp/terraform-plugin-go/tftypes"
 	terraformsdk "github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-
-	"github.com/UpCloudLtd/provider-upcloud/apis/v1beta1"
+	"github.com/pkg/errors"
+	"k8s.io/apimachinery/pkg/types"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 const (

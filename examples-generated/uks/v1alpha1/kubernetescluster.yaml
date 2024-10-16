@@ -1,4 +1,4 @@
-apiVersion: uks.upcloud.io/v1alpha1
+apiVersion: uks.upcloud.com/v1alpha1
 kind: KubernetesCluster
 metadata:
   annotations:
@@ -18,7 +18,7 @@ spec:
 
 ---
 
-apiVersion: network.upcloud.io/v1alpha1
+apiVersion: network.upcloud.com/v1alpha1
 kind: Network
 metadata:
   annotations:
@@ -37,7 +37,7 @@ spec:
 
 ---
 
-apiVersion: network.upcloud.io/v1alpha1
+apiVersion: network.upcloud.com/v1alpha1
 kind: Network
 metadata:
   annotations:
@@ -60,7 +60,7 @@ spec:
 
 ---
 
-apiVersion: network.upcloud.io/v1alpha1
+apiVersion: network.upcloud.com/v1alpha1
 kind: Router
 metadata:
   annotations:

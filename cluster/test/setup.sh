@@ -13,7 +13,7 @@ ${KUBECTL} -n upbound-system wait --for=condition=Available deployment --all --t
 
 echo "Creating a default provider config..."
 cat <<EOF | ${KUBECTL} apply -f -
-apiVersion: provider.upcloud.io/v1beta1
+apiVersion: provider.upcloud.com/v1beta1
 kind: ProviderConfig
 metadata:
   name: default

@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: networks.network.upcloud.io
+  name: firewallrules.server.upcloud.com
 spec:
-  group: network.upcloud.io
+  group: server.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: Network
-    listKind: NetworkList
-    plural: networks
-    singular: network
+    kind: FirewallRules
+    listKind: FirewallRulesList
+    plural: firewallrules
+    singular: firewallrules
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,9 +34,12 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Network is the Schema for the Networks API. This resource represents
-          an SDN private network that cloud servers and other resources from the same
-          zone can be attached to.
+        description: FirewallRules is the Schema for the FirewallRuless API. This
+          resource represents a generated list of UpCloud firewall rules. Firewall
+          rules are used in conjunction with UpCloud servers. Each server has its
+          own firewall rules. The firewall is enabled on all network interfaces except
+          ones attached to private virtual networks. The maximum number of firewall
+          rules per server is 1000.
         properties:
           apiVersion:
             description: |-
@@ -56,7 +59,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: NetworkSpec defines the desired state of Network
+            description: FirewallRulesSpec defines the desired state of FirewallRules
             properties:
               deletionPolicy:
                 default: Delete
@@ -74,75 +77,97 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  ipNetwork:
+                  firewallRule:
                     description: |-
-                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
-                      IP subnet within the network. Network must have exactly one IP subnet.
+                      address/port range.
+                      The default rule can be created by providing only "action" and "direction" attributes. Default rule should be defined last. (see below for nested schema)
+                      A single firewall rule.
+                      If used, IP address and port ranges must have both start and end values specified. These can be the same value if only one IP address or port number is specified.
+                      Source and destination port numbers can only be set if the protocol is TCP or UDP.
+                      The ICMP type may only be set if the protocol is ICMP.
+                      Typical firewall rule should have "action", "direction", "protocol", "family" and at least one destination/source-address/port range.
+                      The default rule can be created by providing only "action" and "direction" attributes. Default rule should be defined last.
                     items:
                       properties:
-                        address:
+                        action:
                           description: |-
-                            (String) The CIDR range of the subnet
-                            The CIDR range of the subnet
+                            (String) Action to take if the rule conditions are met
+                            Action to take if the rule conditions are met
                           type: string
-                        dhcp:
+                        comment:
                           description: |-
-                            (Boolean) Is DHCP enabled?
-                            Is DHCP enabled?
-                          type: boolean
-                        dhcpDefaultRoute:
+                            (String) Freeform comment string for the rule
+                            Freeform comment string for the rule
+                          type: string
+                        destinationAddressEnd:
                           description: |-
-                            (Boolean) Is the gateway the DHCP default route?
-                            Is the gateway the DHCP default route?
-                          type: boolean
-                        dhcpDns:
+                            (String) The destination address range ends from this address
+                            The destination address range ends from this address
+                          type: string
+                        destinationAddressStart:
                           description: |-
-                            (Set of String) The DNS servers given by DHCP
-                            The DNS servers given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        dhcpRoutes:
+                            (String) The destination address range starts from this address
+                            The destination address range starts from this address
+                          type: string
+                        destinationPortEnd:
                           description: |-
-                            (Set of String) The additional DHCP classless static routes given by DHCP
-                            The additional DHCP classless static routes given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
+                            (String) The destination port range ends from this port number
+                            The destination port range ends from this port number
+                          type: string
+                        destinationPortStart:
+                          description: |-
+                            (String) The destination port range starts from this port number
+                            The destination port range starts from this port number
+                          type: string
+                        direction:
+                          description: |-
+                            (String) The direction of network traffic this rule will be applied to
+                            The direction of network traffic this rule will be applied to
+                          type: string
                         family:
                           description: |-
-                            (String) IP address family
-                            IP address family
+                            (String) The address family of new firewall rule
+                            The address family of new firewall rule
                           type: string
-                        gateway:
+                        icmpType:
                           description: |-
-                            (String) Gateway address given by DHCP
-                            Gateway address given by DHCP
+                            (String) The ICMP type
+                            The ICMP type
+                          type: string
+                        protocol:
+                          description: |-
+                            (String) The protocol this rule will be applied to
+                            The protocol this rule will be applied to
+                          type: string
+                        sourceAddressEnd:
+                          description: |-
+                            (String) The source address range ends from this address
+                            The source address range ends from this address
+                          type: string
+                        sourceAddressStart:
+                          description: |-
+                            (String) The source address range starts from this address
+                            The source address range starts from this address
+                          type: string
+                        sourcePortEnd:
+                          description: |-
+                            (String) The source port range ends from this port number
+                            The source port range ends from this port number
+                          type: string
+                        sourcePortStart:
+                          description: |-
+                            (String) The source port range starts from this port number
+                            The source port range starts from this port number
                           type: string
                       type: object
                     type: array
-                  labels:
-                    additionalProperties:
-                      type: string
+                  serverId:
                     description: |-
-                      value pairs to classify the network.
-                      User defined key-value pairs to classify the network.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  name:
-                    description: |-
-                      (String) Name of the network.
-                      Name of the network.
+                      (String) The unique id of the server to be protected the firewall rules
+                      The unique id of the server to be protected the firewall rules
                     type: string
-                  router:
-                    description: |-
-                      (String) UUID of a router to attach to this network.
-                      UUID of a router to attach to this network.
-                    type: string
-                  routerRef:
-                    description: Reference to a Router in network to populate router.
+                  serverIdRef:
+                    description: Reference to a Server in server to populate serverId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -175,8 +200,8 @@ spec:
                     required:
                     - name
                     type: object
-                  routerSelector:
-                    description: Selector for a Router in network to populate router.
+                  serverIdSelector:
+                    description: Selector for a Server in server to populate serverId.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -215,11 +240,6 @@ spec:
                             type: string
                         type: object
                     type: object
-                  zone:
-                    description: |-
-                      fra1. You can list available zones with upctl zone list.
-                      The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
-                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -234,75 +254,97 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  ipNetwork:
+                  firewallRule:
                     description: |-
-                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
-                      IP subnet within the network. Network must have exactly one IP subnet.
+                      address/port range.
+                      The default rule can be created by providing only "action" and "direction" attributes. Default rule should be defined last. (see below for nested schema)
+                      A single firewall rule.
+                      If used, IP address and port ranges must have both start and end values specified. These can be the same value if only one IP address or port number is specified.
+                      Source and destination port numbers can only be set if the protocol is TCP or UDP.
+                      The ICMP type may only be set if the protocol is ICMP.
+                      Typical firewall rule should have "action", "direction", "protocol", "family" and at least one destination/source-address/port range.
+                      The default rule can be created by providing only "action" and "direction" attributes. Default rule should be defined last.
                     items:
                       properties:
-                        address:
+                        action:
                           description: |-
-                            (String) The CIDR range of the subnet
-                            The CIDR range of the subnet
+                            (String) Action to take if the rule conditions are met
+                            Action to take if the rule conditions are met
                           type: string
-                        dhcp:
+                        comment:
                           description: |-
-                            (Boolean) Is DHCP enabled?
-                            Is DHCP enabled?
-                          type: boolean
-                        dhcpDefaultRoute:
+                            (String) Freeform comment string for the rule
+                            Freeform comment string for the rule
+                          type: string
+                        destinationAddressEnd:
                           description: |-
-                            (Boolean) Is the gateway the DHCP default route?
-                            Is the gateway the DHCP default route?
-                          type: boolean
-                        dhcpDns:
+                            (String) The destination address range ends from this address
+                            The destination address range ends from this address
+                          type: string
+                        destinationAddressStart:
                           description: |-
-                            (Set of String) The DNS servers given by DHCP
-                            The DNS servers given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        dhcpRoutes:
+                            (String) The destination address range starts from this address
+                            The destination address range starts from this address
+                          type: string
+                        destinationPortEnd:
                           description: |-
-                            (Set of String) The additional DHCP classless static routes given by DHCP
-                            The additional DHCP classless static routes given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
+                            (String) The destination port range ends from this port number
+                            The destination port range ends from this port number
+                          type: string
+                        destinationPortStart:
+                          description: |-
+                            (String) The destination port range starts from this port number
+                            The destination port range starts from this port number
+                          type: string
+                        direction:
+                          description: |-
+                            (String) The direction of network traffic this rule will be applied to
+                            The direction of network traffic this rule will be applied to
+                          type: string
                         family:
                           description: |-
-                            (String) IP address family
-                            IP address family
+                            (String) The address family of new firewall rule
+                            The address family of new firewall rule
                           type: string
-                        gateway:
+                        icmpType:
                           description: |-
-                            (String) Gateway address given by DHCP
-                            Gateway address given by DHCP
+                            (String) The ICMP type
+                            The ICMP type
+                          type: string
+                        protocol:
+                          description: |-
+                            (String) The protocol this rule will be applied to
+                            The protocol this rule will be applied to
+                          type: string
+                        sourceAddressEnd:
+                          description: |-
+                            (String) The source address range ends from this address
+                            The source address range ends from this address
+                          type: string
+                        sourceAddressStart:
+                          description: |-
+                            (String) The source address range starts from this address
+                            The source address range starts from this address
+                          type: string
+                        sourcePortEnd:
+                          description: |-
+                            (String) The source port range ends from this port number
+                            The source port range ends from this port number
+                          type: string
+                        sourcePortStart:
+                          description: |-
+                            (String) The source port range starts from this port number
+                            The source port range starts from this port number
                           type: string
                       type: object
                     type: array
-                  labels:
-                    additionalProperties:
-                      type: string
+                  serverId:
                     description: |-
-                      value pairs to classify the network.
-                      User defined key-value pairs to classify the network.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  name:
-                    description: |-
-                      (String) Name of the network.
-                      Name of the network.
+                      (String) The unique id of the server to be protected the firewall rules
+                      The unique id of the server to be protected the firewall rules
                     type: string
-                  router:
-                    description: |-
-                      (String) UUID of a router to attach to this network.
-                      UUID of a router to attach to this network.
-                    type: string
-                  routerRef:
-                    description: Reference to a Router in network to populate router.
+                  serverIdRef:
+                    description: Reference to a Server in server to populate serverId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -335,8 +377,8 @@ spec:
                     required:
                     - name
                     type: object
-                  routerSelector:
-                    description: Selector for a Router in network to populate router.
+                  serverIdSelector:
+                    description: Selector for a Server in server to populate serverId.
                     properties:
                       matchControllerRef:
                         description: |-
@@ -375,11 +417,6 @@ spec:
                             type: string
                         type: object
                     type: object
-                  zone:
-                    description: |-
-                      fra1. You can list available zones with upctl zone list.
-                      The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
-                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -549,98 +586,106 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.name is a required parameter
+            - message: spec.forProvider.firewallRule is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
-                || (has(self.initProvider) && has(self.initProvider.name))'
-            - message: spec.forProvider.zone is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.zone)
-                || (has(self.initProvider) && has(self.initProvider.zone))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.firewallRule)
+                || (has(self.initProvider) && has(self.initProvider.firewallRule))'
           status:
-            description: NetworkStatus defines the observed state of Network.
+            description: FirewallRulesStatus defines the observed state of FirewallRules.
             properties:
               atProvider:
                 properties:
-                  id:
-                    description: (String) UUID of the network.
-                    type: string
-                  ipNetwork:
+                  firewallRule:
                     description: |-
-                      (Block List) IP subnet within the network. Network must have exactly one IP subnet. (see below for nested schema)
-                      IP subnet within the network. Network must have exactly one IP subnet.
+                      address/port range.
+                      The default rule can be created by providing only "action" and "direction" attributes. Default rule should be defined last. (see below for nested schema)
+                      A single firewall rule.
+                      If used, IP address and port ranges must have both start and end values specified. These can be the same value if only one IP address or port number is specified.
+                      Source and destination port numbers can only be set if the protocol is TCP or UDP.
+                      The ICMP type may only be set if the protocol is ICMP.
+                      Typical firewall rule should have "action", "direction", "protocol", "family" and at least one destination/source-address/port range.
+                      The default rule can be created by providing only "action" and "direction" attributes. Default rule should be defined last.
                     items:
                       properties:
-                        address:
+                        action:
                           description: |-
-                            (String) The CIDR range of the subnet
-                            The CIDR range of the subnet
+                            (String) Action to take if the rule conditions are met
+                            Action to take if the rule conditions are met
                           type: string
-                        dhcp:
+                        comment:
                           description: |-
-                            (Boolean) Is DHCP enabled?
-                            Is DHCP enabled?
-                          type: boolean
-                        dhcpDefaultRoute:
+                            (String) Freeform comment string for the rule
+                            Freeform comment string for the rule
+                          type: string
+                        destinationAddressEnd:
                           description: |-
-                            (Boolean) Is the gateway the DHCP default route?
-                            Is the gateway the DHCP default route?
-                          type: boolean
-                        dhcpDns:
+                            (String) The destination address range ends from this address
+                            The destination address range ends from this address
+                          type: string
+                        destinationAddressStart:
                           description: |-
-                            (Set of String) The DNS servers given by DHCP
-                            The DNS servers given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
-                        dhcpRoutes:
+                            (String) The destination address range starts from this address
+                            The destination address range starts from this address
+                          type: string
+                        destinationPortEnd:
                           description: |-
-                            (Set of String) The additional DHCP classless static routes given by DHCP
-                            The additional DHCP classless static routes given by DHCP
-                          items:
-                            type: string
-                          type: array
-                          x-kubernetes-list-type: set
+                            (String) The destination port range ends from this port number
+                            The destination port range ends from this port number
+                          type: string
+                        destinationPortStart:
+                          description: |-
+                            (String) The destination port range starts from this port number
+                            The destination port range starts from this port number
+                          type: string
+                        direction:
+                          description: |-
+                            (String) The direction of network traffic this rule will be applied to
+                            The direction of network traffic this rule will be applied to
+                          type: string
                         family:
                           description: |-
-                            (String) IP address family
-                            IP address family
+                            (String) The address family of new firewall rule
+                            The address family of new firewall rule
                           type: string
-                        gateway:
+                        icmpType:
                           description: |-
-                            (String) Gateway address given by DHCP
-                            Gateway address given by DHCP
+                            (String) The ICMP type
+                            The ICMP type
+                          type: string
+                        protocol:
+                          description: |-
+                            (String) The protocol this rule will be applied to
+                            The protocol this rule will be applied to
+                          type: string
+                        sourceAddressEnd:
+                          description: |-
+                            (String) The source address range ends from this address
+                            The source address range ends from this address
+                          type: string
+                        sourceAddressStart:
+                          description: |-
+                            (String) The source address range starts from this address
+                            The source address range starts from this address
+                          type: string
+                        sourcePortEnd:
+                          description: |-
+                            (String) The source port range ends from this port number
+                            The source port range ends from this port number
+                          type: string
+                        sourcePortStart:
+                          description: |-
+                            (String) The source port range starts from this port number
+                            The source port range starts from this port number
                           type: string
                       type: object
                     type: array
-                  labels:
-                    additionalProperties:
-                      type: string
-                    description: |-
-                      value pairs to classify the network.
-                      User defined key-value pairs to classify the network.
-                    type: object
-                    x-kubernetes-map-type: granular
-                  name:
-                    description: |-
-                      (String) Name of the network.
-                      Name of the network.
+                  id:
+                    description: (String) The ID of this resource.
                     type: string
-                  router:
+                  serverId:
                     description: |-
-                      (String) UUID of a router to attach to this network.
-                      UUID of a router to attach to this network.
-                    type: string
-                  type:
-                    description: |-
-                      (String) The network type
-                      The network type
-                    type: string
-                  zone:
-                    description: |-
-                      fra1. You can list available zones with upctl zone list.
-                      The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                      (String) The unique id of the server to be protected the firewall rules
+                      The unique id of the server to be protected the firewall rules
                     type: string
                 type: object
               conditions:

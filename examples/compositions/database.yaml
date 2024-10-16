@@ -18,7 +18,7 @@ spec:
   resources:
     - name: main-service
       base:
-        apiVersion: database.upcloud.io/v1alpha1
+        apiVersion: database.upcloud.com/v1alpha1
         kind: ManagedDatabaseMysql
         spec:
           forProvider:
@@ -35,7 +35,7 @@ spec:
         toFieldPath: status.mainServiceID
     - name: logical-db
       base:
-        apiVersion: database.upcloud.io/v1alpha1
+        apiVersion: database.upcloud.com/v1alpha1
         kind: ManagedDatabaseLogicalDatabase
         spec:
           forProvider:

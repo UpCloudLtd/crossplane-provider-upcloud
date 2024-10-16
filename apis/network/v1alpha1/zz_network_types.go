@@ -136,7 +136,7 @@ type NetworkInitParameters struct {
 
 	// (String) UUID of a router to attach to this network.
 	// UUID of a router to attach to this network.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Router
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/network/v1alpha1.Router
 	Router *string `json:"router,omitempty" tf:"router,omitempty"`
 
 	// Reference to a Router in network to populate router.
@@ -203,7 +203,7 @@ type NetworkParameters struct {
 
 	// (String) UUID of a router to attach to this network.
 	// UUID of a router to attach to this network.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Router
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/network/v1alpha1.Router
 	// +kubebuilder:validation:Optional
 	Router *string `json:"router,omitempty" tf:"router,omitempty"`
 

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/UpCloudLtd/provider-upcloud/config/groupversion"
+	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/groupversion"
 
 	"github.com/crossplane/upjet/pkg/config"
 )

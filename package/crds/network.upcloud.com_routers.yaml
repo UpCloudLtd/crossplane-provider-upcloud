@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: managedobjectstorages.objectstorage.upcloud.io
+  name: routers.network.upcloud.com
 spec:
-  group: objectstorage.upcloud.io
+  group: network.upcloud.com
   names:
     categories:
     - crossplane
     - managed
     - upcloud
-    kind: ManagedObjectStorage
-    listKind: ManagedObjectStorageList
-    plural: managedobjectstorages
-    singular: managedobjectstorage
+    kind: Router
+    listKind: RouterList
+    plural: routers
+    singular: router
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,9 +34,9 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ManagedObjectStorage is the Schema for the ManagedObjectStorages
-          API. This resource represents an UpCloud Managed Object Storage instance,
-          which provides S3 compatible storage.
+        description: Router is the Schema for the Routers API. Routers can be used
+          to connect multiple Private Networks. UpCloud Servers on any attached network
+          can communicate directly with each other.
         properties:
           apiVersion:
             description: |-
@@ -56,7 +56,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ManagedObjectStorageSpec defines the desired state of ManagedObjectStorage
+            description: RouterSpec defines the desired state of Router
             properties:
               deletionPolicy:
                 default: Delete
@@ -74,57 +74,42 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  configuredStatus:
-                    description: |-
-                      (String) Service status managed by the end user.
-                      Service status managed by the end user.
-                    type: string
                   labels:
                     additionalProperties:
                       type: string
                     description: |-
-                      value pairs to classify the managed object storage.
-                      User defined key-value pairs to classify the managed object storage.
+                      value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) Name of the Managed Object Storage service. Must be unique within account.
-                      Name of the Managed Object Storage service. Must be unique within account.
+                      (String) Name of the router.
+                      Name of the router.
                     type: string
-                  network:
+                  staticRoute:
                     description: |-
-                      (Block Set) Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network. (see below for nested schema)
-                      Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network.
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
                     items:
                       properties:
-                        family:
-                          description: |-
-                            (String) Network family. IPv6 currently not supported.
-                            Network family. IPv6 currently not supported.
-                          type: string
                         name:
                           description: |-
-                            (String) Name of the Managed Object Storage service. Must be unique within account.
-                            Network name. Must be unique within the service.
+                            (String) Name of the router.
+                            Name or description of the route.
                           type: string
-                        type:
+                        nexthop:
                           description: |-
-                            (String) Network type.
-                            Network type.
+                            (String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                            Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
                           type: string
-                        uuid:
+                        route:
                           description: |-
-                            (String) Private network uuid. For public networks the field should be omitted.
-                            Private network uuid. For public networks the field should be omitted.
+                            (String) Destination prefix of the route.
+                            Destination prefix of the route.
                           type: string
                       type: object
                     type: array
-                  region:
-                    description: |-
-                      (String) Region in which the service will be hosted, see upcloud_managed_object_storage_regions data source.
-                      Region in which the service will be hosted, see `upcloud_managed_object_storage_regions` data source.
-                    type: string
                 type: object
               initProvider:
                 description: |-
@@ -139,57 +124,42 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
-                  configuredStatus:
-                    description: |-
-                      (String) Service status managed by the end user.
-                      Service status managed by the end user.
-                    type: string
                   labels:
                     additionalProperties:
                       type: string
                     description: |-
-                      value pairs to classify the managed object storage.
-                      User defined key-value pairs to classify the managed object storage.
+                      value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) Name of the Managed Object Storage service. Must be unique within account.
-                      Name of the Managed Object Storage service. Must be unique within account.
+                      (String) Name of the router.
+                      Name of the router.
                     type: string
-                  network:
+                  staticRoute:
                     description: |-
-                      (Block Set) Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network. (see below for nested schema)
-                      Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network.
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
                     items:
                       properties:
-                        family:
-                          description: |-
-                            (String) Network family. IPv6 currently not supported.
-                            Network family. IPv6 currently not supported.
-                          type: string
                         name:
                           description: |-
-                            (String) Name of the Managed Object Storage service. Must be unique within account.
-                            Network name. Must be unique within the service.
+                            (String) Name of the router.
+                            Name or description of the route.
                           type: string
-                        type:
+                        nexthop:
                           description: |-
-                            (String) Network type.
-                            Network type.
+                            (String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                            Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
                           type: string
-                        uuid:
+                        route:
                           description: |-
-                            (String) Private network uuid. For public networks the field should be omitted.
-                            Private network uuid. For public networks the field should be omitted.
+                            (String) Destination prefix of the route.
+                            Destination prefix of the route.
                           type: string
                       type: object
                     type: array
-                  region:
-                    description: |-
-                      (String) Region in which the service will be hosted, see upcloud_managed_object_storage_regions data source.
-                      Region in which the service will be hosted, see `upcloud_managed_object_storage_regions` data source.
-                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -359,120 +329,101 @@ spec:
             - forProvider
             type: object
             x-kubernetes-validations:
-            - message: spec.forProvider.configuredStatus is a required parameter
+            - message: spec.forProvider.labels is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.configuredStatus)
-                || (has(self.initProvider) && has(self.initProvider.configuredStatus))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.labels)
+                || (has(self.initProvider) && has(self.initProvider.labels))'
             - message: spec.forProvider.name is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
                 || (has(self.initProvider) && has(self.initProvider.name))'
-            - message: spec.forProvider.region is a required parameter
+            - message: spec.forProvider.staticRoute is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.region)
-                || (has(self.initProvider) && has(self.initProvider.region))'
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.staticRoute)
+                || (has(self.initProvider) && has(self.initProvider.staticRoute))'
           status:
-            description: ManagedObjectStorageStatus defines the observed state of
-              ManagedObjectStorage.
+            description: RouterStatus defines the observed state of Router.
             properties:
               atProvider:
                 properties:
-                  configuredStatus:
+                  attachedNetworks:
                     description: |-
-                      (String) Service status managed by the end user.
-                      Service status managed by the end user.
-                    type: string
-                  createdAt:
-                    description: |-
-                      (String) Creation time.
-                      Creation time.
-                    type: string
-                  endpoint:
-                    description: |-
-                      (Set of Object) Endpoints for accessing the Managed Object Storage service. (see below for nested schema)
-                      Endpoints for accessing the Managed Object Storage service.
+                      (List of String) List of UUIDs representing networks attached to this router.
+                      List of UUIDs representing networks attached to this router.
                     items:
-                      properties:
-                        domainName:
-                          description: |-
-                            (String)
-                            Domain name of the endpoint.
-                          type: string
-                        iamUrl:
-                          description: |-
-                            (String)
-                            URL for IAM.
-                          type: string
-                        stsUrl:
-                          description: |-
-                            (String)
-                            URL for STS.
-                          type: string
-                        type:
-                          description: |-
-                            (String) Network type.
-                            Type of the endpoint (`private` / `public`).
-                          type: string
-                      type: object
+                      type: string
                     type: array
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) UUID of the router.
                     type: string
                   labels:
                     additionalProperties:
                       type: string
                     description: |-
-                      value pairs to classify the managed object storage.
-                      User defined key-value pairs to classify the managed object storage.
+                      value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
                     type: object
                     x-kubernetes-map-type: granular
                   name:
                     description: |-
-                      (String) Name of the Managed Object Storage service. Must be unique within account.
-                      Name of the Managed Object Storage service. Must be unique within account.
+                      (String) Name of the router.
+                      Name of the router.
                     type: string
-                  network:
+                  staticRoute:
                     description: |-
-                      (Block Set) Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network. (see below for nested schema)
-                      Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network.
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
                     items:
                       properties:
-                        family:
-                          description: |-
-                            (String) Network family. IPv6 currently not supported.
-                            Network family. IPv6 currently not supported.
-                          type: string
                         name:
                           description: |-
-                            (String) Name of the Managed Object Storage service. Must be unique within account.
-                            Network name. Must be unique within the service.
+                            (String) Name of the router.
+                            Name or description of the route.
+                          type: string
+                        nexthop:
+                          description: |-
+                            (String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                            Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                          type: string
+                        route:
+                          description: |-
+                            (String) Destination prefix of the route.
+                            Destination prefix of the route.
                           type: string
                         type:
                           description: |-
-                            (String) Network type.
-                            Network type.
-                          type: string
-                        uuid:
-                          description: |-
-                            (String) Private network uuid. For public networks the field should be omitted.
-                            Private network uuid. For public networks the field should be omitted.
+                            (String) Type of the router
+                            Type of the route.
                           type: string
                       type: object
                     type: array
-                  operationalState:
+                  staticRoutes:
                     description: |-
-                      (String) Operational state of the Managed Object Storage service.
-                      Operational state of the Managed Object Storage service.
-                    type: string
-                  region:
+                      (Set of Object) A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as static_route blocks. (see below for nested schema)
+                      A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as `static_route` blocks.
+                    items:
+                      properties:
+                        name:
+                          description: (String) Name of the router.
+                          type: string
+                        nexthop:
+                          description: '(String) Next hop address. NOTE: For static
+                            route to be active the next hop has to be an address of
+                            a reachable running Cloud Server in one of the Private
+                            Networks attached to the router.'
+                          type: string
+                        route:
+                          description: (String) Destination prefix of the route.
+                          type: string
+                        type:
+                          description: (String) Type of the router
+                          type: string
+                      type: object
+                    type: array
+                  type:
                     description: |-
-                      (String) Region in which the service will be hosted, see upcloud_managed_object_storage_regions data source.
-                      Region in which the service will be hosted, see `upcloud_managed_object_storage_regions` data source.
-                    type: string
-                  updatedAt:
-                    description: |-
-                      (String) Creation time.
-                      Creation time.
+                      (String) Type of the router
+                      Type of the router
                     type: string
                 type: object
               conditions:

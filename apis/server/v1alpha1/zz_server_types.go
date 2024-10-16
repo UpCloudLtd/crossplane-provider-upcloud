@@ -181,7 +181,7 @@ type NetworkInterfaceInitParameters struct {
 
 	// (String) The unique ID of a network to attach this network to.
 	// The unique ID of a network to attach this network to.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/network/v1alpha1.Network
 	Network *string `json:"network,omitempty" tf:"network,omitempty"`
 
 	// Reference to a Network in network to populate network.
@@ -264,7 +264,7 @@ type NetworkInterfaceParameters struct {
 
 	// (String) The unique ID of a network to attach this network to.
 	// The unique ID of a network to attach this network to.
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/network/v1alpha1.Network
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/network/v1alpha1.Network
 	// +kubebuilder:validation:Optional
 	Network *string `json:"network,omitempty" tf:"network,omitempty"`
 
@@ -647,7 +647,7 @@ type StorageDevicesInitParameters struct {
 
 	// (String) A valid storage UUID
 	// A valid storage UUID
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/storage/v1alpha1.Storage
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/storage/v1alpha1.Storage
 	Storage *string `json:"storage,omitempty" tf:"storage,omitempty"`
 
 	// Reference to a Storage in storage to populate storage.
@@ -696,7 +696,7 @@ type StorageDevicesParameters struct {
 
 	// (String) A valid storage UUID
 	// A valid storage UUID
-	// +crossplane:generate:reference:type=github.com/UpCloudLtd/provider-upcloud/apis/storage/v1alpha1.Storage
+	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/storage/v1alpha1.Storage
 	// +kubebuilder:validation:Optional
 	Storage *string `json:"storage" tf:"storage,omitempty"`
 

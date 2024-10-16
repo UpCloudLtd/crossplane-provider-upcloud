@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.14.0
-  name: manageddatabasemysqls.database.upcloud.io
+  name: manageddatabasemysqls.database.upcloud.com
 spec:
-  group: database.upcloud.io
+  group: database.upcloud.com
   names:
     categories:
     - crossplane
