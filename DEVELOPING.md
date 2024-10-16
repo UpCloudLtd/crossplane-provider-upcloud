@@ -70,10 +70,10 @@ If you use VSCode, you can use the following run configuration and run the contr
            "TERRAFORM_VERSION": "1.5.7",
            "TERRAFORM_PROVIDER_SOURCE": "UpCloudLtd/upcloud",
            "TERRAFORM_PROVIDER_REPO": "https://github.com/UpCloudLtd/terraform-provider-upcloud",
-           "TERRAFORM_PROVIDER_VERSION": "5.10.1",
+           "TERRAFORM_PROVIDER_VERSION": "5.12.0",
            "TERRAFORM_PROVIDER_DOWNLOAD_NAME": "terraform-provider-upcloud",
-           "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.10.1",
-           "TERRAFORM_NATIVE_PROVIDER_BINARY": "terraform-provider-upcloud_v5.10.1",
+           "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.12.0",
+           "TERRAFORM_NATIVE_PROVIDER_BINARY": "terraform-provider-upcloud_v5.12.0",
            "TERRAFORM_DOCS_PATH": "docs/resources"
        }
    }
@@ -85,9 +85,9 @@ First is to use locally built TF provider. You can do that by [building the TF p
     ```shell
 
     // "TERRAFORM_PROVIDER_SOURCE": "UpCloudLtd/upcloud",
-    // "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.10.1",
+    // "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.12.0",
     "TERRAFORM_PROVIDER_SOURCE": "registry.upcloud.com/upcloud/upcloud",
-    "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "file:///home/myusername/.terraform.d/plugins/registry.upcloud.com/upcloud/upcloud/5.10.1",
+    "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "file:///home/myusername/.terraform.d/plugins/registry.upcloud.com/upcloud/upcloud/5.12.0",
     ```
 Just make sure to change the version to whatever was the result of local TF build process.
 
@@ -132,6 +132,6 @@ Currently, the release process is entirely manual and goes as follows:
     ```
 5. Push the package to the repository with the same version as the tag from step 1. You need to have `crossplane.yaml` file in the directory you run the push command:
     ```
-    cd package && up xpkg push upcloud/provider-upcloud:v0.0.2 -f ../_output/xpkg/linux_amd64/provider-upcloud-vXX.XX.XX.xpkg
+    cd package && up xpkg push upcloud/provider-upcloud:v0.0.6 -f ../_output/xpkg/linux_amd64/provider-upcloud-vXX.XX.XX.xpkg
     ```
 6. Verify that it is published by going to [Upbound marketplace](https://marketplace.upbound.io/account/upcloud/provider-upcloud).

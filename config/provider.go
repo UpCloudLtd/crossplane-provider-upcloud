@@ -5,8 +5,9 @@ Copyright 2021 Upbound Inc.
 package config
 
 import (
-	// Note(turkenh): we are importing this to embed provider schema document
+	"context"
 	_ "embed"
+	"fmt"
 
 	"github.com/UpCloudLtd/provider-upcloud/config/database"
 	"github.com/UpCloudLtd/provider-upcloud/config/kubernetes"
@@ -17,6 +18,9 @@ import (
 
 	"github.com/UpCloudLtd/terraform-provider-upcloud/upcloud"
 	ujconfig "github.com/crossplane/upjet/pkg/config"
+	"github.com/hashicorp/terraform-plugin-framework/provider"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 const (
@@ -36,9 +40,9 @@ func GetProvider() *ujconfig.Provider {
 		ujconfig.WithRootGroup("upcloud.io"),
 		ujconfig.WithIncludeList([]string{}),
 		ujconfig.WithTerraformPluginSDKIncludeList(sdkResourcesList()),
-		ujconfig.WithTerraformProvider(upcloud.Provider()),
+		ujconfig.WithTerraformProvider(terraformProvider()),
 		ujconfig.WithTerraformPluginFrameworkIncludeList(pluginFrameworkResourcesList()),
-		ujconfig.WithTerraformPluginFrameworkProvider(upcloud.New()),
+		ujconfig.WithTerraformPluginFrameworkProvider(terraformPluginFrameworkProvider()),
 		ujconfig.WithFeaturesPackage("internal/features"),
 	)
 
@@ -90,4 +94,23 @@ func formatResourceNames(resources [][]string) []string {
 	}
 
 	return formatted
+}
+
+func terraformProvider() *schema.Provider {
+	p := upcloud.Provider()
+	p.ConfigureContextFunc = func(ctx context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
+		return upcloud.ProviderConfigure(ctx, d, defaultUserAgent())
+	}
+
+	return p
+}
+
+func terraformPluginFrameworkProvider() provider.Provider {
+	p := upcloud.NewWithUserAgent(defaultUserAgent())
+
+	return p
+}
+
+func defaultUserAgent() string {
+	return fmt.Sprintf("crossplane-provider-upcloud/%s", version)
 }

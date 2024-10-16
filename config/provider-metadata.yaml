@@ -521,7 +521,7 @@ resources:
             private_node_groups: (Boolean) Enable private node groups. Private node groups requires a network that is routed through NAT gateway.
             state: (String) Operational state of the cluster.
             storage_encryption: (String) Set default storage encryption strategy for all nodes in the cluster.
-            version: (String) Kubernetes version ID, e.g. 1.28. You can list available version IDs with upctl kubernetes versions.
+            version: (String) Kubernetes version ID, e.g. 1.29. You can list available version IDs with upctl kubernetes versions.
             zone: (String) Zone in which the Kubernetes cluster will be hosted, e.g. de-fra1. You can list available zones with upctl zone list.
         importStatements: []
     upcloud_kubernetes_node_group:
@@ -669,7 +669,7 @@ resources:
         importStatements: []
     upcloud_loadbalancer_backend:
         subCategory: Load Balancer
-        description: This resource represents load balancer backend service
+        description: This resource represents load balancer backend service.
         name: upcloud_loadbalancer_backend
         title: upcloud_loadbalancer_backend Resource - terraform-provider-upcloud
         examples:
@@ -703,25 +703,25 @@ resources:
                       "zone": "${var.lb_zone}"
                     }
         argumentDocs:
-            health_check_expected_status: (Number) Expected HTTP status code returned by the customer application to mark server as healthy. Ignored for tcp type.
+            health_check_expected_status: (Number) Expected HTTP status code returned by the customer application to mark server as healthy. Ignored for tcp health_check_type.
             health_check_fall: (Number) Sets how many failed health checks are allowed until the backend member is taken off from the rotation.
-            health_check_interval: (Number) Interval between health checks.
-            health_check_rise: (Number) Sets how many passing checks there must be before returning the backend member to the rotation.
+            health_check_interval: (Number) Interval between health checks in seconds.
+            health_check_rise: (Number) Sets how many successful health checks are required to put the backend member back into rotation.
             health_check_tls_verify: (Boolean) Enables certificate verification with the system CA certificate bundle. Works with https scheme in health_check_url, otherwise ignored.
             health_check_type: (String) Health check type.
-            health_check_url: (String) Target path for health check HTTP GET requests. Ignored for tcp type.
+            health_check_url: (String) Target path for health check HTTP GET requests. Ignored for tcp health_check_type.
             http2_enabled: '(Boolean) Allow HTTP/2 connections to backend members by utilizing ALPN extension of TLS protocol, therefore it can only be enabled when tls_enabled is set to true. Note: members should support HTTP/2 for this setting to work.'
-            id: (String) The ID of this resource.
-            loadbalancer: (String) ID of the load balancer to which the backend is connected.
-            members: (List of String) Backend members receive traffic dispatched from the frontends
-            name: (String) The name of the backend must be unique within the load balancer service.
-            outbound_proxy_protocol: (String) Enable outbound proxy protocol by setting the desired version. Empty string disables proxy protocol.
-            properties: '(Block List, Max: 1) Backend properties. Properties can set back to defaults by defining empty properties {} block. (see below for nested schema)'
-            resolver_name: (String) Domain Name Resolver used with dynamic type members.
+            id: (String) ID of the backend. ID is in {load balancer UUID}/{backend name} format.
+            loadbalancer: (String) UUID of the load balancer to which the backend is connected.
+            members: (List of String) Backend member server UUIDs. Members receive traffic dispatched from the frontends.
+            name: (String) The name of the backend. Must be unique within the load balancer service.
+            outbound_proxy_protocol: (String) Enable outbound proxy protocol by setting the desired version. Defaults to empty string. Empty string disables proxy protocol.
+            properties: (Block List) Backend properties. Properties can be set back to defaults by defining an empty properties {} block. For terraform import, an empty or non-empty block is also required. (see below for nested schema)
+            resolver_name: (String) Domain name resolver used with dynamic type members.
             sticky_session_cookie_name: (String) Sets sticky session cookie name. Empty string disables sticky session.
             timeout_server: (Number) Backend server timeout in seconds.
             timeout_tunnel: (Number) Maximum inactivity time on the client and server side for tunnels in seconds.
-            tls_configs: (List of String) Set of TLS config names
+            tls_configs: (List of String) Set of TLS config names.
             tls_enabled: (Boolean) Enables TLS connection from the load balancer to backend servers.
             tls_use_system_ca: (Boolean) If enabled, then the system CA certificate bundle will be used for the certificate verification.
             tls_verify: '(Boolean) Enables backend servers certificate verification. Please make sure that TLS config with the certificate bundle of type authority attached to the backend or tls_use_system_ca enabled. Note: tls_verify has preference over health_check_tls_verify when tls_enabled in true.'
@@ -739,7 +739,7 @@ resources:
         importStatements: []
     upcloud_loadbalancer_dynamic_backend_member:
         subCategory: Load Balancer
-        description: This resource represents load balancer's dynamic backend member
+        description: This resource represents load balancer dynamic backend member
         name: upcloud_loadbalancer_dynamic_backend_member
         title: upcloud_loadbalancer_dynamic_backend_member Resource - terraform-provider-upcloud
         examples:
@@ -798,15 +798,12 @@ resources:
         argumentDocs:
             backend: (String) ID of the load balancer backend to which the member is connected.
             enabled: (Boolean) Indicates if the member is enabled. Disabled members are excluded from load balancing.
-            id: (String) The ID of this resource.
+            id: (String) ID of the backend member. ID is in {load balancer UUID}/{backend name}/{member name} format.
             ip: (String) Optional fallback IP address in case of failure on DNS resolving.
             max_sessions: (Number) Maximum number of sessions before queueing.
-            name: (String) The name of the member must be unique within the load balancer backend service.
+            name: (String) The name of the member. Must be unique within within the load balancer backend.
             port: (Number) Server port. Port is optional and can be specified in DNS SRV record.
-            weight: |-
-                (Number) Used to adjust the server's weight relative to other servers.
-                All servers will receive a load proportional to their weight relative to the sum of all weights, so the higher the weight, the higher the load.
-                A value of 0 means the server will not participate in load balancing but will still accept persistent connections.
+            weight: (Number) Weight of the member. The higher the weight, the more traffic the member receives.
         importStatements: []
     upcloud_loadbalancer_dynamic_certificate_bundle:
         subCategory: Load Balancer
@@ -905,14 +902,14 @@ resources:
             name: (String) The name of the frontend. Must be unique within the load balancer service.
             networks: (Block Set) Networks that frontend will be listening. Networks are required if load balancer has networks defined. This field will be required when deprecated field network is removed from load balancer resource. (see below for nested schema)
             port: (Number) Port to listen for incoming requests.
-            properties: (Block List) Frontend properties. Properties can set back to defaults by defining empty properties {} block. (see below for nested schema)
+            properties: (Block List) Frontend properties. Properties can be set back to defaults by defining an empty properties {} block. For terraform import, an empty or non-empty block is also required. (see below for nested schema)
             rules: (List of String) Set of frontend rule names.
             timeout_client: (Number) Client request timeout in seconds.
             tls_configs: (List of String) Set of TLS config names.
         importStatements: []
     upcloud_loadbalancer_frontend_rule:
         subCategory: Load Balancer
-        description: This resource represents load balancer frontend rule
+        description: This resource represents load balancer frontend rule.
         name: upcloud_loadbalancer_frontend_rule
         title: upcloud_loadbalancer_frontend_rule Resource - terraform-provider-upcloud
         examples:
@@ -979,43 +976,44 @@ resources:
                       "zone": "${var.lb_zone}"
                     }
         argumentDocs:
-            actions: '(Block List, Max: 1) Set of rule actions. (see below for nested schema)'
+            actions: (Block List) Rule actions. (see below for nested schema)
             active: (Boolean)
             backend_name: (String) The name of the backend where traffic will be routed.
-            body_size: '(Block List, Max: 100) Matches by HTTP request body size. (see below for nested schema)'
-            body_size_range: '(Block List, Max: 100) Matches by range of HTTP request body sizes (see below for nested schema)'
+            body_size: (Block List) Matches by HTTP request body size. (see below for nested schema)
+            body_size_range: (Block List) Matches by range of HTTP request body sizes. (see below for nested schema)
             content_type: (String) Content type.
-            cookie: '(Block List, Max: 100) Matches by HTTP cookie value. Cookie name must be provided. (see below for nested schema)'
-            frontend: (String) ID of the load balancer frontend to which the rule is connected.
-            header: '(Block List, Max: 100) Matches by HTTP header value. Header name must be provided. (see below for nested schema)'
-            host: '(Block List, Max: 100) Matches by hostname. Header extracted from HTTP Headers or from TLS certificate in case of secured connection. (see below for nested schema)'
-            http_method: '(Block List, Max: 100) Matches by HTTP method. (see below for nested schema)'
-            http_redirect: '(Block List, Max: 100) Redirects HTTP requests to specified location or URL scheme. Only either location or scheme can be defined at a time. (see below for nested schema)'
-            http_return: '(Block List, Max: 100) Returns HTTP response with specified HTTP status. (see below for nested schema)'
-            id: (String) The ID of this resource.
-            ignore_case: (Boolean) Ignore case, default false.
-            inverse: (Boolean) Sets if the condition should be inverted. Works similar to logical NOT operator.
+            cookie: (Block List) Matches by HTTP cookie value. Cookie name must be provided. (see below for nested schema)
+            frontend: (String) ID of the load balancer frontend to which the frontend rule is connected.
+            header: (Block List) Matches by HTTP header value. Header name must be provided. (see below for nested schema)
+            host: (Block List) Matches by hostname. Header extracted from HTTP Headers or from TLS certificate in case of secured connection. (see below for nested schema)
+            http_method: (Block List) Matches by HTTP method. (see below for nested schema)
+            http_redirect: (Block List) Redirects HTTP requests to specified location or URL scheme. Only either location or scheme can be defined at a time. (see below for nested schema)
+            http_return: (Block List) Returns HTTP response with specified HTTP status. (see below for nested schema)
+            id: (String) ID of the frontend rule. ID is in {load balancer UUID}/{frontend name}/{frontend rule name} format.
+            ignore_case: (Boolean) Defines if case should be ignored. Defaults to false.
+            inverse: (Boolean) Defines if the condition should be inverted. Works similarly to logical NOT operator.
             location: (String) Target location.
-            matchers: '(Block List, Max: 1) Set of rule matchers. if rule doesn''t have matchers, then action applies to all incoming requests. (see below for nested schema)'
+            matchers: (Block List) Set of rule matchers. If rule doesn't have matchers, then action applies to all incoming requests. (see below for nested schema)
+            matching_condition: (String) Defines boolean operator used to combine multiple matchers. Defaults to and.
             method: (String) Match method (equal, greater, greater_or_equal, less, less_or_equal).
-            name: (String) The name of the frontend rule must be unique within the load balancer service.
-            num_members_up: '(Block List, Max: 100) Matches by number of healthy backend members. (see below for nested schema)'
-            path: '(Block List, Max: 100) Matches by URL path. (see below for nested schema)'
+            name: (String) The name of the frontend rule. Must be unique within the frontend.
+            num_members_up: (Block List) Matches by number of healthy backend members. (see below for nested schema)
+            path: (Block List) Matches by URL path. (see below for nested schema)
             payload: (String) The payload.
             priority: (Number) Rule with the higher priority goes first. Rules with the same priority processed in alphabetical order.
             range_end: (Number) Integer value.
             range_start: (Number) Integer value.
             scheme: (String) Target scheme.
-            set_forwarded_headers: '(Block List, Max: 100) Adds ''X-Forwarded-For / -Proto / -Port'' headers in your forwarded requests (see below for nested schema)'
-            src_ip: '(Block List, Max: 100) Matches by source IP address. (see below for nested schema)'
-            src_port: '(Block List, Max: 100) Matches by source port number. (see below for nested schema)'
-            src_port_range: '(Block List, Max: 100) Matches by range of source port numbers (see below for nested schema)'
+            set_forwarded_headers: (Block List) Adds 'X-Forwarded-For / -Proto / -Port' headers in your forwarded requests (see below for nested schema)
+            src_ip: (Block List) Matches by source IP address. (see below for nested schema)
+            src_port: (Block List) Matches by source port number. (see below for nested schema)
+            src_port_range: (Block List) Matches by range of source port numbers. (see below for nested schema)
             status: (Number) HTTP status code.
-            tcp_reject: '(Block List, Max: 100) Terminates a connection. (see below for nested schema)'
-            url: '(Block List, Max: 100) Matches by URL without schema, e.g. example.com/dashboard. (see below for nested schema)'
-            url_param: '(Block List, Max: 100) Matches by URL query parameter value. Query parameter name must be provided (see below for nested schema)'
-            url_query: '(Block List, Max: 100) Matches by URL query string. (see below for nested schema)'
-            use_backend: '(Block List, Max: 100) Routes traffic to specified backend. (see below for nested schema)'
+            tcp_reject: (Block List) Terminates a connection. (see below for nested schema)
+            url: (Block List) Matches by URL without schema, e.g. example.com/dashboard. (see below for nested schema)
+            url_param: (Block List) Matches by URL query parameter value. Query parameter name must be provided (see below for nested schema)
+            url_query: (Block List) Matches by URL query string. (see below for nested schema)
+            use_backend: (Block List) Routes traffic to specified backend. (see below for nested schema)
             value: (Number) Integer value.
         importStatements: []
     upcloud_loadbalancer_frontend_tls_config:
@@ -1105,7 +1103,7 @@ resources:
         importStatements: []
     upcloud_loadbalancer_resolver:
         subCategory: Load Balancer
-        description: This resource represents service's domain name resolver
+        description: This resource represents load balancer resolver.
         name: upcloud_loadbalancer_resolver
         title: upcloud_loadbalancer_resolver Resource - terraform-provider-upcloud
         examples:
@@ -1149,19 +1147,17 @@ resources:
         argumentDocs:
             cache_invalid: (Number) Time in seconds to cache invalid results.
             cache_valid: (Number) Time in seconds to cache valid results.
-            id: (String) The ID of this resource.
+            id: (String) ID of the resolver. ID is in {load balancer UUID}/{resolver name} format.
             loadbalancer: (String) ID of the load balancer to which the resolver is connected.
-            name: (String) The name of the resolver must be unique within the service.
-            nameservers: |-
-                (List of String) List of nameserver IP addresses. Nameserver can reside in public internet or in customer private network.
-                Port is optional, if missing then default 53 will be used.
+            name: (String) The name of the resolver. Must be unique within the service.
+            nameservers: (List of String) List of nameserver IP addresses. Nameserver can reside in public internet or in customer private network. Port is optional, if missing then default 53 will be used.
             retries: (Number) Number of retries on failure.
             timeout: (Number) Timeout for the query in seconds.
             timeout_retry: (Number) Timeout for the query retries in seconds.
         importStatements: []
     upcloud_loadbalancer_static_backend_member:
         subCategory: Load Balancer
-        description: This resource represents load balancer's static backend member
+        description: This resource represents load balancer static backend member
         name: upcloud_loadbalancer_static_backend_member
         title: upcloud_loadbalancer_static_backend_member Resource - terraform-provider-upcloud
         examples:
@@ -1207,15 +1203,12 @@ resources:
         argumentDocs:
             backend: (String) ID of the load balancer backend to which the member is connected.
             enabled: (Boolean) Indicates if the member is enabled. Disabled members are excluded from load balancing.
-            id: (String) The ID of this resource.
-            ip: (String) Server IP address in the customer private network.
+            id: (String) ID of the backend member. ID is in {load balancer UUID}/{backend name}/{member name} format.
+            ip: (String) Optional fallback IP address in case of failure on DNS resolving.
             max_sessions: (Number) Maximum number of sessions before queueing.
-            name: (String) The name of the member must be unique within the load balancer backend service.
-            port: (Number) Server port.
-            weight: |-
-                (Number) Used to adjust the server's weight relative to other servers.
-                All servers will receive a load proportional to their weight relative to the sum of all weights, so the higher the weight, the higher the load.
-                A value of 0 means the server will not participate in load balancing but will still accept persistent connections.
+            name: (String) The name of the member. Must be unique within within the load balancer backend.
+            port: (Number) Server port. Port is optional and can be specified in DNS SRV record.
+            weight: (Number) Weight of the member. The higher the weight, the more traffic the member receives.
         importStatements: []
     upcloud_managed_database_logical_database:
         subCategory: Databases
@@ -1901,6 +1894,40 @@ resources:
             updated_at: (String) Creation time.
             uuid: (String) Private network uuid. For public networks the field should be omitted.
         importStatements: []
+    upcloud_managed_object_storage_custom_domain:
+        subCategory: Object Storage
+        description: This resource represents an UpCloud Managed Object Storage custom domain. Note that DNS settings for the custom domain should be configured before creating this resource.
+        name: upcloud_managed_object_storage_custom_domain
+        title: upcloud_managed_object_storage_custom_domain Resource - terraform-provider-upcloud
+        examples:
+            - name: this
+              manifest: |-
+                {
+                  "domain_name": "objects.example.com",
+                  "service_uuid": "${upcloud_managed_object_storage.this.id}"
+                }
+              references:
+                service_uuid: upcloud_managed_object_storage.this.id
+              dependencies:
+                upcloud_managed_object_storage.this: |-
+                    {
+                      "configured_status": "started",
+                      "name": "object-storage-custom-domain-example",
+                      "network": [
+                        {
+                          "family": "IPv4",
+                          "name": "public",
+                          "type": "public"
+                        }
+                      ],
+                      "region": "europe-1"
+                    }
+        argumentDocs:
+            domain_name: (String) Must be a subdomain and consist of 3 to 5 parts such as objects.example.com. Cannot be root-level domain e.g. example.com.
+            id: (String) ID of the custom domain. ID is in {object storage UUID}/{domain name} format.
+            service_uuid: (String) Managed Object Storage service UUID.
+            type: (String) At the moment only public is accepted.
+        importStatements: []
     upcloud_managed_object_storage_policy:
         subCategory: Object Storage
         description: This resource represents an UpCloud Managed Object Storage policy.
@@ -2566,7 +2593,7 @@ resources:
             size: (Number) The size of the storage in gigabytes.
             source: (String) The mode of the import task. One of http_import or direct_upload.
             source_hash: (String) SHA256 hash of the source content. This hash is used to verify the integrity of the imported data by comparing it to sha256sum after the import has completed. Possible filename is automatically removed from the hash before comparison.
-            source_location: (String) The location of the file to import. For http_import an accessible URL for direct_upload a local file.
+            source_location: (String) The location of the file to import. For http_import an accessible URL. For direct_upload a local file. When direct uploading a compressed image, Content-Type header of the PUT request is set automatically based on the file extension (.gz or .xz, case-insensitive).
             system_labels: (Map of String) System defined key-value pairs to classify the storage. The keys of system defined labels are prefixed with underscore and can not be modified by the user.
             tier: (String) The tier of the storage.
             time: (String) The time of day when the backup is created
