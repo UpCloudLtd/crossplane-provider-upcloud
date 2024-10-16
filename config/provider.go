@@ -112,5 +112,5 @@ func terraformPluginFrameworkProvider() provider.Provider {
 }
 
 func defaultUserAgent() string {
-	return fmt.Sprintf("provider-upcloud/%s", version)
+	return fmt.Sprintf("crossplane-provider-upcloud/%s", version)
 }
