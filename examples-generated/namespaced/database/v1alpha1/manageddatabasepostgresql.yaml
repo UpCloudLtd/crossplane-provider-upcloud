@@ -1,0 +1,15 @@
+apiVersion: database.m.upcloud.com/v1alpha1
+kind: ManagedDatabasePostgresql
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabasepostgresql
+  labels:
+    testing.upbound.io/example-name: example_1
+  name: example-1
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: postgres-1
+    plan: 1x1xCPU-2GB-25GB
+    title: postgres
+    zone: fi-hel1

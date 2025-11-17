@@ -3,7 +3,7 @@ package storage
 import (
 	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/groupversion"
 
-	"github.com/crossplane/upjet/pkg/config"
+	"github.com/crossplane/upjet/v2/pkg/config"
 )
 
 // SDKResources is a list of all supported storage resources implemented with Terraform legacy SDKv2.

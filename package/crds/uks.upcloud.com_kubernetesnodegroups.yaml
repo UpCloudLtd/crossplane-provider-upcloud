@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.18.0
   name: kubernetesnodegroups.uks.upcloud.com
 spec:
   group: uks.upcloud.com
@@ -79,6 +79,24 @@ spec:
                       affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                       If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                     type: boolean
+                  cloudNativePlan:
+                    description: |-
+                      (Block List) Resource properties for Cloud Native plan storage configuration. This block is optional for Cloud Native plans. (see below for nested schema)
+                      Resource properties for Cloud Native plan storage configuration. This block is optional for Cloud Native plans.
+                    items:
+                      properties:
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use.
+                            The storage tier to use.
+                          type: string
+                      type: object
+                    type: array
                   cluster:
                     description: |-
                       (String) UUID of the cluster.
@@ -162,19 +180,19 @@ spec:
                     type: object
                   customPlan:
                     description: |-
-                      (Block List) Resource properties for custom plan (see below for nested schema)
-                      Resource properties for custom plan
+                      (Block List) Resource properties for custom plan. This block is required for custom plans only. (see below for nested schema)
+                      Resource properties for custom plan. This block is required for `custom` plans only.
                     items:
                       properties:
                         cores:
                           description: |-
-                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
-                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            (Number) The number of CPU cores dedicated to individual node group nodes.
+                            The number of CPU cores dedicated to individual node group nodes.
                           type: number
                         memory:
                           description: |-
-                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
-                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            (Number) The amount of memory in megabytes to assign to individual node group node. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node. Value needs to be divisible by 1024.
                           type: number
                         storageSize:
                           description: |-
@@ -183,15 +201,35 @@ spec:
                           type: number
                         storageTier:
                           description: |-
-                            (String) The storage tier to use. Defaults to maxiops
-                            The storage tier to use. Defaults to maxiops
+                            (String) The storage tier to use.
+                            The storage tier to use.
+                          type: string
+                      type: object
+                    type: array
+                  gpuPlan:
+                    description: |-
+                      (Block List) Resource properties for GPU plan storage configuration. This block is optional for GPU plans. (see below for nested schema)
+                      Resource properties for GPU plan storage configuration. This block is optional for GPU plans.
+                    items:
+                      properties:
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use.
+                            The storage tier to use.
                           type: string
                       type: object
                     type: array
                   kubeletArgs:
                     description: |-
-                      those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
-                      Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
+                      -. The API will prefix the arguments with -- when preparing kubelet call.
+                      Additional arguments for kubelet for the nodes in this group. Configure the arguments without leading `--`. The API will prefix the arguments with `--` when preparing kubelet call.
+
+                      Note that these arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
                     items:
                       properties:
                         key:
@@ -234,8 +272,8 @@ spec:
                     x-kubernetes-list-type: set
                   storageEncryption:
                     description: |-
-                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
-                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      at-rest and none.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable. Valid values are `data-at-rest` and `none`.
                     type: string
                   taint:
                     description: |-
@@ -284,21 +322,39 @@ spec:
                       affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                       If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                     type: boolean
+                  cloudNativePlan:
+                    description: |-
+                      (Block List) Resource properties for Cloud Native plan storage configuration. This block is optional for Cloud Native plans. (see below for nested schema)
+                      Resource properties for Cloud Native plan storage configuration. This block is optional for Cloud Native plans.
+                    items:
+                      properties:
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use.
+                            The storage tier to use.
+                          type: string
+                      type: object
+                    type: array
                   customPlan:
                     description: |-
-                      (Block List) Resource properties for custom plan (see below for nested schema)
-                      Resource properties for custom plan
+                      (Block List) Resource properties for custom plan. This block is required for custom plans only. (see below for nested schema)
+                      Resource properties for custom plan. This block is required for `custom` plans only.
                     items:
                       properties:
                         cores:
                           description: |-
-                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
-                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            (Number) The number of CPU cores dedicated to individual node group nodes.
+                            The number of CPU cores dedicated to individual node group nodes.
                           type: number
                         memory:
                           description: |-
-                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
-                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            (Number) The amount of memory in megabytes to assign to individual node group node. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node. Value needs to be divisible by 1024.
                           type: number
                         storageSize:
                           description: |-
@@ -307,15 +363,35 @@ spec:
                           type: number
                         storageTier:
                           description: |-
-                            (String) The storage tier to use. Defaults to maxiops
-                            The storage tier to use. Defaults to maxiops
+                            (String) The storage tier to use.
+                            The storage tier to use.
+                          type: string
+                      type: object
+                    type: array
+                  gpuPlan:
+                    description: |-
+                      (Block List) Resource properties for GPU plan storage configuration. This block is optional for GPU plans. (see below for nested schema)
+                      Resource properties for GPU plan storage configuration. This block is optional for GPU plans.
+                    items:
+                      properties:
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use.
+                            The storage tier to use.
                           type: string
                       type: object
                     type: array
                   kubeletArgs:
                     description: |-
-                      those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
-                      Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
+                      -. The API will prefix the arguments with -- when preparing kubelet call.
+                      Additional arguments for kubelet for the nodes in this group. Configure the arguments without leading `--`. The API will prefix the arguments with `--` when preparing kubelet call.
+
+                      Note that these arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
                     items:
                       properties:
                         key:
@@ -358,8 +434,8 @@ spec:
                     x-kubernetes-list-type: set
                   storageEncryption:
                     description: |-
-                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
-                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      at-rest and none.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable. Valid values are `data-at-rest` and `none`.
                     type: string
                   taint:
                     description: |-
@@ -456,93 +532,12 @@ spec:
                 required:
                 - name
                 type: object
-              publishConnectionDetailsTo:
-                description: |-
-                  PublishConnectionDetailsTo specifies the connection secret config which
-                  contains a name, metadata and a reference to secret store config to
-                  which any connection details for this managed resource should be written.
-                  Connection details frequently include the endpoint, username,
-                  and password required to connect to the managed resource.
-                properties:
-                  configRef:
-                    default:
-                      name: default
-                    description: |-
-                      SecretStoreConfigRef specifies which secret store config should be used
-                      for this ConnectionSecret.
-                    properties:
-                      name:
-                        description: Name of the referenced object.
-                        type: string
-                      policy:
-                        description: Policies for referencing.
-                        properties:
-                          resolution:
-                            default: Required
-                            description: |-
-                              Resolution specifies whether resolution of this reference is required.
-                              The default is 'Required', which means the reconcile will fail if the
-                              reference cannot be resolved. 'Optional' means this reference will be
-                              a no-op if it cannot be resolved.
-                            enum:
-                            - Required
-                            - Optional
-                            type: string
-                          resolve:
-                            description: |-
-                              Resolve specifies when this reference should be resolved. The default
-                              is 'IfNotPresent', which will attempt to resolve the reference only when
-                              the corresponding field is not present. Use 'Always' to resolve the
-                              reference on every reconcile.
-                            enum:
-                            - Always
-                            - IfNotPresent
-                            type: string
-                        type: object
-                    required:
-                    - name
-                    type: object
-                  metadata:
-                    description: Metadata is the metadata for connection secret.
-                    properties:
-                      annotations:
-                        additionalProperties:
-                          type: string
-                        description: |-
-                          Annotations are the annotations to be added to connection secret.
-                          - For Kubernetes secrets, this will be used as "metadata.annotations".
-                          - It is up to Secret Store implementation for others store types.
-                        type: object
-                      labels:
-                        additionalProperties:
-                          type: string
-                        description: |-
-                          Labels are the labels/tags to be added to connection secret.
-                          - For Kubernetes secrets, this will be used as "metadata.labels".
-                          - It is up to Secret Store implementation for others store types.
-                        type: object
-                      type:
-                        description: |-
-                          Type is the SecretType for the connection secret.
-                          - Only valid for Kubernetes Secret Stores.
-                        type: string
-                    type: object
-                  name:
-                    description: Name is the name of the connection secret.
-                    type: string
-                required:
-                - name
-                type: object
               writeConnectionSecretToRef:
                 description: |-
                   WriteConnectionSecretToReference specifies the namespace and name of a
                   Secret to which any connection details for this managed resource should
                   be written. Connection details frequently include the endpoint, username,
                   and password required to connect to the managed resource.
-                  This field is planned to be replaced in a future release in favor of
-                  PublishConnectionDetailsTo. Currently, both could be set independently
-                  and connection details would be published to both without affecting
-                  each other.
                 properties:
                   name:
                     description: Name of the secret.
@@ -576,6 +571,24 @@ spec:
                       affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                       If set to true, nodes in this group will be placed on separate compute hosts. Please note that anti-affinity policy is considered 'best effort' and enabling it does not fully guarantee that the nodes will end up on different hardware.
                     type: boolean
+                  cloudNativePlan:
+                    description: |-
+                      (Block List) Resource properties for Cloud Native plan storage configuration. This block is optional for Cloud Native plans. (see below for nested schema)
+                      Resource properties for Cloud Native plan storage configuration. This block is optional for Cloud Native plans.
+                    items:
+                      properties:
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use.
+                            The storage tier to use.
+                          type: string
+                      type: object
+                    type: array
                   cluster:
                     description: |-
                       (String) UUID of the cluster.
@@ -583,19 +596,19 @@ spec:
                     type: string
                   customPlan:
                     description: |-
-                      (Block List) Resource properties for custom plan (see below for nested schema)
-                      Resource properties for custom plan
+                      (Block List) Resource properties for custom plan. This block is required for custom plans only. (see below for nested schema)
+                      Resource properties for custom plan. This block is required for `custom` plans only.
                     items:
                       properties:
                         cores:
                           description: |-
-                            (Number) The number of CPU cores dedicated to individual node group nodes when using custom plan
-                            The number of CPU cores dedicated to individual node group nodes when using custom plan
+                            (Number) The number of CPU cores dedicated to individual node group nodes.
+                            The number of CPU cores dedicated to individual node group nodes.
                           type: number
                         memory:
                           description: |-
-                            (Number) The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
-                            The amount of memory in megabytes to assign to individual node group node when using custom plan. Value needs to be divisible by 1024.
+                            (Number) The amount of memory in megabytes to assign to individual node group node. Value needs to be divisible by 1024.
+                            The amount of memory in megabytes to assign to individual node group node. Value needs to be divisible by 1024.
                           type: number
                         storageSize:
                           description: |-
@@ -604,8 +617,26 @@ spec:
                           type: number
                         storageTier:
                           description: |-
-                            (String) The storage tier to use. Defaults to maxiops
-                            The storage tier to use. Defaults to maxiops
+                            (String) The storage tier to use.
+                            The storage tier to use.
+                          type: string
+                      type: object
+                    type: array
+                  gpuPlan:
+                    description: |-
+                      (Block List) Resource properties for GPU plan storage configuration. This block is optional for GPU plans. (see below for nested schema)
+                      Resource properties for GPU plan storage configuration. This block is optional for GPU plans.
+                    items:
+                      properties:
+                        storageSize:
+                          description: |-
+                            (Number) The size of the storage device in gigabytes.
+                            The size of the storage device in gigabytes.
+                          type: number
+                        storageTier:
+                          description: |-
+                            (String) The storage tier to use.
+                            The storage tier to use.
                           type: string
                       type: object
                     type: array
@@ -616,8 +647,10 @@ spec:
                     type: string
                   kubeletArgs:
                     description: |-
-                      those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args. (see below for nested schema)
-                      Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
+                      -. The API will prefix the arguments with -- when preparing kubelet call.
+                      Additional arguments for kubelet for the nodes in this group. Configure the arguments without leading `--`. The API will prefix the arguments with `--` when preparing kubelet call.
+
+                      Note that these arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.
                     items:
                       properties:
                         key:
@@ -660,8 +693,8 @@ spec:
                     x-kubernetes-list-type: set
                   storageEncryption:
                     description: |-
-                      (String) The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
-                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable.
+                      at-rest and none.
+                      The storage encryption strategy to use for the nodes in this group. If not set, the cluster's storage encryption strategy will be used, if applicable. Valid values are `data-at-rest` and `none`.
                     type: string
                   taint:
                     description: |-

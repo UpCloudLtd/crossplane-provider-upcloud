@@ -1,0 +1,37 @@
+apiVersion: network.m.upcloud.com/v1alpha1
+kind: Network
+metadata:
+  annotations:
+    meta.upbound.io/example-id: network/v1alpha1/network
+  labels:
+    testing.upbound.io/example-name: example_network
+  name: example-network
+  namespace: upbound-system
+spec:
+  forProvider:
+    ipNetwork:
+    - address: 10.0.0.0/24
+      dhcp: true
+      dhcpDefaultRoute: false
+      family: IPv4
+      gateway: 10.0.0.1
+    name: example_private_net
+    routerSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example_router
+    zone: nl-ams1
+
+---
+
+apiVersion: network.m.upcloud.com/v1alpha1
+kind: Router
+metadata:
+  annotations:
+    meta.upbound.io/example-id: network/v1alpha1/network
+  labels:
+    testing.upbound.io/example-name: example_router
+  name: example-router
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: example_router

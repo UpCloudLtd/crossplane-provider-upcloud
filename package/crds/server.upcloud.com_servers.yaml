@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.18.0
   name: servers.server.upcloud.com
 spec:
   group: server.upcloud.com
@@ -35,7 +35,9 @@ spec:
     schema:
       openAPIV3Schema:
         description: Server is the Schema for the Servers API. The UpCloud server
-          resource allows the creation, update and deletion of a cloud server https://upcloud.com/products/cloud-servers.
+          resource allows the creation, update and deletion of cloud servers https://upcloud.com/products/cloud-servers.
+          -> To deploy a GPU server, select a plan with GPU- prefix, e.g., GPU-8xCPU-64GB-1xL40S.
+          Use upctl zone devices command to list per zone GPU availability.
         properties:
           apiVersion:
             description: |-
@@ -80,10 +82,9 @@ spec:
                     type: string
                   cpu:
                     description: |-
-                      (Number) The number of CPU for the server
-                      The number of CPU for the server
-                    format: int64
-                    type: integer
+                      (Number) The number of CPU cores for the server
+                      The number of CPU cores for the server
+                    type: number
                   firewall:
                     description: |-
                       (Boolean) Are firewall rules active for the server
@@ -93,13 +94,17 @@ spec:
                     description: |-
                       attribute. Only available for private cloud hosts
                       Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
-                    format: int64
-                    type: integer
+                    type: number
                   hostname:
                     description: |-
-                      (String) A valid domain name
-                      A valid domain name
+                      (String) The hostname of the server.
+                      The hostname of the server.
                     type: string
+                  hotResize:
+                    description: |-
+                      (Boolean) If set to true, allows changing the server plan without requiring a reboot. This enables hot resizing of the server. If hot resizing fails, the apply operation will fail.
+                      If set to true, allows changing the server plan without requiring a reboot. This enables hot resizing of the server. If hot resizing fails, the apply operation will fail.
+                    type: boolean
                   labels:
                     additionalProperties:
                       type: string
@@ -110,7 +115,7 @@ spec:
                     x-kubernetes-map-type: granular
                   login:
                     description: |-
-                      (Block Set, Max: 1) Configure access credentials to the server (see below for nested schema)
+                      (Block Set) Configure access credentials to the server (see below for nested schema)
                       Configure access credentials to the server
                     items:
                       properties:
@@ -140,36 +145,39 @@ spec:
                     type: array
                   mem:
                     description: |-
-                      (Number) The size of memory for the server (in megabytes)
-                      The size of memory for the server (in megabytes)
-                    format: int64
-                    type: integer
+                      (Number) The amount of memory for the server (in megabytes)
+                      The amount of memory for the server (in megabytes)
+                    type: number
                   metadata:
                     description: |-
-                      (Boolean) Is the metadata service active for the server
-                      Is the metadata service active for the server
+                      init based templates.
+                      Is metadata service active for the server. The metadata service must be enabled when using recent cloud-init based templates.
                     type: boolean
                   networkInterface:
                     description: |-
-                      (Block List, Min: 1) One or more blocks describing the network interfaces of the server. (see below for nested schema)
+                      (Block List) One or more blocks describing the network interfaces of the server.
                       One or more blocks describing the network interfaces of the server.
+
+                      In addition to list order, the configured network interfaces are matched to the server's actual network interfaces by `index` and `ip_address` fields. This is to avoid public and utility network interfaces being re-assigned when the server is updated. This might result to inaccurate diffs in the plan, when interfaces are re-ordered or when interface is removed from the middle of the list.
+
+                      We recommend explicitly setting the value for `index` in configuration, when re-ordering interfaces or when removing interface from middle of the list.
                     items:
                       properties:
                         additionalIpAddress:
                           description: |-
-                            4 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type private (see below for nested schema)
-                            0-4 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type `private`
+                            31 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type private (see below for nested schema)
+                            0-31 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type `private`
                           items:
                             properties:
                               ipAddress:
                                 description: |-
-                                  (String) The assigned primary IP address.
-                                  The assigned additional IP address.
+                                  (String) The primary IP address of this interface.
+                                  An additional IP address for this interface.
                                 type: string
                               ipAddressFamily:
                                 description: |-
                                   (String) The type of the primary IP address of this interface (one of IPv4 or IPv6).
-                                  The type of this additional IP address of this interface (one of `IPv4` or `IPv6`).
+                                  The type of the additional IP address of this interface (one of `IPv4` or `IPv6`).
                                 type: string
                             type: object
                           type: array
@@ -178,10 +186,15 @@ spec:
                             (Boolean) true if this interface should be used for network booting.
                             `true` if this interface should be used for network booting.
                           type: boolean
+                        index:
+                          description: |-
+                            assigned when the server is updated. This might result to inaccurate diffs in the plan, when interfaces are re-ordered or when interface is removed from the middle of the list.
+                            The interface index.
+                          type: number
                         ipAddress:
                           description: |-
-                            (String) The assigned primary IP address.
-                            The assigned primary IP address.
+                            (String) The primary IP address of this interface.
+                            The primary IP address of this interface.
                           type: string
                         ipAddressFamily:
                           description: |-
@@ -190,8 +203,8 @@ spec:
                           type: string
                         network:
                           description: |-
-                            (String) The unique ID of a network to attach this network to.
-                            The unique ID of a network to attach this network to.
+                            (String) The UUID of the network to attach this interface to. Required for private network interfaces.
+                            The UUID of the network to attach this interface to. Required for private network interfaces.
                           type: string
                         networkRef:
                           description: Reference to a Network in network to populate
@@ -298,11 +311,10 @@ spec:
                     type: string
                   simpleBackup:
                     description: |-
-                      (see below for nested schema)
+                      (Block Set) Simple backup schedule configuration
                       Simple backup schedule configuration
-                      The idea behind simple backups is to provide a simplified way of backing up *all* of the storages attached to a given server.
-                      This means you cannot have simple backup set for a server, and then some individual backup_rules on the storages attached to said server.
-                      Such configuration will throw an error during execution. This also apply to backup_rules set for server templates.
+
+                      The simple backups provide a simplified way to back up *all* of the storages attached to a given server. This means you cannot have simple backup set for a server, and individual `backup_rules` on the storages attached to the server. Such configuration will throw an error during execution. This also applies to `backup_rules` defined for server templates.
                     items:
                       properties:
                         plan:
@@ -319,8 +331,8 @@ spec:
                     type: array
                   storageDevices:
                     description: |-
-                      (Block Set) A list of storage devices associated with the server (see below for nested schema)
-                      A list of storage devices associated with the server
+                      (Block Set) A set of storage devices associated with the server (see below for nested schema)
+                      A set of storage devices associated with the server
                     items:
                       properties:
                         address:
@@ -335,8 +347,8 @@ spec:
                           type: string
                         storage:
                           description: |-
-                            (String) A valid storage UUID
-                            A valid storage UUID
+                            (String) The UUID of the storage to attach to the server.
+                            The UUID of the storage to attach to the server.
                           type: string
                         storageRef:
                           description: Reference to a Storage in storage to populate
@@ -431,7 +443,7 @@ spec:
                     x-kubernetes-list-type: set
                   template:
                     description: |-
-                      (Block List, Max: 1) Block describing the preconfigured operating system (see below for nested schema)
+                      (Block List) Block describing the preconfigured operating system (see below for nested schema)
                       Block describing the preconfigured operating system
                     items:
                       properties:
@@ -447,9 +459,8 @@ spec:
                           type: string
                         backupRule:
                           description: |-
-                            (Block List, Max: 1) The criteria to backup the storage.
+                            (Block List) The criteria to backup the storage.
                             The criteria to backup the storage.
-
 
                             Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                           items:
@@ -463,12 +474,11 @@ spec:
                                 description: |-
                                   (Number) The number of days before a backup is automatically deleted
                                   The number of days before a backup is automatically deleted
-                                format: int64
-                                type: integer
+                                type: number
                               time:
                                 description: |-
                                   (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
-                                  The time of day when the backup is created
+                                  The time of day (UTC) when the backup is created
                                 type: string
                             type: object
                           type: array
@@ -497,29 +507,33 @@ spec:
                           description: |-
                             (Number) The size of the storage in gigabytes
                             The size of the storage in gigabytes
-                          format: int64
-                          type: integer
+                          type: number
                         storage:
                           description: |-
-                            (String) A valid storage UUID
+                            (String) The UUID of the storage to attach to the server.
                             A valid storage UUID or template name. You can list available public templates with `upctl storage list --public --template` and available private templates with `upctl storage list --template`.
+                          type: string
+                        tier:
+                          description: |-
+                            (String) The storage tier to use.
+                            The storage tier to use.
                           type: string
                         title:
                           description: |-
-                            (String) A short, informational description
+                            (String) A short, informational description of the server.
                             A short, informative description
                           type: string
                       type: object
                     type: array
                   timezone:
                     description: |-
-                      (String) A timezone identifier, e.g. Europe/Helsinki
-                      A timezone identifier, e.g. `Europe/Helsinki`
+                      (String) The timezone of the server. The timezone must be a valid timezone string, e.g. Europe/Helsinki.
+                      The timezone of the server. The timezone must be a valid timezone string, e.g. `Europe/Helsinki`.
                     type: string
                   title:
                     description: |-
-                      (String) A short, informational description
-                      A short, informational description
+                      (String) A short, informational description of the server.
+                      A short, informational description of the server.
                     type: string
                   userData:
                     description: |-
@@ -557,10 +571,9 @@ spec:
                     type: string
                   cpu:
                     description: |-
-                      (Number) The number of CPU for the server
-                      The number of CPU for the server
-                    format: int64
-                    type: integer
+                      (Number) The number of CPU cores for the server
+                      The number of CPU cores for the server
+                    type: number
                   firewall:
                     description: |-
                       (Boolean) Are firewall rules active for the server
@@ -570,13 +583,17 @@ spec:
                     description: |-
                       attribute. Only available for private cloud hosts
                       Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
-                    format: int64
-                    type: integer
+                    type: number
                   hostname:
                     description: |-
-                      (String) A valid domain name
-                      A valid domain name
+                      (String) The hostname of the server.
+                      The hostname of the server.
                     type: string
+                  hotResize:
+                    description: |-
+                      (Boolean) If set to true, allows changing the server plan without requiring a reboot. This enables hot resizing of the server. If hot resizing fails, the apply operation will fail.
+                      If set to true, allows changing the server plan without requiring a reboot. This enables hot resizing of the server. If hot resizing fails, the apply operation will fail.
+                    type: boolean
                   labels:
                     additionalProperties:
                       type: string
@@ -587,7 +604,7 @@ spec:
                     x-kubernetes-map-type: granular
                   login:
                     description: |-
-                      (Block Set, Max: 1) Configure access credentials to the server (see below for nested schema)
+                      (Block Set) Configure access credentials to the server (see below for nested schema)
                       Configure access credentials to the server
                     items:
                       properties:
@@ -617,36 +634,39 @@ spec:
                     type: array
                   mem:
                     description: |-
-                      (Number) The size of memory for the server (in megabytes)
-                      The size of memory for the server (in megabytes)
-                    format: int64
-                    type: integer
+                      (Number) The amount of memory for the server (in megabytes)
+                      The amount of memory for the server (in megabytes)
+                    type: number
                   metadata:
                     description: |-
-                      (Boolean) Is the metadata service active for the server
-                      Is the metadata service active for the server
+                      init based templates.
+                      Is metadata service active for the server. The metadata service must be enabled when using recent cloud-init based templates.
                     type: boolean
                   networkInterface:
                     description: |-
-                      (Block List, Min: 1) One or more blocks describing the network interfaces of the server. (see below for nested schema)
+                      (Block List) One or more blocks describing the network interfaces of the server.
                       One or more blocks describing the network interfaces of the server.
+
+                      In addition to list order, the configured network interfaces are matched to the server's actual network interfaces by `index` and `ip_address` fields. This is to avoid public and utility network interfaces being re-assigned when the server is updated. This might result to inaccurate diffs in the plan, when interfaces are re-ordered or when interface is removed from the middle of the list.
+
+                      We recommend explicitly setting the value for `index` in configuration, when re-ordering interfaces or when removing interface from middle of the list.
                     items:
                       properties:
                         additionalIpAddress:
                           description: |-
-                            4 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type private (see below for nested schema)
-                            0-4 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type `private`
+                            31 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type private (see below for nested schema)
+                            0-31 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type `private`
                           items:
                             properties:
                               ipAddress:
                                 description: |-
-                                  (String) The assigned primary IP address.
-                                  The assigned additional IP address.
+                                  (String) The primary IP address of this interface.
+                                  An additional IP address for this interface.
                                 type: string
                               ipAddressFamily:
                                 description: |-
                                   (String) The type of the primary IP address of this interface (one of IPv4 or IPv6).
-                                  The type of this additional IP address of this interface (one of `IPv4` or `IPv6`).
+                                  The type of the additional IP address of this interface (one of `IPv4` or `IPv6`).
                                 type: string
                             type: object
                           type: array
@@ -655,10 +675,15 @@ spec:
                             (Boolean) true if this interface should be used for network booting.
                             `true` if this interface should be used for network booting.
                           type: boolean
+                        index:
+                          description: |-
+                            assigned when the server is updated. This might result to inaccurate diffs in the plan, when interfaces are re-ordered or when interface is removed from the middle of the list.
+                            The interface index.
+                          type: number
                         ipAddress:
                           description: |-
-                            (String) The assigned primary IP address.
-                            The assigned primary IP address.
+                            (String) The primary IP address of this interface.
+                            The primary IP address of this interface.
                           type: string
                         ipAddressFamily:
                           description: |-
@@ -667,8 +692,8 @@ spec:
                           type: string
                         network:
                           description: |-
-                            (String) The unique ID of a network to attach this network to.
-                            The unique ID of a network to attach this network to.
+                            (String) The UUID of the network to attach this interface to. Required for private network interfaces.
+                            The UUID of the network to attach this interface to. Required for private network interfaces.
                           type: string
                         networkRef:
                           description: Reference to a Network in network to populate
@@ -775,11 +800,10 @@ spec:
                     type: string
                   simpleBackup:
                     description: |-
-                      (see below for nested schema)
+                      (Block Set) Simple backup schedule configuration
                       Simple backup schedule configuration
-                      The idea behind simple backups is to provide a simplified way of backing up *all* of the storages attached to a given server.
-                      This means you cannot have simple backup set for a server, and then some individual backup_rules on the storages attached to said server.
-                      Such configuration will throw an error during execution. This also apply to backup_rules set for server templates.
+
+                      The simple backups provide a simplified way to back up *all* of the storages attached to a given server. This means you cannot have simple backup set for a server, and individual `backup_rules` on the storages attached to the server. Such configuration will throw an error during execution. This also applies to `backup_rules` defined for server templates.
                     items:
                       properties:
                         plan:
@@ -796,8 +820,8 @@ spec:
                     type: array
                   storageDevices:
                     description: |-
-                      (Block Set) A list of storage devices associated with the server (see below for nested schema)
-                      A list of storage devices associated with the server
+                      (Block Set) A set of storage devices associated with the server (see below for nested schema)
+                      A set of storage devices associated with the server
                     items:
                       properties:
                         address:
@@ -812,8 +836,8 @@ spec:
                           type: string
                         storage:
                           description: |-
-                            (String) A valid storage UUID
-                            A valid storage UUID
+                            (String) The UUID of the storage to attach to the server.
+                            The UUID of the storage to attach to the server.
                           type: string
                         storageRef:
                           description: Reference to a Storage in storage to populate
@@ -908,7 +932,7 @@ spec:
                     x-kubernetes-list-type: set
                   template:
                     description: |-
-                      (Block List, Max: 1) Block describing the preconfigured operating system (see below for nested schema)
+                      (Block List) Block describing the preconfigured operating system (see below for nested schema)
                       Block describing the preconfigured operating system
                     items:
                       properties:
@@ -924,9 +948,8 @@ spec:
                           type: string
                         backupRule:
                           description: |-
-                            (Block List, Max: 1) The criteria to backup the storage.
+                            (Block List) The criteria to backup the storage.
                             The criteria to backup the storage.
-
 
                             Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                           items:
@@ -940,12 +963,11 @@ spec:
                                 description: |-
                                   (Number) The number of days before a backup is automatically deleted
                                   The number of days before a backup is automatically deleted
-                                format: int64
-                                type: integer
+                                type: number
                               time:
                                 description: |-
                                   (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
-                                  The time of day when the backup is created
+                                  The time of day (UTC) when the backup is created
                                 type: string
                             type: object
                           type: array
@@ -974,29 +996,33 @@ spec:
                           description: |-
                             (Number) The size of the storage in gigabytes
                             The size of the storage in gigabytes
-                          format: int64
-                          type: integer
+                          type: number
                         storage:
                           description: |-
-                            (String) A valid storage UUID
+                            (String) The UUID of the storage to attach to the server.
                             A valid storage UUID or template name. You can list available public templates with `upctl storage list --public --template` and available private templates with `upctl storage list --template`.
+                          type: string
+                        tier:
+                          description: |-
+                            (String) The storage tier to use.
+                            The storage tier to use.
                           type: string
                         title:
                           description: |-
-                            (String) A short, informational description
+                            (String) A short, informational description of the server.
                             A short, informative description
                           type: string
                       type: object
                     type: array
                   timezone:
                     description: |-
-                      (String) A timezone identifier, e.g. Europe/Helsinki
-                      A timezone identifier, e.g. `Europe/Helsinki`
+                      (String) The timezone of the server. The timezone must be a valid timezone string, e.g. Europe/Helsinki.
+                      The timezone of the server. The timezone must be a valid timezone string, e.g. `Europe/Helsinki`.
                     type: string
                   title:
                     description: |-
-                      (String) A short, informational description
-                      A short, informational description
+                      (String) A short, informational description of the server.
+                      A short, informational description of the server.
                     type: string
                   userData:
                     description: |-
@@ -1080,93 +1106,12 @@ spec:
                 required:
                 - name
                 type: object
-              publishConnectionDetailsTo:
-                description: |-
-                  PublishConnectionDetailsTo specifies the connection secret config which
-                  contains a name, metadata and a reference to secret store config to
-                  which any connection details for this managed resource should be written.
-                  Connection details frequently include the endpoint, username,
-                  and password required to connect to the managed resource.
-                properties:
-                  configRef:
-                    default:
-                      name: default
-                    description: |-
-                      SecretStoreConfigRef specifies which secret store config should be used
-                      for this ConnectionSecret.
-                    properties:
-                      name:
-                        description: Name of the referenced object.
-                        type: string
-                      policy:
-                        description: Policies for referencing.
-                        properties:
-                          resolution:
-                            default: Required
-                            description: |-
-                              Resolution specifies whether resolution of this reference is required.
-                              The default is 'Required', which means the reconcile will fail if the
-                              reference cannot be resolved. 'Optional' means this reference will be
-                              a no-op if it cannot be resolved.
-                            enum:
-                            - Required
-                            - Optional
-                            type: string
-                          resolve:
-                            description: |-
-                              Resolve specifies when this reference should be resolved. The default
-                              is 'IfNotPresent', which will attempt to resolve the reference only when
-                              the corresponding field is not present. Use 'Always' to resolve the
-                              reference on every reconcile.
-                            enum:
-                            - Always
-                            - IfNotPresent
-                            type: string
-                        type: object
-                    required:
-                    - name
-                    type: object
-                  metadata:
-                    description: Metadata is the metadata for connection secret.
-                    properties:
-                      annotations:
-                        additionalProperties:
-                          type: string
-                        description: |-
-                          Annotations are the annotations to be added to connection secret.
-                          - For Kubernetes secrets, this will be used as "metadata.annotations".
-                          - It is up to Secret Store implementation for others store types.
-                        type: object
-                      labels:
-                        additionalProperties:
-                          type: string
-                        description: |-
-                          Labels are the labels/tags to be added to connection secret.
-                          - For Kubernetes secrets, this will be used as "metadata.labels".
-                          - It is up to Secret Store implementation for others store types.
-                        type: object
-                      type:
-                        description: |-
-                          Type is the SecretType for the connection secret.
-                          - Only valid for Kubernetes Secret Stores.
-                        type: string
-                    type: object
-                  name:
-                    description: Name is the name of the connection secret.
-                    type: string
-                required:
-                - name
-                type: object
               writeConnectionSecretToRef:
                 description: |-
                   WriteConnectionSecretToReference specifies the namespace and name of a
                   Secret to which any connection details for this managed resource should
                   be written. Connection details frequently include the endpoint, username,
                   and password required to connect to the managed resource.
-                  This field is planned to be replaced in a future release in favor of
-                  PublishConnectionDetailsTo. Currently, both could be set independently
-                  and connection details would be published to both without affecting
-                  each other.
                 properties:
                   name:
                     description: Name of the secret.
@@ -1186,10 +1131,6 @@ spec:
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.hostname)
                 || (has(self.initProvider) && has(self.initProvider.hostname))'
-            - message: spec.forProvider.networkInterface is a required parameter
-              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
-                || ''Update'' in self.managementPolicies) || has(self.forProvider.networkInterface)
-                || (has(self.initProvider) && has(self.initProvider.networkInterface))'
             - message: spec.forProvider.zone is a required parameter
               rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
                 || ''Update'' in self.managementPolicies) || has(self.forProvider.zone)
@@ -1206,10 +1147,9 @@ spec:
                     type: string
                   cpu:
                     description: |-
-                      (Number) The number of CPU for the server
-                      The number of CPU for the server
-                    format: int64
-                    type: integer
+                      (Number) The number of CPU cores for the server
+                      The number of CPU cores for the server
+                    type: number
                   firewall:
                     description: |-
                       (Boolean) Are firewall rules active for the server
@@ -1219,15 +1159,19 @@ spec:
                     description: |-
                       attribute. Only available for private cloud hosts
                       Use this to start the VM on a specific host. Refers to value from host -attribute. Only available for private cloud hosts
-                    format: int64
-                    type: integer
+                    type: number
                   hostname:
                     description: |-
-                      (String) A valid domain name
-                      A valid domain name
+                      (String) The hostname of the server.
+                      The hostname of the server.
                     type: string
+                  hotResize:
+                    description: |-
+                      (Boolean) If set to true, allows changing the server plan without requiring a reboot. This enables hot resizing of the server. If hot resizing fails, the apply operation will fail.
+                      If set to true, allows changing the server plan without requiring a reboot. This enables hot resizing of the server. If hot resizing fails, the apply operation will fail.
+                    type: boolean
                   id:
-                    description: (String) The ID of this resource.
+                    description: (String) UUID of the server.
                     type: string
                   labels:
                     additionalProperties:
@@ -1239,7 +1183,7 @@ spec:
                     x-kubernetes-map-type: granular
                   login:
                     description: |-
-                      (Block Set, Max: 1) Configure access credentials to the server (see below for nested schema)
+                      (Block Set) Configure access credentials to the server (see below for nested schema)
                       Configure access credentials to the server
                     items:
                       properties:
@@ -1269,36 +1213,39 @@ spec:
                     type: array
                   mem:
                     description: |-
-                      (Number) The size of memory for the server (in megabytes)
-                      The size of memory for the server (in megabytes)
-                    format: int64
-                    type: integer
+                      (Number) The amount of memory for the server (in megabytes)
+                      The amount of memory for the server (in megabytes)
+                    type: number
                   metadata:
                     description: |-
-                      (Boolean) Is the metadata service active for the server
-                      Is the metadata service active for the server
+                      init based templates.
+                      Is metadata service active for the server. The metadata service must be enabled when using recent cloud-init based templates.
                     type: boolean
                   networkInterface:
                     description: |-
-                      (Block List, Min: 1) One or more blocks describing the network interfaces of the server. (see below for nested schema)
+                      (Block List) One or more blocks describing the network interfaces of the server.
                       One or more blocks describing the network interfaces of the server.
+
+                      In addition to list order, the configured network interfaces are matched to the server's actual network interfaces by `index` and `ip_address` fields. This is to avoid public and utility network interfaces being re-assigned when the server is updated. This might result to inaccurate diffs in the plan, when interfaces are re-ordered or when interface is removed from the middle of the list.
+
+                      We recommend explicitly setting the value for `index` in configuration, when re-ordering interfaces or when removing interface from middle of the list.
                     items:
                       properties:
                         additionalIpAddress:
                           description: |-
-                            4 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type private (see below for nested schema)
-                            0-4 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type `private`
+                            31 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type private (see below for nested schema)
+                            0-31 blocks of additional IP addresses to assign to this interface. Allowed only with network interfaces of type `private`
                           items:
                             properties:
                               ipAddress:
                                 description: |-
-                                  (String) The assigned primary IP address.
-                                  The assigned additional IP address.
+                                  (String) The primary IP address of this interface.
+                                  An additional IP address for this interface.
                                 type: string
                               ipAddressFamily:
                                 description: |-
                                   (String) The type of the primary IP address of this interface (one of IPv4 or IPv6).
-                                  The type of this additional IP address of this interface (one of `IPv4` or `IPv6`).
+                                  The type of the additional IP address of this interface (one of `IPv4` or `IPv6`).
                                 type: string
                               ipAddressFloating:
                                 description: |-
@@ -1312,10 +1259,15 @@ spec:
                             (Boolean) true if this interface should be used for network booting.
                             `true` if this interface should be used for network booting.
                           type: boolean
+                        index:
+                          description: |-
+                            assigned when the server is updated. This might result to inaccurate diffs in the plan, when interfaces are re-ordered or when interface is removed from the middle of the list.
+                            The interface index.
+                          type: number
                         ipAddress:
                           description: |-
-                            (String) The assigned primary IP address.
-                            The assigned primary IP address.
+                            (String) The primary IP address of this interface.
+                            The primary IP address of this interface.
                           type: string
                         ipAddressFamily:
                           description: |-
@@ -1329,13 +1281,13 @@ spec:
                           type: boolean
                         macAddress:
                           description: |-
-                            (String) The assigned MAC address.
-                            The assigned MAC address.
+                            (String) The MAC address of the interface.
+                            The MAC address of the interface.
                           type: string
                         network:
                           description: |-
-                            (String) The unique ID of a network to attach this network to.
-                            The unique ID of a network to attach this network to.
+                            (String) The UUID of the network to attach this interface to. Required for private network interfaces.
+                            The UUID of the network to attach this interface to. Required for private network interfaces.
                           type: string
                         sourceIpFiltering:
                           description: |-
@@ -1366,11 +1318,10 @@ spec:
                     type: string
                   simpleBackup:
                     description: |-
-                      (see below for nested schema)
+                      (Block Set) Simple backup schedule configuration
                       Simple backup schedule configuration
-                      The idea behind simple backups is to provide a simplified way of backing up *all* of the storages attached to a given server.
-                      This means you cannot have simple backup set for a server, and then some individual backup_rules on the storages attached to said server.
-                      Such configuration will throw an error during execution. This also apply to backup_rules set for server templates.
+
+                      The simple backups provide a simplified way to back up *all* of the storages attached to a given server. This means you cannot have simple backup set for a server, and individual `backup_rules` on the storages attached to the server. Such configuration will throw an error during execution. This also applies to `backup_rules` defined for server templates.
                     items:
                       properties:
                         plan:
@@ -1387,8 +1338,8 @@ spec:
                     type: array
                   storageDevices:
                     description: |-
-                      (Block Set) A list of storage devices associated with the server (see below for nested schema)
-                      A list of storage devices associated with the server
+                      (Block Set) A set of storage devices associated with the server (see below for nested schema)
+                      A set of storage devices associated with the server
                     items:
                       properties:
                         address:
@@ -1403,8 +1354,8 @@ spec:
                           type: string
                         storage:
                           description: |-
-                            (String) A valid storage UUID
-                            A valid storage UUID
+                            (String) The UUID of the storage to attach to the server.
+                            The UUID of the storage to attach to the server.
                           type: string
                         type:
                           description: |-
@@ -1423,7 +1374,7 @@ spec:
                     x-kubernetes-list-type: set
                   template:
                     description: |-
-                      (Block List, Max: 1) Block describing the preconfigured operating system (see below for nested schema)
+                      (Block List) Block describing the preconfigured operating system (see below for nested schema)
                       Block describing the preconfigured operating system
                     items:
                       properties:
@@ -1439,9 +1390,8 @@ spec:
                           type: string
                         backupRule:
                           description: |-
-                            (Block List, Max: 1) The criteria to backup the storage.
+                            (Block List) The criteria to backup the storage.
                             The criteria to backup the storage.
-
 
                             Please keep in mind that it's not possible to have a storage with `backup_rule` attached to a server with `simple_backup` specified. Such configurations will throw errors during execution.
                           items:
@@ -1455,12 +1405,11 @@ spec:
                                 description: |-
                                   (Number) The number of days before a backup is automatically deleted
                                   The number of days before a backup is automatically deleted
-                                format: int64
-                                type: integer
+                                type: number
                               time:
                                 description: |-
                                   (String) Time of the day at which backup will be taken. Should be provided in a hhmm format (e.g. 2230).
-                                  The time of day when the backup is created
+                                  The time of day (UTC) when the backup is created
                                 type: string
                             type: object
                           type: array
@@ -1487,41 +1436,40 @@ spec:
                           type: boolean
                         id:
                           description: |-
-                            (String) The ID of this resource.
+                            (String) UUID of the server.
                             The unique identifier for the storage
                           type: string
                         size:
                           description: |-
                             (Number) The size of the storage in gigabytes
                             The size of the storage in gigabytes
-                          format: int64
-                          type: integer
+                          type: number
                         storage:
                           description: |-
-                            (String) A valid storage UUID
+                            (String) The UUID of the storage to attach to the server.
                             A valid storage UUID or template name. You can list available public templates with `upctl storage list --public --template` and available private templates with `upctl storage list --template`.
                           type: string
                         tier:
                           description: |-
-                            (String) The storage tier to use
-                            The storage tier to use
+                            (String) The storage tier to use.
+                            The storage tier to use.
                           type: string
                         title:
                           description: |-
-                            (String) A short, informational description
+                            (String) A short, informational description of the server.
                             A short, informative description
                           type: string
                       type: object
                     type: array
                   timezone:
                     description: |-
-                      (String) A timezone identifier, e.g. Europe/Helsinki
-                      A timezone identifier, e.g. `Europe/Helsinki`
+                      (String) The timezone of the server. The timezone must be a valid timezone string, e.g. Europe/Helsinki.
+                      The timezone of the server. The timezone must be a valid timezone string, e.g. `Europe/Helsinki`.
                     type: string
                   title:
                     description: |-
-                      (String) A short, informational description
-                      A short, informational description
+                      (String) A short, informational description of the server.
+                      A short, informational description of the server.
                     type: string
                   userData:
                     description: |-

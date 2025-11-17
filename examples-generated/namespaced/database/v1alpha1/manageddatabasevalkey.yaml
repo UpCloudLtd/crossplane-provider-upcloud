@@ -1,0 +1,15 @@
+apiVersion: database.m.upcloud.com/v1alpha1
+kind: ManagedDatabaseValkey
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabasevalkey
+  labels:
+    testing.upbound.io/example-name: example_1
+  name: example-1
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: valkey-1
+    plan: 1x1xCPU-2GB
+    title: valkey-example-1
+    zone: fi-hel2

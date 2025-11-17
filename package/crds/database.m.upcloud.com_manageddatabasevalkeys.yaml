@@ -1,0 +1,1264 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.18.0
+  name: manageddatabasevalkeys.database.m.upcloud.com
+spec:
+  group: database.m.upcloud.com
+  names:
+    categories:
+    - crossplane
+    - managed
+    - upcloud
+    kind: ManagedDatabaseValkey
+    listKind: ManagedDatabaseValkeyList
+    plural: manageddatabasevalkeys
+    singular: manageddatabasevalkey
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ManagedDatabaseValkey is the Schema for the ManagedDatabaseValkeys
+          API. This resource represents Valkey managed database. See UpCloud Managed
+          Databases https://upcloud.com/products/managed-databases product page for
+          more details about the service.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ManagedDatabaseValkeySpec defines the desired state of ManagedDatabaseValkey
+            properties:
+              forProvider:
+                properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Not supported for valkey databases. Should be left unconfigured.
+                      Not supported for `valkey` databases. Should be left unconfigured.
+                    format: int64
+                    type: integer
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                        uuidRef:
+                          description: Reference to a Network in network to populate
+                            uuid.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            namespace:
+                              description: Namespace of the referenced object
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        uuidSelector:
+                          description: Selector for a Network in network to populate
+                            uuid.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            namespace:
+                              description: Namespace for the selector
+                              type: string
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans valkey.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans valkey`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for Valkey (see below for nested schema)
+                      Database Engine properties for Valkey
+                    items:
+                      properties:
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        frequentSnapshots:
+                          description: |-
+                            (Boolean) Frequent RDB snapshots. When enabled, Valkey will create frequent local RDB snapshots. When disabled, Valkey will only take RDB snapshots when a backup is created, based on the backup schedule. This setting is ignored when valkey_persistence is set to off.
+                            Frequent RDB snapshots. When enabled, Valkey will create frequent local RDB snapshots. When disabled, Valkey will only take RDB snapshots when a backup is created, based on the backup schedule. This setting is ignored when `valkey_persistence` is set to `off`.
+                          type: boolean
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                type: object
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                format: int64
+                                type: integer
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        valkeyAclChannelsDefault:
+                          description: |-
+                            pubsub-default.
+                            Default ACL for pub/sub channels used when a Valkey user is created. Determines default pub/sub channels' ACL for new users if ACL is not supplied. When this option is not defined, all_channels is assumed to keep backward compatibility. This option doesn't affect Valkey configuration acl-pubsub-default.
+                          type: string
+                        valkeyActiveExpireEffort:
+                          description: |-
+                            expire-effort setting (default 1, max 10) uses more CPU to reclaim expired keys faster, reducing memory usage but potentially increasing latency.
+                            Active expire effort. Valkey reclaims expired keys both when accessed and in the background. The background process scans for expired keys to free memory. Increasing the active-expire-effort setting (default 1, max 10) uses more CPU to reclaim expired keys faster, reducing memory usage but potentially increasing latency.
+                          format: int64
+                          type: integer
+                        valkeyIoThreads:
+                          description: |-
+                            (Number) Valkey IO thread count. Set Valkey IO thread count. Changing this will cause a restart of the Valkey service.
+                            Valkey IO thread count. Set Valkey IO thread count. Changing this will cause a restart of the Valkey service.
+                          format: int64
+                          type: integer
+                        valkeyLfuDecayTime:
+                          description: |-
+                            policy counter decay time in minutes.
+                            LFU maxmemory-policy counter decay time in minutes.
+                          format: int64
+                          type: integer
+                        valkeyLfuLogFactor:
+                          description: |-
+                            lfu and allkeys-lfu maxmemory-policies.
+                            Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
+                          format: int64
+                          type: integer
+                        valkeyMaxmemoryPolicy:
+                          description: |-
+                            policy.
+                            Valkey maxmemory-policy.
+                          type: string
+                        valkeyNotifyKeyspaceEvents:
+                          description: |-
+                            keyspace-events option.
+                            Set notify-keyspace-events option.
+                          type: string
+                        valkeyNumberOfDatabases:
+                          description: |-
+                            (Number) Number of Valkey databases. Set number of Valkey databases. Changing this will cause a restart of the Valkey service.
+                            Number of Valkey databases. Set number of Valkey databases. Changing this will cause a restart of the Valkey service.
+                          format: int64
+                          type: integer
+                        valkeyPersistence:
+                          description: |-
+                            (String) Valkey persistence. When persistence is 'rdb', Valkey does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            Valkey persistence. When persistence is 'rdb', Valkey does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                          type: string
+                        valkeyPubsubClientOutputBufferLimit:
+                          description: |-
+                            (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                            Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                          format: int64
+                          type: integer
+                        valkeySsl:
+                          description: |-
+                            (Boolean) Require SSL to access Valkey.
+                            Require SSL to access Valkey.
+                          type: boolean
+                        valkeyTimeout:
+                          description: |-
+                            (Number) Valkey idle connection timeout in seconds.
+                            Valkey idle connection timeout in seconds.
+                          format: int64
+                          type: integer
+                      type: object
+                    type: array
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Not supported for valkey databases. Should be left unconfigured.
+                      Not supported for `valkey` databases. Should be left unconfigured.
+                    format: int64
+                    type: integer
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                        uuidRef:
+                          description: Reference to a Network in network to populate
+                            uuid.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            namespace:
+                              description: Namespace of the referenced object
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        uuidSelector:
+                          description: Selector for a Network in network to populate
+                            uuid.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            namespace:
+                              description: Namespace for the selector
+                              type: string
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans valkey.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans valkey`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for Valkey (see below for nested schema)
+                      Database Engine properties for Valkey
+                    items:
+                      properties:
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        frequentSnapshots:
+                          description: |-
+                            (Boolean) Frequent RDB snapshots. When enabled, Valkey will create frequent local RDB snapshots. When disabled, Valkey will only take RDB snapshots when a backup is created, based on the backup schedule. This setting is ignored when valkey_persistence is set to off.
+                            Frequent RDB snapshots. When enabled, Valkey will create frequent local RDB snapshots. When disabled, Valkey will only take RDB snapshots when a backup is created, based on the backup schedule. This setting is ignored when `valkey_persistence` is set to `off`.
+                          type: boolean
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                type: object
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                format: int64
+                                type: integer
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        valkeyAclChannelsDefault:
+                          description: |-
+                            pubsub-default.
+                            Default ACL for pub/sub channels used when a Valkey user is created. Determines default pub/sub channels' ACL for new users if ACL is not supplied. When this option is not defined, all_channels is assumed to keep backward compatibility. This option doesn't affect Valkey configuration acl-pubsub-default.
+                          type: string
+                        valkeyActiveExpireEffort:
+                          description: |-
+                            expire-effort setting (default 1, max 10) uses more CPU to reclaim expired keys faster, reducing memory usage but potentially increasing latency.
+                            Active expire effort. Valkey reclaims expired keys both when accessed and in the background. The background process scans for expired keys to free memory. Increasing the active-expire-effort setting (default 1, max 10) uses more CPU to reclaim expired keys faster, reducing memory usage but potentially increasing latency.
+                          format: int64
+                          type: integer
+                        valkeyIoThreads:
+                          description: |-
+                            (Number) Valkey IO thread count. Set Valkey IO thread count. Changing this will cause a restart of the Valkey service.
+                            Valkey IO thread count. Set Valkey IO thread count. Changing this will cause a restart of the Valkey service.
+                          format: int64
+                          type: integer
+                        valkeyLfuDecayTime:
+                          description: |-
+                            policy counter decay time in minutes.
+                            LFU maxmemory-policy counter decay time in minutes.
+                          format: int64
+                          type: integer
+                        valkeyLfuLogFactor:
+                          description: |-
+                            lfu and allkeys-lfu maxmemory-policies.
+                            Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
+                          format: int64
+                          type: integer
+                        valkeyMaxmemoryPolicy:
+                          description: |-
+                            policy.
+                            Valkey maxmemory-policy.
+                          type: string
+                        valkeyNotifyKeyspaceEvents:
+                          description: |-
+                            keyspace-events option.
+                            Set notify-keyspace-events option.
+                          type: string
+                        valkeyNumberOfDatabases:
+                          description: |-
+                            (Number) Number of Valkey databases. Set number of Valkey databases. Changing this will cause a restart of the Valkey service.
+                            Number of Valkey databases. Set number of Valkey databases. Changing this will cause a restart of the Valkey service.
+                          format: int64
+                          type: integer
+                        valkeyPersistence:
+                          description: |-
+                            (String) Valkey persistence. When persistence is 'rdb', Valkey does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            Valkey persistence. When persistence is 'rdb', Valkey does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                          type: string
+                        valkeyPubsubClientOutputBufferLimit:
+                          description: |-
+                            (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                            Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                          format: int64
+                          type: integer
+                        valkeySsl:
+                          description: |-
+                            (Boolean) Require SSL to access Valkey.
+                            Require SSL to access Valkey.
+                          type: boolean
+                        valkeyTimeout:
+                          description: |-
+                            (Number) Valkey idle connection timeout in seconds.
+                            Valkey idle connection timeout in seconds.
+                          format: int64
+                          type: integer
+                      type: object
+                    type: array
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  kind: ClusterProviderConfig
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  kind:
+                    description: Kind of the referenced object.
+                    type: string
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.plan is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.plan)
+                || (has(self.initProvider) && has(self.initProvider.plan))'
+            - message: spec.forProvider.title is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.title)
+                || (has(self.initProvider) && has(self.initProvider.title))'
+            - message: spec.forProvider.zone is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.zone)
+                || (has(self.initProvider) && has(self.initProvider.zone))'
+          status:
+            description: ManagedDatabaseValkeyStatus defines the observed state of
+              ManagedDatabaseValkey.
+            properties:
+              atProvider:
+                properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Not supported for valkey databases. Should be left unconfigured.
+                      Not supported for `valkey` databases. Should be left unconfigured.
+                    format: int64
+                    type: integer
+                  components:
+                    description: |-
+                      (List of Object) Service component information (see below for nested schema)
+                      Service component information
+                    items:
+                      properties:
+                        component:
+                          description: |-
+                            (String)
+                            Type of the component
+                          type: string
+                        host:
+                          description: |-
+                            (String) Hostname or IP address of the server where to migrate data from.
+                            Hostname of the component
+                          type: string
+                        port:
+                          description: |-
+                            (Number) Port number of the server where to migrate data from.
+                            Port number of the component
+                          format: int64
+                          type: integer
+                        route:
+                          description: |-
+                            (String)
+                            Component network route type
+                          type: string
+                        usage:
+                          description: |-
+                            (String)
+                            Usage of the component
+                          type: string
+                      type: object
+                    type: array
+                  id:
+                    description: (String) The ID of this resource.
+                    type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                      type: object
+                    type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            Name plus a node iteration
+                          type: string
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                        state:
+                          description: |-
+                            (String) State of the service
+                            State of the node
+                          type: string
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans valkey.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans valkey`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  primaryDatabase:
+                    description: |-
+                      (String) Primary database name
+                      Primary database name
+                    type: string
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for Valkey (see below for nested schema)
+                      Database Engine properties for Valkey
+                    items:
+                      properties:
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        frequentSnapshots:
+                          description: |-
+                            (Boolean) Frequent RDB snapshots. When enabled, Valkey will create frequent local RDB snapshots. When disabled, Valkey will only take RDB snapshots when a backup is created, based on the backup schedule. This setting is ignored when valkey_persistence is set to off.
+                            Frequent RDB snapshots. When enabled, Valkey will create frequent local RDB snapshots. When disabled, Valkey will only take RDB snapshots when a backup is created, based on the backup schedule. This setting is ignored when `valkey_persistence` is set to `off`.
+                          type: boolean
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                format: int64
+                                type: integer
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        valkeyAclChannelsDefault:
+                          description: |-
+                            pubsub-default.
+                            Default ACL for pub/sub channels used when a Valkey user is created. Determines default pub/sub channels' ACL for new users if ACL is not supplied. When this option is not defined, all_channels is assumed to keep backward compatibility. This option doesn't affect Valkey configuration acl-pubsub-default.
+                          type: string
+                        valkeyActiveExpireEffort:
+                          description: |-
+                            expire-effort setting (default 1, max 10) uses more CPU to reclaim expired keys faster, reducing memory usage but potentially increasing latency.
+                            Active expire effort. Valkey reclaims expired keys both when accessed and in the background. The background process scans for expired keys to free memory. Increasing the active-expire-effort setting (default 1, max 10) uses more CPU to reclaim expired keys faster, reducing memory usage but potentially increasing latency.
+                          format: int64
+                          type: integer
+                        valkeyIoThreads:
+                          description: |-
+                            (Number) Valkey IO thread count. Set Valkey IO thread count. Changing this will cause a restart of the Valkey service.
+                            Valkey IO thread count. Set Valkey IO thread count. Changing this will cause a restart of the Valkey service.
+                          format: int64
+                          type: integer
+                        valkeyLfuDecayTime:
+                          description: |-
+                            policy counter decay time in minutes.
+                            LFU maxmemory-policy counter decay time in minutes.
+                          format: int64
+                          type: integer
+                        valkeyLfuLogFactor:
+                          description: |-
+                            lfu and allkeys-lfu maxmemory-policies.
+                            Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies.
+                          format: int64
+                          type: integer
+                        valkeyMaxmemoryPolicy:
+                          description: |-
+                            policy.
+                            Valkey maxmemory-policy.
+                          type: string
+                        valkeyNotifyKeyspaceEvents:
+                          description: |-
+                            keyspace-events option.
+                            Set notify-keyspace-events option.
+                          type: string
+                        valkeyNumberOfDatabases:
+                          description: |-
+                            (Number) Number of Valkey databases. Set number of Valkey databases. Changing this will cause a restart of the Valkey service.
+                            Number of Valkey databases. Set number of Valkey databases. Changing this will cause a restart of the Valkey service.
+                          format: int64
+                          type: integer
+                        valkeyPersistence:
+                          description: |-
+                            (String) Valkey persistence. When persistence is 'rdb', Valkey does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                            Valkey persistence. When persistence is 'rdb', Valkey does RDB dumps each 10 minutes if any key is changed. Also RDB dumps are done according to backup schedule for backup purposes. When persistence is 'off', no RDB dumps and backups are done, so data can be lost at any moment if service is restarted for any reason, or if service is powered off. Also service can't be forked.
+                          type: string
+                        valkeyPubsubClientOutputBufferLimit:
+                          description: |-
+                            (Number) Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                            Pub/sub client output buffer hard limit in MB. Set output buffer limit for pub / sub clients in MB. The value is the hard limit, the soft limit is 1/4 of the hard limit. When setting the limit, be mindful of the available memory in the selected service plan.
+                          format: int64
+                          type: integer
+                        valkeySsl:
+                          description: |-
+                            (Boolean) Require SSL to access Valkey.
+                            Require SSL to access Valkey.
+                          type: boolean
+                        valkeyTimeout:
+                          description: |-
+                            (Number) Valkey idle connection timeout in seconds.
+                            Valkey idle connection timeout in seconds.
+                          format: int64
+                          type: integer
+                      type: object
+                    type: array
+                  serviceHost:
+                    description: |-
+                      (String) Hostname to the service instance
+                      Hostname to the service instance
+                    type: string
+                  servicePort:
+                    description: |-
+                      (String) Port to the service instance
+                      Port to the service instance
+                    type: string
+                  serviceUsername:
+                    description: |-
+                      (String) Primary username to the service instance
+                      Primary username to the service instance
+                    type: string
+                  state:
+                    description: |-
+                      (String) State of the service
+                      State of the service
+                    type: string
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  type:
+                    description: |-
+                      (String) Type of the service
+                      Type of the service
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -70,10 +70,10 @@ If you use VSCode, you can use the following run configuration and run the contr
            "TERRAFORM_VERSION": "1.5.7",
            "TERRAFORM_PROVIDER_SOURCE": "UpCloudLtd/upcloud",
            "TERRAFORM_PROVIDER_REPO": "https://github.com/UpCloudLtd/terraform-provider-upcloud",
-           "TERRAFORM_PROVIDER_VERSION": "5.12.0",
+           "TERRAFORM_PROVIDER_VERSION": "5.31.1",
            "TERRAFORM_PROVIDER_DOWNLOAD_NAME": "terraform-provider-upcloud",
-           "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.12.0",
-           "TERRAFORM_NATIVE_PROVIDER_BINARY": "terraform-provider-upcloud_v5.12.0",
+           "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.31.1",
+           "TERRAFORM_NATIVE_PROVIDER_BINARY": "terraform-provider-upcloud_v5.31.1",
            "TERRAFORM_DOCS_PATH": "docs/resources"
        }
    }
@@ -85,9 +85,9 @@ First is to use locally built TF provider. You can do that by [building the TF p
     ```shell
 
     // "TERRAFORM_PROVIDER_SOURCE": "UpCloudLtd/upcloud",
-    // "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.12.0",
+    // "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "https://releases.hashicorp.com/terraform-provider-upcloud/5.31.1",
     "TERRAFORM_PROVIDER_SOURCE": "registry.upcloud.com/upcloud/upcloud",
-    "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "file:///home/myusername/.terraform.d/plugins/registry.upcloud.com/upcloud/upcloud/5.12.0",
+    "TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX": "file:///home/myusername/.terraform.d/plugins/registry.upcloud.com/upcloud/upcloud/5.31.1",
     ```
 Just make sure to change the version to whatever was the result of local TF build process.
 
