@@ -109,7 +109,7 @@ type ManagedObjectStorageParameters struct {
 	// (String) Service status managed by the end user.
 	// Service status managed by the end user.
 	// +kubebuilder:validation:Optional
-	ConfiguredStatus *string `json:"configuredStatus,omitempty" tf:"configured_status,omitempty"`
+	ConfiguredStatus *string `json:"configuredStatus" tf:"configured_status,omitempty"`
 
 	// value pairs to classify the managed object storage.
 	// User defined key-value pairs to classify the managed object storage.
@@ -120,7 +120,7 @@ type ManagedObjectStorageParameters struct {
 	// (String) Name of the Managed Object Storage service. Must be unique within account.
 	// Name of the Managed Object Storage service. Must be unique within account.
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (Block Set) Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network. (see below for nested schema)
 	// Attached networks from where object storage can be used. Private networks must reside in object storage region. To gain access from multiple private networks that might reside in different zones, create the networks and a corresponding router for each network.
@@ -130,7 +130,7 @@ type ManagedObjectStorageParameters struct {
 	// storage regions to list available regions.
 	// Region in which the service will be hosted, see `upcloud_managed_object_storage_regions` data source or use `upctl object-storage regions` to list available regions.
 	// +kubebuilder:validation:Optional
-	Region *string `json:"region,omitempty" tf:"region,omitempty"`
+	Region *string `json:"region" tf:"region,omitempty"`
 }
 
 type NetworkInitParameters struct {

@@ -58,7 +58,7 @@ type ManagedDatabaseLogicalDatabaseParameters struct {
 	// The service to which the logical database belongs. Please note that reference fields (`serviceRef` and `serviceSelector`) only work for PostgreSQL databases. For other databases you need to leverage compositions and patches to pass database service ID to logical database `service` field. See https://docs.crossplane.io/latest/concepts/patch-and-transform/#patching-between-resources for more info.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/cluster/database/v1alpha1.ManagedDatabasePostgresql
 	// +kubebuilder:validation:Optional
-	Service *string `json:"service,omitempty" tf:"service,omitempty"`
+	Service *string `json:"service" tf:"service,omitempty"`
 
 	// Reference to a ManagedDatabasePostgresql in database to populate service.
 	// +kubebuilder:validation:Optional

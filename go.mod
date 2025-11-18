@@ -21,7 +21,7 @@ require (
 	sigs.k8s.io/controller-tools v0.18.0
 )
 
-replace github.com/crossplane/upjet/v2 v2.2.0 => github.com/UpCloudLtd/upjet/v2 v2.0.0-20251117185347-9e1d912d7c27
+replace github.com/crossplane/upjet/v2 v2.2.0 => github.com/UpCloudLtd/upjet/v2 v2.0.0-20251118133500-2ca5450f7551
 
 require (
 	al.essio.dev/pkg/shellescape v1.5.1 // indirect

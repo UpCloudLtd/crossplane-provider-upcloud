@@ -10,8 +10,8 @@ github.com/UpCloudLtd/upcloud-go-api/credentials v0.1.1 h1:eTfQsv58ufALOk9BZ7WbS
 github.com/UpCloudLtd/upcloud-go-api/credentials v0.1.1/go.mod h1:7OtVs2UqtfvjkC1HfE+Oud0MnbMv7qUWnbEgxnTAqts=
 github.com/UpCloudLtd/upcloud-go-api/v8 v8.31.1 h1:fp+yFy61TlgFVEQZnleoxfR+5ApMJ4H7OCtJaBBwhf8=
 github.com/UpCloudLtd/upcloud-go-api/v8 v8.31.1/go.mod h1:NBh1d/ip1bhdAIhuPWbyPme7tbLzDTV7dhutUmU1vg8=
-github.com/UpCloudLtd/upjet/v2 v2.0.0-20251117185347-9e1d912d7c27 h1:2u3JbXfzkNKOp57ZvbpYNH+FBCYe80fYxs95Y/L0kx8=
-github.com/UpCloudLtd/upjet/v2 v2.0.0-20251117185347-9e1d912d7c27/go.mod h1:jDCqvAFLrVEzqE+pywmQ5u18HbJK5j5Jj4cTQpqOLqY=
+github.com/UpCloudLtd/upjet/v2 v2.0.0-20251118133500-2ca5450f7551 h1:2zkkaVNrFwAy7yLFQqQZ2sJXC26gIkKmoU60kfgqYcc=
+github.com/UpCloudLtd/upjet/v2 v2.0.0-20251118133500-2ca5450f7551/go.mod h1:jDCqvAFLrVEzqE+pywmQ5u18HbJK5j5Jj4cTQpqOLqY=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
 github.com/agext/levenshtein v1.2.3 h1:YB2fHEn0UJagG8T1rrWknE3ZQzWM06O8AMAatNn7lmo=
 github.com/agext/levenshtein v1.2.3/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=

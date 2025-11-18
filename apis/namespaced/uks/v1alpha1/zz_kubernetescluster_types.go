@@ -138,24 +138,24 @@ type KubernetesClusterParameters struct {
 	// IP addresses or IP ranges in CIDR format which are allowed to access the cluster control plane. To allow access from any source, use `["0.0.0.0/0"]`. To deny access from all sources, use `[]`. Values set here do not restrict access to node groups or exposed Kubernetes services.
 	// +kubebuilder:validation:Optional
 	// +listType=set
-	ControlPlaneIPFilter []*string `json:"controlPlaneIpFilter,omitempty" tf:"control_plane_ip_filter,omitempty"`
+	ControlPlaneIPFilter []*string `json:"controlPlaneIpFilter" tf:"control_plane_ip_filter,omitempty"`
 
 	// value pairs to classify the cluster.
 	// User defined key-value pairs to classify the cluster.
 	// +kubebuilder:validation:Optional
 	// +mapType=granular
-	Labels map[string]*string `json:"labels,omitempty" tf:"labels,omitempty"`
+	Labels map[string]*string `json:"labels" tf:"labels,omitempty"`
 
 	// (String) Cluster name. Needs to be unique within the account.
 	// Cluster name. Needs to be unique within the account.
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (String) Network ID for the cluster to run in.
 	// Network ID for the cluster to run in.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/namespaced/network/v1alpha1.Network
 	// +kubebuilder:validation:Optional
-	Network *string `json:"network,omitempty" tf:"network,omitempty"`
+	Network *string `json:"network" tf:"network,omitempty"`
 
 	// Reference to a Network in network to populate network.
 	// +kubebuilder:validation:Optional
@@ -195,7 +195,7 @@ type KubernetesClusterParameters struct {
 	// fra1. You can list available zones with upctl zone list.
 	// Zone in which the Kubernetes cluster will be hosted, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 // KubernetesClusterSpec defines the desired state of KubernetesCluster

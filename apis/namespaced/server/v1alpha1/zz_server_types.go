@@ -535,7 +535,7 @@ type ServerParameters struct {
 	// (String) The hostname of the server.
 	// The hostname of the server.
 	// +kubebuilder:validation:Optional
-	Hostname *string `json:"hostname,omitempty" tf:"hostname,omitempty"`
+	Hostname *string `json:"hostname" tf:"hostname,omitempty"`
 
 	// (Boolean) If set to true, allows changing the server plan without requiring a reboot. This enables hot resizing of the server. If hot resizing fails, the apply operation will fail.
 	// If set to true, allows changing the server plan without requiring a reboot. This enables hot resizing of the server. If hot resizing fails, the apply operation will fail.
@@ -633,7 +633,7 @@ type ServerParameters struct {
 	// fra1. You can list available zones with upctl zone list.
 	// The zone in which the server will be hosted, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 type SimpleBackupInitParameters struct {

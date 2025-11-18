@@ -76,13 +76,13 @@ type ManagedObjectStoragePolicyParameters struct {
 	// encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
 	// Policy document, URL-encoded compliant with RFC 3986. Extra whitespace and escapes are ignored when determining if the document has changed.
 	// +kubebuilder:validation:Optional
-	Document *string `json:"document,omitempty" tf:"document,omitempty"`
+	Document *string `json:"document" tf:"document,omitempty"`
 
 	// (String) Managed Object Storage service UUID.
 	// Managed Object Storage service UUID.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/cluster/objectstorage/v1alpha1.ManagedObjectStorage
 	// +kubebuilder:validation:Optional
-	ServiceUUID *string `json:"serviceUuid,omitempty" tf:"service_uuid,omitempty"`
+	ServiceUUID *string `json:"serviceUuid" tf:"service_uuid,omitempty"`
 
 	// Reference to a ManagedObjectStorage in objectstorage to populate serviceUuid.
 	// +kubebuilder:validation:Optional

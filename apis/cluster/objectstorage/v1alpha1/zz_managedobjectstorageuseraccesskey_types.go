@@ -56,7 +56,7 @@ type ManagedObjectStorageUserAccessKeyParameters struct {
 	// Managed Object Storage service UUID.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/cluster/objectstorage/v1alpha1.ManagedObjectStorage
 	// +kubebuilder:validation:Optional
-	ServiceUUID *string `json:"serviceUuid,omitempty" tf:"service_uuid,omitempty"`
+	ServiceUUID *string `json:"serviceUuid" tf:"service_uuid,omitempty"`
 
 	// Reference to a ManagedObjectStorage in objectstorage to populate serviceUuid.
 	// +kubebuilder:validation:Optional
@@ -69,13 +69,13 @@ type ManagedObjectStorageUserAccessKeyParameters struct {
 	// (String) Status of the key. Valid values: Active|Inactive
 	// Status of the key. Valid values: `Active`|`Inactive`
 	// +kubebuilder:validation:Optional
-	Status *string `json:"status,omitempty" tf:"status,omitempty"`
+	Status *string `json:"status" tf:"status,omitempty"`
 
 	// (String) Username.
 	// Username.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/cluster/objectstorage/v1alpha1.ManagedObjectStorageUser
 	// +kubebuilder:validation:Optional
-	Username *string `json:"username,omitempty" tf:"username,omitempty"`
+	Username *string `json:"username" tf:"username,omitempty"`
 
 	// Reference to a ManagedObjectStorageUser in objectstorage to populate username.
 	// +kubebuilder:validation:Optional

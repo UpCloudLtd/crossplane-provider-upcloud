@@ -211,7 +211,7 @@ type ManagedDatabaseMysqlParameters struct {
 	// (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
 	// Private networks attached to the managed database
@@ -226,7 +226,7 @@ type ManagedDatabaseMysqlParameters struct {
 	// (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans mysql.
 	// Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans mysql`.
 	// +kubebuilder:validation:Optional
-	Plan *string `json:"plan,omitempty" tf:"plan,omitempty"`
+	Plan *string `json:"plan" tf:"plan,omitempty"`
 
 	// (Boolean) The administrative power state of the service
 	// The administrative power state of the service
@@ -246,12 +246,12 @@ type ManagedDatabaseMysqlParameters struct {
 	// (String) Title of a managed database instance
 	// Title of a managed database instance
 	// +kubebuilder:validation:Optional
-	Title *string `json:"title,omitempty" tf:"title,omitempty"`
+	Title *string `json:"title" tf:"title,omitempty"`
 
 	// fra1. You can list available zones with upctl zone list.
 	// Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 type MigrationInitParameters struct {
@@ -479,7 +479,7 @@ type NetworkParameters struct {
 	// Private network UUID. Must reside in the same zone as the database.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/cluster/network/v1alpha1.Network
 	// +kubebuilder:validation:Optional
-	UUID *string `json:"uuid,omitempty" tf:"uuid,omitempty"`
+	UUID *string `json:"uuid" tf:"uuid,omitempty"`
 
 	// Reference to a Network in network to populate uuid.
 	// +kubebuilder:validation:Optional

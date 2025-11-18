@@ -298,7 +298,7 @@ type NetworkParameters struct {
 	// (String) Name of the network.
 	// Name of the network.
 	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+	Name *string `json:"name" tf:"name,omitempty"`
 
 	// (String) UUID of a router to attach to this network.
 	// UUID of a router to attach to this network.
@@ -317,7 +317,7 @@ type NetworkParameters struct {
 	// fra1. You can list available zones with upctl zone list.
 	// The zone the network is in, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
 	// +kubebuilder:validation:Optional
-	Zone *string `json:"zone,omitempty" tf:"zone,omitempty"`
+	Zone *string `json:"zone" tf:"zone,omitempty"`
 }
 
 // NetworkSpec defines the desired state of Network

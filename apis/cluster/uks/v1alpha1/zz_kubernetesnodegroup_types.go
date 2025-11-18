@@ -312,7 +312,7 @@ type KubernetesNodeGroupParameters struct {
 	// UUID of the cluster.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/cluster/uks/v1alpha1.KubernetesCluster
 	// +kubebuilder:validation:Optional
-	Cluster *string `json:"cluster,omitempty" tf:"cluster,omitempty"`
+	Cluster *string `json:"cluster" tf:"cluster,omitempty"`
 
 	// Reference to a KubernetesCluster in uks to populate cluster.
 	// +kubebuilder:validation:Optional
@@ -348,12 +348,12 @@ type KubernetesNodeGroupParameters struct {
 	// (Number) Amount of nodes to provision in the node group.
 	// Amount of nodes to provision in the node group.
 	// +kubebuilder:validation:Optional
-	NodeCount *float64 `json:"nodeCount,omitempty" tf:"node_count,omitempty"`
+	NodeCount *float64 `json:"nodeCount" tf:"node_count,omitempty"`
 
 	// (String) The server plan used for the node group. You can list available plans with upctl server plans
 	// The server plan used for the node group. You can list available plans with `upctl server plans`
 	// +kubebuilder:validation:Optional
-	Plan *string `json:"plan,omitempty" tf:"plan,omitempty"`
+	Plan *string `json:"plan" tf:"plan,omitempty"`
 
 	// (Set of String) You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.
 	// You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.

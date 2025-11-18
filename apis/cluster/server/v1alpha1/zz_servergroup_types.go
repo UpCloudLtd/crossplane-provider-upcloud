@@ -145,7 +145,7 @@ type ServerGroupParameters struct {
 	// (String) Title of your server group
 	// Title of your server group
 	// +kubebuilder:validation:Optional
-	Title *string `json:"title,omitempty" tf:"title,omitempty"`
+	Title *string `json:"title" tf:"title,omitempty"`
 
 	// (Boolean) Controls if members of the server group are being tracked in this resource. Set to false when using server_group property of upcloud_server to attach servers to the server group to avoid delayed state updates.
 	// Controls if members of the server group are being tracked in this resource. Set to `false` when using `server_group` property of `upcloud_server` to attach servers to the server group to avoid delayed state updates.

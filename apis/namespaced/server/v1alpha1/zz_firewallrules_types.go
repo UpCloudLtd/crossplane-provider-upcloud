@@ -274,7 +274,7 @@ type FirewallRulesParameters struct {
 	// The UUID of the server to be protected with the firewall rules.
 	// +crossplane:generate:reference:type=github.com/UpCloudLtd/crossplane-provider-upcloud/apis/namespaced/server/v1alpha1.Server
 	// +kubebuilder:validation:Optional
-	ServerID *string `json:"serverId,omitempty" tf:"server_id,omitempty"`
+	ServerID *string `json:"serverId" tf:"server_id,omitempty"`
 
 	// Reference to a Server in server to populate serverId.
 	// +kubebuilder:validation:Optional
