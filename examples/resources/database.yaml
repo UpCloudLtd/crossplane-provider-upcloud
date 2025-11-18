@@ -49,14 +49,14 @@ spec:
     zone: fi-hel2
 ---
 apiVersion: database.upcloud.com/v1alpha1
-kind: ManagedDatabaseRedis
+kind: ManagedDatabaseValkey
 metadata:
-  name: crossplane-example-redis
+  name: crossplane-example-valkey
 spec:
   forProvider:
-    name: crossplane-redis-1
+    name: crossplane-valkey-1
     plan: 1x1xCPU-2GB
-    title: crossplane-example-redis
+    title: crossplane-example-valkey
     zone: fi-hel2
 ---
 apiVersion: database.upcloud.com/v1alpha1

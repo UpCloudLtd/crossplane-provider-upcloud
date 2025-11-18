@@ -31,7 +31,7 @@ This is a quick guide on how to develop this provider. For general info about de
     make run
     ```
 
-6. Go to `examples/providerconfig`, copy the secret template and populate it with your UpCloud API username and password:
+6. Go to `examples/providerconfig`, copy the secret template and populate it with your UpCloud API token (or username and password):
     ```shell
     cp examples/providerconfig/secret.yaml.tmpl examples/providerconfig/secret.yaml
     ```
