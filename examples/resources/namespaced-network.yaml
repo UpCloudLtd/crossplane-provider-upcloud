@@ -1,0 +1,15 @@
+apiVersion: network.m.upcloud.com/v1alpha1
+kind: Network
+metadata:
+  name: upcloud-crossplane-example-namespaced-network
+  namespace: upcloud-crossplane-example
+spec:
+  forProvider:
+    ipNetwork:
+    - address: 10.13.0.0/24
+      family: IPv4
+    name: crossplane-example-namespaced-network
+    zone: de-fra1
+  providerConfigRef:
+    name: upcloud-crossplane-example-providerconfig
+    kind: ProviderConfig

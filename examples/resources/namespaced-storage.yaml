@@ -1,0 +1,14 @@
+apiVersion: storage.m.upcloud.com/v1alpha1
+kind: Storage
+metadata:
+  name: upcloud-crossplane-example-namespaced-storage
+  namespace: upcloud-crossplane-example
+spec:
+  forProvider:
+    size: 10
+    tier: standard
+    title: crossplane-example-namespaced-storage
+    zone: de-fra1
+  providerConfigRef:
+    name: upcloud-crossplane-example-providerconfig
+    kind: ProviderConfig

@@ -23,6 +23,6 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("upcloud_storage", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider
-		r.UseAsync = true
+		r.UseAsync = false
 	})
 }

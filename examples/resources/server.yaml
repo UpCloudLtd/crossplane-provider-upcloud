@@ -19,9 +19,10 @@ spec:
       networkRef:
         name: example-2
     plan: 1xCPU-1GB
+    metadata: true
     template:
     - size: 25
-      storage: Ubuntu Server 20.04 LTS (Focal Fossa)
+      storage: Ubuntu Server 24.04 LTS (Noble Numbat)
     storageDevices:
     - storageRef:
         name: example
