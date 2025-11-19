@@ -5,6 +5,11 @@ See updating [Changelog example here](https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+### Added
+
+- Update UpCloud Terraform provider to `v5.31.1`. This adds support for many new features, such as API tokens.
+- Add support for Crossplane v2.
+
 ## [0.0.7] - 2024-10-16
 
 ### Changed
