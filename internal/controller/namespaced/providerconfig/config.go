@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 package providerconfig
 
 import (
@@ -14,18 +10,41 @@ import (
 	"github.com/UpCloudLtd/crossplane-provider-upcloud/apis/namespaced/v1beta1"
 )
 
-// Setup adds a controller that reconciles ProviderConfigs and
-// ClusterProviderConfigs by accounting for their current usage.
+// Setup adds a controller that reconciles ProviderConfigs and ClusterProviderConfigs
+// by accounting for their current usage.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
-	if err := setupNamespacedProviderConfig(mgr, o); err != nil {
+	if err := setupCluster(mgr, o); err != nil {
 		return err
 	}
-	return setupClusterProviderConfig(mgr, o)
-
+	return setupNamespaced(mgr, o)
 }
 
-func setupNamespacedProviderConfig(mgr ctrl.Manager, o controller.Options) error {
+// setupCluster adds a controller that reconciles ClusterProviderConfigs by accounting for
+// their current usage.
+func setupCluster(mgr ctrl.Manager, o controller.Options) error {
+	name := providerconfig.ControllerName(v1beta1.ClusterProviderConfigGroupKind)
+
+	of := resource.ProviderConfigKinds{
+		Config:    v1beta1.ClusterProviderConfigGroupVersionKind,
+		Usage:     v1beta1.ProviderConfigUsageGroupVersionKind,
+		UsageList: v1beta1.ProviderConfigUsageListGroupVersionKind,
+	}
+
+	return ctrl.NewControllerManagedBy(mgr).
+		Named(name).
+		WithOptions(o.ForControllerRuntime()).
+		For(&v1beta1.ClusterProviderConfig{}).
+		Watches(&v1beta1.ProviderConfigUsage{}, &resource.EnqueueRequestForProviderConfig{}).
+		Complete(providerconfig.NewReconciler(mgr, of,
+			providerconfig.WithLogger(o.Logger.WithValues("controller", name)),
+			providerconfig.WithRecorder(event.NewAPIRecorder(mgr.GetEventRecorderFor(name)))))
+}
+
+// setupNamespaced adds a controller that reconciles ProviderConfigs by accounting for
+// their current usage.
+func setupNamespaced(mgr ctrl.Manager, o controller.Options) error {
 	name := providerconfig.ControllerName(v1beta1.ProviderConfigGroupKind)
+
 	of := resource.ProviderConfigKinds{
 		Config:    v1beta1.ProviderConfigGroupVersionKind,
 		Usage:     v1beta1.ProviderConfigUsageGroupVersionKind,
@@ -41,30 +60,11 @@ func setupNamespacedProviderConfig(mgr ctrl.Manager, o controller.Options) error
 			providerconfig.WithLogger(o.Logger.WithValues("controller", name)),
 			providerconfig.WithRecorder(event.NewAPIRecorder(mgr.GetEventRecorderFor(name)))))
 }
-func setupClusterProviderConfig(mgr ctrl.Manager, o controller.Options) error {
-	name := providerconfig.ControllerName(v1beta1.ClusterProviderConfigGroupKind)
-	of := resource.ProviderConfigKinds{
-		Config: v1beta1.ClusterProviderConfigGroupVersionKind,
-		// Usage types are shared
-		Usage:     v1beta1.ProviderConfigUsageGroupVersionKind,
-		UsageList: v1beta1.ProviderConfigUsageListGroupVersionKind,
-	}
 
-	return ctrl.NewControllerManagedBy(mgr).
-		Named(name).
-		WithOptions(o.ForControllerRuntime()).
-		For(&v1beta1.ClusterProviderConfig{}).
-		// Usage types are shared
-		Watches(&v1beta1.ProviderConfigUsage{}, &resource.EnqueueRequestForProviderConfig{}).
-		Complete(providerconfig.NewReconciler(mgr, of,
-			providerconfig.WithLogger(o.Logger.WithValues("controller", name)),
-			providerconfig.WithRecorder(event.NewAPIRecorder(mgr.GetEventRecorderFor(name)))))
-}
-
-// SetupGated adds a controller that reconciles ProviderConfigs by accounting for
-// their current usage.
+// SetupGated adds a controller that reconciles ProviderConfigs and ClusterProviderConfigs
+// by accounting for their current usage.
 func SetupGated(mgr ctrl.Manager, o controller.Options) error {
-	o.Options.Gate.Register(func() {
+	o.Gate.Register(func() {
 		if err := Setup(mgr, o); err != nil {
 			mgr.GetLogger().Error(err, "unable to setup reconcilers", "gvk", v1beta1.ClusterProviderConfigGroupVersionKind.String(), "gvk", v1beta1.ProviderConfigGroupVersionKind.String())
 		}
