@@ -11,3 +11,6 @@ metadata:
       This is an official Crossplane provider for [UpCloud](https://upcloud.com).
       Detailed instructions on how to install and use the provider can be found in the [GitHub repository](https://github.com/UpCloudLtd/crossplane-provider-upcloud).
       If you have any questions or need help, please [create a new issue in GitHub](https://github.com/UpCloudLtd/crossplane-provider-upcloud/issues/new).
+spec:
+  capabilities:
+  - SafeStart

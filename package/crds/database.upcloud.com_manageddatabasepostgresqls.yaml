@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.14.0
+    controller-gen.kubebuilder.io/version: v0.18.0
   name: manageddatabasepostgresqls.database.upcloud.com
 spec:
   group: database.upcloud.com
@@ -76,6 +76,12 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                      Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                    format: int64
+                    type: integer
                   labels:
                     additionalProperties:
                       type: string
@@ -211,15 +217,15 @@ spec:
                       properties:
                         role:
                           description: |-
-                            (String)
+                            (String) Role. Specifies the master role to use for object audit logging.
                             Role of the node
                           type: string
                       type: object
                     type: array
                   plan:
                     description: |-
-                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
-                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans pg.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans pg`.
                     type: string
                   powered:
                     description: |-
@@ -263,54 +269,54 @@ spec:
                           type: boolean
                         autovacuumAnalyzeScaleFactor:
                           description: |-
-                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
-                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE (e.g. 0.2 for 20% of the table size). The default is 0.2.
+                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE (e.g. `0.2` for 20% of the table size). The default is `0.2`.
                           type: number
                         autovacuumAnalyzeThreshold:
                           description: |-
-                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
-                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50.
+                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is `50`.
                           format: int64
                           type: integer
                         autovacuumFreezeMaxAge:
                           description: |-
-                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
-                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. The system launches autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. Changing this parameter causes a service restart.
+                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. The system launches autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         autovacuumMaxWorkers:
                           description: |-
-                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
-                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is 3. Changing this parameter causes a service restart.
+                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is `3`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         autovacuumNaptime:
                           description: |-
-                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
-                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds. The default is 60.
+                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds. The default is `60`.
                           format: int64
                           type: integer
                         autovacuumVacuumCostDelay:
                           description: |-
-                            1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
-                            Specifies the cost delay value that will be used in automatic VACUUM operations. If -1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                            1 is specified, the regular vacuum_cost_delay value will be used. The default is 2 (upstream default).
+                            Specifies the cost delay value that will be used in automatic VACUUM operations. If `-1` is specified, the regular vacuum_cost_delay value will be used. The default is `2` (upstream default).
                           format: int64
                           type: integer
                         autovacuumVacuumCostLimit:
                           description: |-
-                            1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
-                            Specifies the cost limit value that will be used in automatic VACUUM operations. If -1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                            1 is specified, the regular vacuum_cost_limit value will be used. The default is -1 (upstream default).
+                            Specifies the cost limit value that will be used in automatic VACUUM operations. If `-1` is specified, the regular vacuum_cost_limit value will be used. The default is `-1` (upstream default).
                           format: int64
                           type: integer
                         autovacuumVacuumScaleFactor:
                           description: |-
-                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
-                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM (e.g. 0.2 for 20% of the table size). The default is 0.2.
+                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM (e.g. `0.2` for 20% of the table size). The default is `0.2`.
                           type: number
                         autovacuumVacuumThreshold:
                           description: |-
-                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
-                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50.
+                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is `50`.
                           format: int64
                           type: integer
                         backupHour:
@@ -327,42 +333,71 @@ spec:
                           type: integer
                         bgwriterDelay:
                           description: |-
-                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
-                            Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. The default is 200.
+                            Specifies the delay between activity rounds for the background writer in milliseconds. The default is `200`.
                           format: int64
                           type: integer
                         bgwriterFlushAfter:
                           description: |-
-                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
-                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes. Setting of 0 disables forced writeback. The default is 512.
+                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes. Setting of 0 disables forced writeback. The default is `512`.
                           format: int64
                           type: integer
                         bgwriterLruMaxpages:
                           description: |-
-                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
-                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. The default is 100.
+                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. The default is `100`.
                           format: int64
                           type: integer
                         bgwriterLruMultiplier:
                           description: |-
                             (Number) The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
-                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is `2.0`.
                           type: number
                         deadlockTimeout:
                           description: |-
-                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
-                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition. The default is 1000 (upstream default).
+                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition. The default is `1000` (upstream default).
                           format: int64
                           type: integer
                         defaultToastCompression:
                           description: |-
-                            (String) Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
-                            Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                            (String) Specifies the default TOAST compression method for values of compressible columns. The default is lz4. Only available for PostgreSQL 14+.
+                            Specifies the default TOAST compression method for values of compressible columns. The default is `lz4`. Only available for PostgreSQL 14+.
                           type: string
                         idleInTransactionSessionTimeout:
                           description: |-
                             (Number) Time out sessions with open transactions after this number of milliseconds.
                             Time out sessions with open transactions after this number of milliseconds.
+                          format: int64
+                          type: integer
+                        ioCombineLimit:
+                          description: |-
+                            (Number) EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units. Version 17 and up only.
+                            EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units. Version 17 and up only.
+                          format: int64
+                          type: integer
+                        ioMaxCombineLimit:
+                          description: |-
+                            settable parameter io_combine_limit. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units, and silently limits the user-settable parameter io_combine_limit. Version 18 and up only. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
+                        ioMaxConcurrency:
+                          description: |-
+                            (Number) EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
+                        ioMethod:
+                          description: |-
+                            (String) EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                          type: string
+                        ioWorkers:
+                          description: |-
+                            (Number) io_max_concurrency. EXPERIMENTAL: Number of IO worker processes, for io_method=worker. Version 18 and up only. Changing this parameter causes a service restart.
+                            io_max_concurrency. EXPERIMENTAL: Number of IO worker processes, for io_method=worker. Version 18 and up only. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         ipFilter:
@@ -379,8 +414,8 @@ spec:
                           type: boolean
                         logAutovacuumMinDuration:
                           description: |-
-                            one (the default) disables logging autovacuum actions.
-                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
+                            one disables logging autovacuum actions. The default is 1000.
+                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one disables logging autovacuum actions. The default is `1000`.
                           format: int64
                           type: integer
                         logErrorVerbosity:
@@ -405,88 +440,100 @@ spec:
                             Log statements for each temporary file created larger than this number of kilobytes, -1 disables.
                           format: int64
                           type: integer
+                        maxConnections:
+                          description: |-
+                            release parameter. Contact your account team to confirm your eligibility. You cannot decrease this parameter value when set. For services with a read replica, first increase the read replica's value. After the change is applied to the replica, you can increase the primary service's value. Changing this parameter causes a service restart.
+                            Sets the PostgreSQL maximum number of concurrent connections to the database server. This is a limited-release parameter. Contact your account team to confirm your eligibility. You cannot decrease this parameter value when set. For services with a read replica, first increase the read replica's value. After the change is applied to the replica, you can increase the primary service's value. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
                         maxFilesPerProcess:
                           description: |-
-                            (Number) PostgreSQL maximum number of files that can be open per process.
-                            PostgreSQL maximum number of files that can be open per process.
+                            (Number) PostgreSQL maximum number of files that can be open per process. The default is 1000 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum number of files that can be open per process. The default is `1000` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxLocksPerTransaction:
                           description: |-
-                            (Number) PostgreSQL maximum locks per transaction.
-                            PostgreSQL maximum locks per transaction.
+                            (Number) PostgreSQL maximum locks per transaction. Changing this parameter causes a service restart.
+                            PostgreSQL maximum locks per transaction. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxLogicalReplicationWorkers:
                           description: |-
-                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
-                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers). The default is 4 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers). The default is `4` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxParallelWorkers:
                           description: |-
-                            (Number) Sets the maximum number of workers that the system can support for parallel queries.
-                            Sets the maximum number of workers that the system can support for parallel queries.
+                            (Number) Sets the maximum number of workers that the system can support for parallel queries. The default is 8 (upstream default).
+                            Sets the maximum number of workers that the system can support for parallel queries. The default is `8` (upstream default).
                           format: int64
                           type: integer
                         maxParallelWorkersPerGather:
                           description: |-
-                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
-                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node. The default is 2 (upstream default).
+                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node. The default is `2` (upstream default).
                           format: int64
                           type: integer
                         maxPredLocksPerTransaction:
                           description: |-
-                            (Number) PostgreSQL maximum predicate locks per transaction.
-                            PostgreSQL maximum predicate locks per transaction.
+                            (Number) PostgreSQL maximum predicate locks per transaction. The default is 64 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum predicate locks per transaction. The default is `64` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxPreparedTransactions:
                           description: |-
-                            (Number) PostgreSQL maximum prepared transactions.
-                            PostgreSQL maximum prepared transactions.
+                            (Number) PostgreSQL maximum prepared transactions. The default is 0. Changing this parameter causes a service restart.
+                            PostgreSQL maximum prepared transactions. The default is `0`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxReplicationSlots:
                           description: |-
-                            (Number) PostgreSQL maximum replication slots.
-                            PostgreSQL maximum replication slots.
+                            (Number) PostgreSQL maximum replication slots. The default is 20. Changing this parameter causes a service restart.
+                            PostgreSQL maximum replication slots. The default is `20`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxSlotWalKeepSize:
                           description: |-
-                            1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
-                            PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is -1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                            1 is specified, replication slots may retain an unlimited amount of WAL files. The default is -1 (upstream default). wal_keep_size minimum WAL size setting takes precedence over this.
+                            PostgreSQL maximum WAL size (MB) reserved for replication slots. If `-1` is specified, replication slots may retain an unlimited amount of WAL files. The default is `-1` (upstream default). wal_keep_size minimum WAL size setting takes precedence over this.
                           format: int64
                           type: integer
                         maxStackDepth:
                           description: |-
-                            (Number) Maximum depth of the stack in bytes.
-                            Maximum depth of the stack in bytes.
+                            (Number) Maximum depth of the stack in bytes. The default is 2097152 (upstream default).
+                            Maximum depth of the stack in bytes. The default is `2097152` (upstream default).
                           format: int64
                           type: integer
                         maxStandbyArchiveDelay:
                           description: |-
-                            (Number) Max standby archive delay in milliseconds.
-                            Max standby archive delay in milliseconds.
+                            (Number) Max standby archive delay in milliseconds. The default is 30000 (upstream default).
+                            Max standby archive delay in milliseconds. The default is `30000` (upstream default).
                           format: int64
                           type: integer
                         maxStandbyStreamingDelay:
                           description: |-
-                            (Number) Max standby streaming delay in milliseconds.
-                            Max standby streaming delay in milliseconds.
+                            (Number) Max standby streaming delay in milliseconds. The default is 30000 (upstream default).
+                            Max standby streaming delay in milliseconds. The default is `30000` (upstream default).
+                          format: int64
+                          type: integer
+                        maxSyncWorkersPerSubscription:
+                          description: |-
+                            (Number) Maximum number of synchronization workers per subscription. The default is 2.
+                            Maximum number of synchronization workers per subscription. The default is `2`.
                           format: int64
                           type: integer
                         maxWalSenders:
                           description: |-
-                            (Number) PostgreSQL maximum WAL senders.
-                            PostgreSQL maximum WAL senders.
+                            (Number) PostgreSQL maximum WAL senders. The default is 20. Changing this parameter causes a service restart.
+                            PostgreSQL maximum WAL senders. The default is `20`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxWorkerProcesses:
                           description: |-
-                            (Number) Sets the maximum number of background processes that the system can support.
-                            Sets the maximum number of background processes that the system can support.
+                            (Number) Sets the maximum number of background processes that the system can support. The default is 8. Changing this parameter causes a service restart.
+                            Sets the maximum number of background processes that the system can support. The default is `8`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         migration:
@@ -557,10 +604,35 @@ spec:
                                 type: string
                             type: object
                           type: array
+                        nodeCount:
+                          description: |-
+                            (Number) Number of nodes for the service.
+                            Number of nodes for the service.
+                          format: int64
+                          type: integer
+                        passwordEncryptionSecretRef:
+                          description: |-
+                            (String, Sensitive) Chooses the algorithm for encrypting passwords.
+                            Chooses the algorithm for encrypting passwords.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
                         pgPartmanBgwInterval:
                           description: |-
-                            (Number) Sets the time interval to run pg_partman's scheduled tasks.
-                            Sets the time interval to run pg_partman's scheduled tasks.
+                            (Number) Sets the time interval in seconds to run pg_partman's scheduled tasks. The default is 3600.
+                            Sets the time interval in seconds to run pg_partman's scheduled tasks. The default is `3600`.
                           format: int64
                           type: integer
                         pgPartmanBgwRole:
@@ -570,25 +642,118 @@ spec:
                           type: string
                         pgStatMonitorEnable:
                           description: |-
-                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
-                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Changing this parameter causes a service restart. When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Changing this parameter causes a service restart. When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
                           type: boolean
                         pgStatMonitorPgsmEnableQueryPlan:
                           description: |-
-                            (Boolean) Enables or disables query plan monitoring.
-                            Enables or disables query plan monitoring.
+                            (Boolean) Enables or disables query plan monitoring. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
+                            Enables or disables query plan monitoring. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
                           type: boolean
                         pgStatMonitorPgsmMaxBuckets:
                           description: |-
-                            (Number) Sets the maximum number of buckets.
-                            Sets the maximum number of buckets.
+                            (Number) Sets the maximum number of buckets. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
+                            Sets the maximum number of buckets. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
                           format: int64
                           type: integer
                         pgStatStatementsTrack:
                           description: |-
-                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
-                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default is top.
+                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default is `top`.
                           type: string
+                        pgaudit:
+                          description: |-
+                            wide settings for the pgaudit extension. (see below for nested schema)
+                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          items:
+                            properties:
+                              featureEnabled:
+                                description: |-
+                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                type: boolean
+                              log:
+                                description: |-
+                                  (List of String) Log. Specifies which classes of statements will be logged by session audit logging.
+                                  Log. Specifies which classes of statements will be logged by session audit logging.
+                                items:
+                                  type: string
+                                type: array
+                              logCatalog:
+                                description: |-
+                                  (Boolean) Log Catalog. Specifies that session logging should be enabled in the case where all relations
+                                  in a statement are in pg_catalog.
+                                  Log Catalog. Specifies that session logging should be enabled in the case where all relations
+                                  in a statement are in pg_catalog.
+                                type: boolean
+                              logClient:
+                                description: |-
+                                  (Boolean) Log Client. Specifies whether log messages will be visible to a client process such as psql.
+                                  Log Client. Specifies whether log messages will be visible to a client process such as psql.
+                                type: boolean
+                              logLevel:
+                                description: |-
+                                  (String) Log level. Specifies the log level that will be used for log entries.
+                                  Log level. Specifies the log level that will be used for log entries.
+                                type: string
+                              logMaxStringLength:
+                                description: |-
+                                  1 disable the truncation.
+                                  Log Max String Length. Crop parameters representation and whole statements if they exceed this threshold.
+                                  A (default) value of -1 disable the truncation.
+                                format: int64
+                                type: integer
+                              logNestedStatements:
+                                description: |-
+                                  (Boolean) Log Nested Statements. This GUC allows to turn off logging nested statements, that is, statements that are
+                                  executed as part of another ExecutorRun.
+                                  Log Nested Statements. This GUC allows to turn off logging nested statements, that is, statements that are
+                                  executed as part of another ExecutorRun.
+                                type: boolean
+                              logParameter:
+                                description: |-
+                                  (Boolean) Log Parameter. Specifies that audit logging should include the parameters that were passed with the statement.
+                                  Log Parameter. Specifies that audit logging should include the parameters that were passed with the statement.
+                                type: boolean
+                              logParameterMaxSize:
+                                description: |-
+                                  (Number) Log Parameter Max Size. Specifies that parameter values longer than this setting (in bytes) should not be logged,
+                                  but replaced with .
+                                  Log Parameter Max Size. Specifies that parameter values longer than this setting (in bytes) should not be logged,
+                                  but replaced with <long param suppressed>.
+                                format: int64
+                                type: integer
+                              logRelation:
+                                description: |-
+                                  (Boolean) Log Relation. Specifies whether session audit logging should create a separate log entry
+                                  for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                  Log Relation. Specifies whether session audit logging should create a separate log entry
+                                  for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                type: boolean
+                              logRows:
+                                description: |-
+                                  (Boolean) Log Rows.
+                                  Log Rows.
+                                type: boolean
+                              logStatement:
+                                description: |-
+                                  (Boolean) Log Statement. Specifies whether logging will include the statement text and parameters (if enabled).
+                                  Log Statement. Specifies whether logging will include the statement text and parameters (if enabled).
+                                type: boolean
+                              logStatementOnce:
+                                description: |-
+                                  (Boolean) Log Statement Once. Specifies whether logging will include the statement text and parameters with
+                                  the first log entry for a statement/substatement combination or with every entry.
+                                  Log Statement Once. Specifies whether logging will include the statement text and parameters with
+                                  the first log entry for a statement/substatement combination or with every entry.
+                                type: boolean
+                              role:
+                                description: |-
+                                  (String) Role. Specifies the master role to use for object audit logging.
+                                  Role. Specifies the master role to use for object audit logging.
+                                type: string
+                            type: object
+                          type: array
                         pgbouncer:
                           description: |-
                             wide settings for pgbouncer. (see below for nested schema)
@@ -664,8 +829,8 @@ spec:
                             properties:
                               maxFailoverReplicationTimeLag:
                                 description: |-
-                                  (Number) Number of seconds of master unavailability before triggering database failover to standby.
-                                  Number of seconds of master unavailability before triggering database failover to standby.
+                                  (Number) Max Failover Replication Time Lag. Number of seconds of master unavailability before triggering database failover to standby.
+                                  Max Failover Replication Time Lag. Number of seconds of master unavailability before triggering database failover to standby.
                                 format: int64
                                 type: integer
                             type: object
@@ -682,8 +847,8 @@ spec:
                           type: boolean
                         sharedBuffersPercentage:
                           description: |-
-                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
-                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value. Changing this parameter causes a service restart.
+                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value. Changing this parameter causes a service restart.
                           type: number
                         synchronousReplication:
                           description: |-
@@ -704,8 +869,8 @@ spec:
                             properties:
                               maxBackgroundWorkers:
                                 description: |-
-                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
-                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time. Changing this parameter causes a service restart.
+                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time. Changing this parameter causes a service restart.
                                 format: int64
                                 type: integer
                             type: object
@@ -717,14 +882,14 @@ spec:
                           type: string
                         trackActivityQuerySize:
                           description: |-
-                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session.
-                            Specifies the number of bytes reserved to track the currently executing command for each active session.
+                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session. Changing this parameter causes a service restart.
+                            Specifies the number of bytes reserved to track the currently executing command for each active session. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         trackCommitTimestamp:
                           description: |-
-                            (String) Record commit time of transactions.
-                            Record commit time of transactions.
+                            (String) Record commit time of transactions. Changing this parameter causes a service restart.
+                            Record commit time of transactions. Changing this parameter causes a service restart.
                           type: string
                         trackFunctions:
                           description: |-
@@ -733,8 +898,8 @@ spec:
                           type: string
                         trackIoTiming:
                           description: |-
-                            (String) Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
-                            Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            (String) Enables timing of database I/O calls. The default is off. When on, it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            Enables timing of database I/O calls. The default is `off`. When on, it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
                           type: string
                         variant:
                           description: |-
@@ -754,18 +919,23 @@ spec:
                           type: integer
                         walWriterDelay:
                           description: |-
-                            (Number) WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
-                            WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                            (Number) WAL flush interval in milliseconds. The default is 200. Setting this parameter to a lower value may negatively impact performance.
+                            WAL flush interval in milliseconds. The default is `200`. Setting this parameter to a lower value may negatively impact performance.
                           format: int64
                           type: integer
                         workMem:
                           description: |-
-                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
-                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. The default is 1MB + 0.075% of total RAM (up to 32MB).
+                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. The default is 1MB + 0.075% of total RAM (up to 32MB).
                           format: int64
                           type: integer
                       type: object
                     type: array
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
                   title:
                     description: |-
                       (String) Title of a managed database instance
@@ -790,6 +960,12 @@ spec:
                   for example because of an external controller is managing them, like an
                   autoscaler.
                 properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                      Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                    format: int64
+                    type: integer
                   labels:
                     additionalProperties:
                       type: string
@@ -925,15 +1101,15 @@ spec:
                       properties:
                         role:
                           description: |-
-                            (String)
+                            (String) Role. Specifies the master role to use for object audit logging.
                             Role of the node
                           type: string
                       type: object
                     type: array
                   plan:
                     description: |-
-                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
-                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans pg.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans pg`.
                     type: string
                   powered:
                     description: |-
@@ -977,54 +1153,54 @@ spec:
                           type: boolean
                         autovacuumAnalyzeScaleFactor:
                           description: |-
-                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
-                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE (e.g. 0.2 for 20% of the table size). The default is 0.2.
+                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE (e.g. `0.2` for 20% of the table size). The default is `0.2`.
                           type: number
                         autovacuumAnalyzeThreshold:
                           description: |-
-                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
-                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50.
+                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is `50`.
                           format: int64
                           type: integer
                         autovacuumFreezeMaxAge:
                           description: |-
-                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
-                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. The system launches autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. Changing this parameter causes a service restart.
+                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. The system launches autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         autovacuumMaxWorkers:
                           description: |-
-                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
-                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is 3. Changing this parameter causes a service restart.
+                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is `3`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         autovacuumNaptime:
                           description: |-
-                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
-                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds. The default is 60.
+                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds. The default is `60`.
                           format: int64
                           type: integer
                         autovacuumVacuumCostDelay:
                           description: |-
-                            1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
-                            Specifies the cost delay value that will be used in automatic VACUUM operations. If -1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                            1 is specified, the regular vacuum_cost_delay value will be used. The default is 2 (upstream default).
+                            Specifies the cost delay value that will be used in automatic VACUUM operations. If `-1` is specified, the regular vacuum_cost_delay value will be used. The default is `2` (upstream default).
                           format: int64
                           type: integer
                         autovacuumVacuumCostLimit:
                           description: |-
-                            1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
-                            Specifies the cost limit value that will be used in automatic VACUUM operations. If -1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                            1 is specified, the regular vacuum_cost_limit value will be used. The default is -1 (upstream default).
+                            Specifies the cost limit value that will be used in automatic VACUUM operations. If `-1` is specified, the regular vacuum_cost_limit value will be used. The default is `-1` (upstream default).
                           format: int64
                           type: integer
                         autovacuumVacuumScaleFactor:
                           description: |-
-                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
-                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM (e.g. 0.2 for 20% of the table size). The default is 0.2.
+                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM (e.g. `0.2` for 20% of the table size). The default is `0.2`.
                           type: number
                         autovacuumVacuumThreshold:
                           description: |-
-                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
-                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50.
+                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is `50`.
                           format: int64
                           type: integer
                         backupHour:
@@ -1041,42 +1217,71 @@ spec:
                           type: integer
                         bgwriterDelay:
                           description: |-
-                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
-                            Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. The default is 200.
+                            Specifies the delay between activity rounds for the background writer in milliseconds. The default is `200`.
                           format: int64
                           type: integer
                         bgwriterFlushAfter:
                           description: |-
-                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
-                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes. Setting of 0 disables forced writeback. The default is 512.
+                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes. Setting of 0 disables forced writeback. The default is `512`.
                           format: int64
                           type: integer
                         bgwriterLruMaxpages:
                           description: |-
-                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
-                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. The default is 100.
+                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. The default is `100`.
                           format: int64
                           type: integer
                         bgwriterLruMultiplier:
                           description: |-
                             (Number) The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
-                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is `2.0`.
                           type: number
                         deadlockTimeout:
                           description: |-
-                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
-                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition. The default is 1000 (upstream default).
+                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition. The default is `1000` (upstream default).
                           format: int64
                           type: integer
                         defaultToastCompression:
                           description: |-
-                            (String) Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
-                            Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                            (String) Specifies the default TOAST compression method for values of compressible columns. The default is lz4. Only available for PostgreSQL 14+.
+                            Specifies the default TOAST compression method for values of compressible columns. The default is `lz4`. Only available for PostgreSQL 14+.
                           type: string
                         idleInTransactionSessionTimeout:
                           description: |-
                             (Number) Time out sessions with open transactions after this number of milliseconds.
                             Time out sessions with open transactions after this number of milliseconds.
+                          format: int64
+                          type: integer
+                        ioCombineLimit:
+                          description: |-
+                            (Number) EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units. Version 17 and up only.
+                            EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units. Version 17 and up only.
+                          format: int64
+                          type: integer
+                        ioMaxCombineLimit:
+                          description: |-
+                            settable parameter io_combine_limit. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units, and silently limits the user-settable parameter io_combine_limit. Version 18 and up only. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
+                        ioMaxConcurrency:
+                          description: |-
+                            (Number) EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
+                        ioMethod:
+                          description: |-
+                            (String) EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                          type: string
+                        ioWorkers:
+                          description: |-
+                            (Number) io_max_concurrency. EXPERIMENTAL: Number of IO worker processes, for io_method=worker. Version 18 and up only. Changing this parameter causes a service restart.
+                            io_max_concurrency. EXPERIMENTAL: Number of IO worker processes, for io_method=worker. Version 18 and up only. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         ipFilter:
@@ -1093,8 +1298,8 @@ spec:
                           type: boolean
                         logAutovacuumMinDuration:
                           description: |-
-                            one (the default) disables logging autovacuum actions.
-                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
+                            one disables logging autovacuum actions. The default is 1000.
+                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one disables logging autovacuum actions. The default is `1000`.
                           format: int64
                           type: integer
                         logErrorVerbosity:
@@ -1119,88 +1324,100 @@ spec:
                             Log statements for each temporary file created larger than this number of kilobytes, -1 disables.
                           format: int64
                           type: integer
+                        maxConnections:
+                          description: |-
+                            release parameter. Contact your account team to confirm your eligibility. You cannot decrease this parameter value when set. For services with a read replica, first increase the read replica's value. After the change is applied to the replica, you can increase the primary service's value. Changing this parameter causes a service restart.
+                            Sets the PostgreSQL maximum number of concurrent connections to the database server. This is a limited-release parameter. Contact your account team to confirm your eligibility. You cannot decrease this parameter value when set. For services with a read replica, first increase the read replica's value. After the change is applied to the replica, you can increase the primary service's value. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
                         maxFilesPerProcess:
                           description: |-
-                            (Number) PostgreSQL maximum number of files that can be open per process.
-                            PostgreSQL maximum number of files that can be open per process.
+                            (Number) PostgreSQL maximum number of files that can be open per process. The default is 1000 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum number of files that can be open per process. The default is `1000` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxLocksPerTransaction:
                           description: |-
-                            (Number) PostgreSQL maximum locks per transaction.
-                            PostgreSQL maximum locks per transaction.
+                            (Number) PostgreSQL maximum locks per transaction. Changing this parameter causes a service restart.
+                            PostgreSQL maximum locks per transaction. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxLogicalReplicationWorkers:
                           description: |-
-                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
-                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers). The default is 4 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers). The default is `4` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxParallelWorkers:
                           description: |-
-                            (Number) Sets the maximum number of workers that the system can support for parallel queries.
-                            Sets the maximum number of workers that the system can support for parallel queries.
+                            (Number) Sets the maximum number of workers that the system can support for parallel queries. The default is 8 (upstream default).
+                            Sets the maximum number of workers that the system can support for parallel queries. The default is `8` (upstream default).
                           format: int64
                           type: integer
                         maxParallelWorkersPerGather:
                           description: |-
-                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
-                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node. The default is 2 (upstream default).
+                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node. The default is `2` (upstream default).
                           format: int64
                           type: integer
                         maxPredLocksPerTransaction:
                           description: |-
-                            (Number) PostgreSQL maximum predicate locks per transaction.
-                            PostgreSQL maximum predicate locks per transaction.
+                            (Number) PostgreSQL maximum predicate locks per transaction. The default is 64 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum predicate locks per transaction. The default is `64` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxPreparedTransactions:
                           description: |-
-                            (Number) PostgreSQL maximum prepared transactions.
-                            PostgreSQL maximum prepared transactions.
+                            (Number) PostgreSQL maximum prepared transactions. The default is 0. Changing this parameter causes a service restart.
+                            PostgreSQL maximum prepared transactions. The default is `0`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxReplicationSlots:
                           description: |-
-                            (Number) PostgreSQL maximum replication slots.
-                            PostgreSQL maximum replication slots.
+                            (Number) PostgreSQL maximum replication slots. The default is 20. Changing this parameter causes a service restart.
+                            PostgreSQL maximum replication slots. The default is `20`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxSlotWalKeepSize:
                           description: |-
-                            1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
-                            PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is -1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                            1 is specified, replication slots may retain an unlimited amount of WAL files. The default is -1 (upstream default). wal_keep_size minimum WAL size setting takes precedence over this.
+                            PostgreSQL maximum WAL size (MB) reserved for replication slots. If `-1` is specified, replication slots may retain an unlimited amount of WAL files. The default is `-1` (upstream default). wal_keep_size minimum WAL size setting takes precedence over this.
                           format: int64
                           type: integer
                         maxStackDepth:
                           description: |-
-                            (Number) Maximum depth of the stack in bytes.
-                            Maximum depth of the stack in bytes.
+                            (Number) Maximum depth of the stack in bytes. The default is 2097152 (upstream default).
+                            Maximum depth of the stack in bytes. The default is `2097152` (upstream default).
                           format: int64
                           type: integer
                         maxStandbyArchiveDelay:
                           description: |-
-                            (Number) Max standby archive delay in milliseconds.
-                            Max standby archive delay in milliseconds.
+                            (Number) Max standby archive delay in milliseconds. The default is 30000 (upstream default).
+                            Max standby archive delay in milliseconds. The default is `30000` (upstream default).
                           format: int64
                           type: integer
                         maxStandbyStreamingDelay:
                           description: |-
-                            (Number) Max standby streaming delay in milliseconds.
-                            Max standby streaming delay in milliseconds.
+                            (Number) Max standby streaming delay in milliseconds. The default is 30000 (upstream default).
+                            Max standby streaming delay in milliseconds. The default is `30000` (upstream default).
+                          format: int64
+                          type: integer
+                        maxSyncWorkersPerSubscription:
+                          description: |-
+                            (Number) Maximum number of synchronization workers per subscription. The default is 2.
+                            Maximum number of synchronization workers per subscription. The default is `2`.
                           format: int64
                           type: integer
                         maxWalSenders:
                           description: |-
-                            (Number) PostgreSQL maximum WAL senders.
-                            PostgreSQL maximum WAL senders.
+                            (Number) PostgreSQL maximum WAL senders. The default is 20. Changing this parameter causes a service restart.
+                            PostgreSQL maximum WAL senders. The default is `20`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxWorkerProcesses:
                           description: |-
-                            (Number) Sets the maximum number of background processes that the system can support.
-                            Sets the maximum number of background processes that the system can support.
+                            (Number) Sets the maximum number of background processes that the system can support. The default is 8. Changing this parameter causes a service restart.
+                            Sets the maximum number of background processes that the system can support. The default is `8`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         migration:
@@ -1271,10 +1488,35 @@ spec:
                                 type: string
                             type: object
                           type: array
+                        nodeCount:
+                          description: |-
+                            (Number) Number of nodes for the service.
+                            Number of nodes for the service.
+                          format: int64
+                          type: integer
+                        passwordEncryptionSecretRef:
+                          description: |-
+                            (String, Sensitive) Chooses the algorithm for encrypting passwords.
+                            Chooses the algorithm for encrypting passwords.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
                         pgPartmanBgwInterval:
                           description: |-
-                            (Number) Sets the time interval to run pg_partman's scheduled tasks.
-                            Sets the time interval to run pg_partman's scheduled tasks.
+                            (Number) Sets the time interval in seconds to run pg_partman's scheduled tasks. The default is 3600.
+                            Sets the time interval in seconds to run pg_partman's scheduled tasks. The default is `3600`.
                           format: int64
                           type: integer
                         pgPartmanBgwRole:
@@ -1284,25 +1526,118 @@ spec:
                           type: string
                         pgStatMonitorEnable:
                           description: |-
-                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
-                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Changing this parameter causes a service restart. When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Changing this parameter causes a service restart. When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
                           type: boolean
                         pgStatMonitorPgsmEnableQueryPlan:
                           description: |-
-                            (Boolean) Enables or disables query plan monitoring.
-                            Enables or disables query plan monitoring.
+                            (Boolean) Enables or disables query plan monitoring. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
+                            Enables or disables query plan monitoring. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
                           type: boolean
                         pgStatMonitorPgsmMaxBuckets:
                           description: |-
-                            (Number) Sets the maximum number of buckets.
-                            Sets the maximum number of buckets.
+                            (Number) Sets the maximum number of buckets. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
+                            Sets the maximum number of buckets. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
                           format: int64
                           type: integer
                         pgStatStatementsTrack:
                           description: |-
-                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
-                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default is top.
+                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default is `top`.
                           type: string
+                        pgaudit:
+                          description: |-
+                            wide settings for the pgaudit extension. (see below for nested schema)
+                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          items:
+                            properties:
+                              featureEnabled:
+                                description: |-
+                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                type: boolean
+                              log:
+                                description: |-
+                                  (List of String) Log. Specifies which classes of statements will be logged by session audit logging.
+                                  Log. Specifies which classes of statements will be logged by session audit logging.
+                                items:
+                                  type: string
+                                type: array
+                              logCatalog:
+                                description: |-
+                                  (Boolean) Log Catalog. Specifies that session logging should be enabled in the case where all relations
+                                  in a statement are in pg_catalog.
+                                  Log Catalog. Specifies that session logging should be enabled in the case where all relations
+                                  in a statement are in pg_catalog.
+                                type: boolean
+                              logClient:
+                                description: |-
+                                  (Boolean) Log Client. Specifies whether log messages will be visible to a client process such as psql.
+                                  Log Client. Specifies whether log messages will be visible to a client process such as psql.
+                                type: boolean
+                              logLevel:
+                                description: |-
+                                  (String) Log level. Specifies the log level that will be used for log entries.
+                                  Log level. Specifies the log level that will be used for log entries.
+                                type: string
+                              logMaxStringLength:
+                                description: |-
+                                  1 disable the truncation.
+                                  Log Max String Length. Crop parameters representation and whole statements if they exceed this threshold.
+                                  A (default) value of -1 disable the truncation.
+                                format: int64
+                                type: integer
+                              logNestedStatements:
+                                description: |-
+                                  (Boolean) Log Nested Statements. This GUC allows to turn off logging nested statements, that is, statements that are
+                                  executed as part of another ExecutorRun.
+                                  Log Nested Statements. This GUC allows to turn off logging nested statements, that is, statements that are
+                                  executed as part of another ExecutorRun.
+                                type: boolean
+                              logParameter:
+                                description: |-
+                                  (Boolean) Log Parameter. Specifies that audit logging should include the parameters that were passed with the statement.
+                                  Log Parameter. Specifies that audit logging should include the parameters that were passed with the statement.
+                                type: boolean
+                              logParameterMaxSize:
+                                description: |-
+                                  (Number) Log Parameter Max Size. Specifies that parameter values longer than this setting (in bytes) should not be logged,
+                                  but replaced with .
+                                  Log Parameter Max Size. Specifies that parameter values longer than this setting (in bytes) should not be logged,
+                                  but replaced with <long param suppressed>.
+                                format: int64
+                                type: integer
+                              logRelation:
+                                description: |-
+                                  (Boolean) Log Relation. Specifies whether session audit logging should create a separate log entry
+                                  for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                  Log Relation. Specifies whether session audit logging should create a separate log entry
+                                  for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                type: boolean
+                              logRows:
+                                description: |-
+                                  (Boolean) Log Rows.
+                                  Log Rows.
+                                type: boolean
+                              logStatement:
+                                description: |-
+                                  (Boolean) Log Statement. Specifies whether logging will include the statement text and parameters (if enabled).
+                                  Log Statement. Specifies whether logging will include the statement text and parameters (if enabled).
+                                type: boolean
+                              logStatementOnce:
+                                description: |-
+                                  (Boolean) Log Statement Once. Specifies whether logging will include the statement text and parameters with
+                                  the first log entry for a statement/substatement combination or with every entry.
+                                  Log Statement Once. Specifies whether logging will include the statement text and parameters with
+                                  the first log entry for a statement/substatement combination or with every entry.
+                                type: boolean
+                              role:
+                                description: |-
+                                  (String) Role. Specifies the master role to use for object audit logging.
+                                  Role. Specifies the master role to use for object audit logging.
+                                type: string
+                            type: object
+                          type: array
                         pgbouncer:
                           description: |-
                             wide settings for pgbouncer. (see below for nested schema)
@@ -1378,8 +1713,8 @@ spec:
                             properties:
                               maxFailoverReplicationTimeLag:
                                 description: |-
-                                  (Number) Number of seconds of master unavailability before triggering database failover to standby.
-                                  Number of seconds of master unavailability before triggering database failover to standby.
+                                  (Number) Max Failover Replication Time Lag. Number of seconds of master unavailability before triggering database failover to standby.
+                                  Max Failover Replication Time Lag. Number of seconds of master unavailability before triggering database failover to standby.
                                 format: int64
                                 type: integer
                             type: object
@@ -1396,8 +1731,8 @@ spec:
                           type: boolean
                         sharedBuffersPercentage:
                           description: |-
-                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
-                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value. Changing this parameter causes a service restart.
+                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value. Changing this parameter causes a service restart.
                           type: number
                         synchronousReplication:
                           description: |-
@@ -1418,8 +1753,8 @@ spec:
                             properties:
                               maxBackgroundWorkers:
                                 description: |-
-                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
-                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time. Changing this parameter causes a service restart.
+                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time. Changing this parameter causes a service restart.
                                 format: int64
                                 type: integer
                             type: object
@@ -1431,14 +1766,14 @@ spec:
                           type: string
                         trackActivityQuerySize:
                           description: |-
-                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session.
-                            Specifies the number of bytes reserved to track the currently executing command for each active session.
+                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session. Changing this parameter causes a service restart.
+                            Specifies the number of bytes reserved to track the currently executing command for each active session. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         trackCommitTimestamp:
                           description: |-
-                            (String) Record commit time of transactions.
-                            Record commit time of transactions.
+                            (String) Record commit time of transactions. Changing this parameter causes a service restart.
+                            Record commit time of transactions. Changing this parameter causes a service restart.
                           type: string
                         trackFunctions:
                           description: |-
@@ -1447,8 +1782,8 @@ spec:
                           type: string
                         trackIoTiming:
                           description: |-
-                            (String) Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
-                            Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            (String) Enables timing of database I/O calls. The default is off. When on, it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            Enables timing of database I/O calls. The default is `off`. When on, it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
                           type: string
                         variant:
                           description: |-
@@ -1468,18 +1803,23 @@ spec:
                           type: integer
                         walWriterDelay:
                           description: |-
-                            (Number) WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
-                            WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                            (Number) WAL flush interval in milliseconds. The default is 200. Setting this parameter to a lower value may negatively impact performance.
+                            WAL flush interval in milliseconds. The default is `200`. Setting this parameter to a lower value may negatively impact performance.
                           format: int64
                           type: integer
                         workMem:
                           description: |-
-                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
-                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. The default is 1MB + 0.075% of total RAM (up to 32MB).
+                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. The default is 1MB + 0.075% of total RAM (up to 32MB).
                           format: int64
                           type: integer
                       type: object
                     type: array
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
                   title:
                     description: |-
                       (String) Title of a managed database instance
@@ -1557,93 +1897,12 @@ spec:
                 required:
                 - name
                 type: object
-              publishConnectionDetailsTo:
-                description: |-
-                  PublishConnectionDetailsTo specifies the connection secret config which
-                  contains a name, metadata and a reference to secret store config to
-                  which any connection details for this managed resource should be written.
-                  Connection details frequently include the endpoint, username,
-                  and password required to connect to the managed resource.
-                properties:
-                  configRef:
-                    default:
-                      name: default
-                    description: |-
-                      SecretStoreConfigRef specifies which secret store config should be used
-                      for this ConnectionSecret.
-                    properties:
-                      name:
-                        description: Name of the referenced object.
-                        type: string
-                      policy:
-                        description: Policies for referencing.
-                        properties:
-                          resolution:
-                            default: Required
-                            description: |-
-                              Resolution specifies whether resolution of this reference is required.
-                              The default is 'Required', which means the reconcile will fail if the
-                              reference cannot be resolved. 'Optional' means this reference will be
-                              a no-op if it cannot be resolved.
-                            enum:
-                            - Required
-                            - Optional
-                            type: string
-                          resolve:
-                            description: |-
-                              Resolve specifies when this reference should be resolved. The default
-                              is 'IfNotPresent', which will attempt to resolve the reference only when
-                              the corresponding field is not present. Use 'Always' to resolve the
-                              reference on every reconcile.
-                            enum:
-                            - Always
-                            - IfNotPresent
-                            type: string
-                        type: object
-                    required:
-                    - name
-                    type: object
-                  metadata:
-                    description: Metadata is the metadata for connection secret.
-                    properties:
-                      annotations:
-                        additionalProperties:
-                          type: string
-                        description: |-
-                          Annotations are the annotations to be added to connection secret.
-                          - For Kubernetes secrets, this will be used as "metadata.annotations".
-                          - It is up to Secret Store implementation for others store types.
-                        type: object
-                      labels:
-                        additionalProperties:
-                          type: string
-                        description: |-
-                          Labels are the labels/tags to be added to connection secret.
-                          - For Kubernetes secrets, this will be used as "metadata.labels".
-                          - It is up to Secret Store implementation for others store types.
-                        type: object
-                      type:
-                        description: |-
-                          Type is the SecretType for the connection secret.
-                          - Only valid for Kubernetes Secret Stores.
-                        type: string
-                    type: object
-                  name:
-                    description: Name is the name of the connection secret.
-                    type: string
-                required:
-                - name
-                type: object
               writeConnectionSecretToRef:
                 description: |-
                   WriteConnectionSecretToReference specifies the namespace and name of a
                   Secret to which any connection details for this managed resource should
                   be written. Connection details frequently include the endpoint, username,
                   and password required to connect to the managed resource.
-                  This field is planned to be replaced in a future release in favor of
-                  PublishConnectionDetailsTo. Currently, both could be set independently
-                  and connection details would be published to both without affecting
-                  each other.
                 properties:
                   name:
                     description: Name of the secret.
@@ -1681,6 +1940,12 @@ spec:
             properties:
               atProvider:
                 properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                      Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                    format: int64
+                    type: integer
                   components:
                     description: |-
                       (List of Object) Service component information (see below for nested schema)
@@ -1782,7 +2047,7 @@ spec:
                           type: string
                         role:
                           description: |-
-                            (String)
+                            (String) Role. Specifies the master role to use for object audit logging.
                             Role of the node
                           type: string
                         state:
@@ -1794,8 +2059,8 @@ spec:
                     type: array
                   plan:
                     description: |-
-                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans <type>.
-                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans <type>`.
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans pg.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans pg`.
                     type: string
                   powered:
                     description: |-
@@ -1825,54 +2090,54 @@ spec:
                           type: boolean
                         autovacuumAnalyzeScaleFactor:
                           description: |-
-                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
-                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size).
+                            (Number) Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE (e.g. 0.2 for 20% of the table size). The default is 0.2.
+                            Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE (e.g. `0.2` for 20% of the table size). The default is `0.2`.
                           type: number
                         autovacuumAnalyzeThreshold:
                           description: |-
-                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
-                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50 tuples.
+                            (Number) Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is 50.
+                            Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is `50`.
                           format: int64
                           type: integer
                         autovacuumFreezeMaxAge:
                           description: |-
-                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
-                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
+                            (Number) Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. The system launches autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. Changing this parameter causes a service restart.
+                            Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. The system launches autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         autovacuumMaxWorkers:
                           description: |-
-                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
-                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is three. This parameter can only be set at server start.
+                            (Number) Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is 3. Changing this parameter causes a service restart.
+                            Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is `3`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         autovacuumNaptime:
                           description: |-
-                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
-                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is one minute.
+                            (Number) Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds. The default is 60.
+                            Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds. The default is `60`.
                           format: int64
                           type: integer
                         autovacuumVacuumCostDelay:
                           description: |-
-                            1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
-                            Specifies the cost delay value that will be used in automatic VACUUM operations. If -1 is specified, the regular vacuum_cost_delay value will be used. The default value is 20 milliseconds.
+                            1 is specified, the regular vacuum_cost_delay value will be used. The default is 2 (upstream default).
+                            Specifies the cost delay value that will be used in automatic VACUUM operations. If `-1` is specified, the regular vacuum_cost_delay value will be used. The default is `2` (upstream default).
                           format: int64
                           type: integer
                         autovacuumVacuumCostLimit:
                           description: |-
-                            1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
-                            Specifies the cost limit value that will be used in automatic VACUUM operations. If -1 is specified (which is the default), the regular vacuum_cost_limit value will be used.
+                            1 is specified, the regular vacuum_cost_limit value will be used. The default is -1 (upstream default).
+                            Specifies the cost limit value that will be used in automatic VACUUM operations. If `-1` is specified, the regular vacuum_cost_limit value will be used. The default is `-1` (upstream default).
                           format: int64
                           type: integer
                         autovacuumVacuumScaleFactor:
                           description: |-
-                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
-                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size).
+                            (Number) Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM (e.g. 0.2 for 20% of the table size). The default is 0.2.
+                            Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM (e.g. `0.2` for 20% of the table size). The default is `0.2`.
                           type: number
                         autovacuumVacuumThreshold:
                           description: |-
-                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
-                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples.
+                            (Number) Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50.
+                            Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is `50`.
                           format: int64
                           type: integer
                         backupHour:
@@ -1889,42 +2154,71 @@ spec:
                           type: integer
                         bgwriterDelay:
                           description: |-
-                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
-                            Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
+                            (Number) Specifies the delay between activity rounds for the background writer in milliseconds. The default is 200.
+                            Specifies the delay between activity rounds for the background writer in milliseconds. The default is `200`.
                           format: int64
                           type: integer
                         bgwriterFlushAfter:
                           description: |-
-                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
-                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
+                            (Number) Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes. Setting of 0 disables forced writeback. The default is 512.
+                            Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes. Setting of 0 disables forced writeback. The default is `512`.
                           format: int64
                           type: integer
                         bgwriterLruMaxpages:
                           description: |-
-                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
-                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
+                            (Number) In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. The default is 100.
+                            In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. The default is `100`.
                           format: int64
                           type: integer
                         bgwriterLruMultiplier:
                           description: |-
                             (Number) The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
-                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
+                            The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is `2.0`.
                           type: number
                         deadlockTimeout:
                           description: |-
-                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
-                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
+                            (Number) This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition. The default is 1000 (upstream default).
+                            This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition. The default is `1000` (upstream default).
                           format: int64
                           type: integer
                         defaultToastCompression:
                           description: |-
-                            (String) Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
-                            Specifies the default TOAST compression method for values of compressible columns (the default is lz4).
+                            (String) Specifies the default TOAST compression method for values of compressible columns. The default is lz4. Only available for PostgreSQL 14+.
+                            Specifies the default TOAST compression method for values of compressible columns. The default is `lz4`. Only available for PostgreSQL 14+.
                           type: string
                         idleInTransactionSessionTimeout:
                           description: |-
                             (Number) Time out sessions with open transactions after this number of milliseconds.
                             Time out sessions with open transactions after this number of milliseconds.
+                          format: int64
+                          type: integer
+                        ioCombineLimit:
+                          description: |-
+                            (Number) EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units. Version 17 and up only.
+                            EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units. Version 17 and up only.
+                          format: int64
+                          type: integer
+                        ioMaxCombineLimit:
+                          description: |-
+                            settable parameter io_combine_limit. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the largest I/O size in operations that combine I/O in 8kB units, and silently limits the user-settable parameter io_combine_limit. Version 18 and up only. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
+                        ioMaxConcurrency:
+                          description: |-
+                            (Number) EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
+                        ioMethod:
+                          description: |-
+                            (String) EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                            EXPERIMENTAL: Controls the maximum number of I/O operations that one process can execute simultaneously. Version 18 and up only. Changing this parameter causes a service restart.
+                          type: string
+                        ioWorkers:
+                          description: |-
+                            (Number) io_max_concurrency. EXPERIMENTAL: Number of IO worker processes, for io_method=worker. Version 18 and up only. Changing this parameter causes a service restart.
+                            io_max_concurrency. EXPERIMENTAL: Number of IO worker processes, for io_method=worker. Version 18 and up only. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         ipFilter:
@@ -1941,8 +2235,8 @@ spec:
                           type: boolean
                         logAutovacuumMinDuration:
                           description: |-
-                            one (the default) disables logging autovacuum actions.
-                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
+                            one disables logging autovacuum actions. The default is 1000.
+                            Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one disables logging autovacuum actions. The default is `1000`.
                           format: int64
                           type: integer
                         logErrorVerbosity:
@@ -1967,88 +2261,100 @@ spec:
                             Log statements for each temporary file created larger than this number of kilobytes, -1 disables.
                           format: int64
                           type: integer
+                        maxConnections:
+                          description: |-
+                            release parameter. Contact your account team to confirm your eligibility. You cannot decrease this parameter value when set. For services with a read replica, first increase the read replica's value. After the change is applied to the replica, you can increase the primary service's value. Changing this parameter causes a service restart.
+                            Sets the PostgreSQL maximum number of concurrent connections to the database server. This is a limited-release parameter. Contact your account team to confirm your eligibility. You cannot decrease this parameter value when set. For services with a read replica, first increase the read replica's value. After the change is applied to the replica, you can increase the primary service's value. Changing this parameter causes a service restart.
+                          format: int64
+                          type: integer
                         maxFilesPerProcess:
                           description: |-
-                            (Number) PostgreSQL maximum number of files that can be open per process.
-                            PostgreSQL maximum number of files that can be open per process.
+                            (Number) PostgreSQL maximum number of files that can be open per process. The default is 1000 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum number of files that can be open per process. The default is `1000` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxLocksPerTransaction:
                           description: |-
-                            (Number) PostgreSQL maximum locks per transaction.
-                            PostgreSQL maximum locks per transaction.
+                            (Number) PostgreSQL maximum locks per transaction. Changing this parameter causes a service restart.
+                            PostgreSQL maximum locks per transaction. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxLogicalReplicationWorkers:
                           description: |-
-                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
-                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers).
+                            (Number) PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers). The default is 4 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum logical replication workers (taken from the pool of max_parallel_workers). The default is `4` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxParallelWorkers:
                           description: |-
-                            (Number) Sets the maximum number of workers that the system can support for parallel queries.
-                            Sets the maximum number of workers that the system can support for parallel queries.
+                            (Number) Sets the maximum number of workers that the system can support for parallel queries. The default is 8 (upstream default).
+                            Sets the maximum number of workers that the system can support for parallel queries. The default is `8` (upstream default).
                           format: int64
                           type: integer
                         maxParallelWorkersPerGather:
                           description: |-
-                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
-                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.
+                            (Number) Sets the maximum number of workers that can be started by a single Gather or Gather Merge node. The default is 2 (upstream default).
+                            Sets the maximum number of workers that can be started by a single Gather or Gather Merge node. The default is `2` (upstream default).
                           format: int64
                           type: integer
                         maxPredLocksPerTransaction:
                           description: |-
-                            (Number) PostgreSQL maximum predicate locks per transaction.
-                            PostgreSQL maximum predicate locks per transaction.
+                            (Number) PostgreSQL maximum predicate locks per transaction. The default is 64 (upstream default). Changing this parameter causes a service restart.
+                            PostgreSQL maximum predicate locks per transaction. The default is `64` (upstream default). Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxPreparedTransactions:
                           description: |-
-                            (Number) PostgreSQL maximum prepared transactions.
-                            PostgreSQL maximum prepared transactions.
+                            (Number) PostgreSQL maximum prepared transactions. The default is 0. Changing this parameter causes a service restart.
+                            PostgreSQL maximum prepared transactions. The default is `0`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxReplicationSlots:
                           description: |-
-                            (Number) PostgreSQL maximum replication slots.
-                            PostgreSQL maximum replication slots.
+                            (Number) PostgreSQL maximum replication slots. The default is 20. Changing this parameter causes a service restart.
+                            PostgreSQL maximum replication slots. The default is `20`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxSlotWalKeepSize:
                           description: |-
-                            1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
-                            PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is -1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
+                            1 is specified, replication slots may retain an unlimited amount of WAL files. The default is -1 (upstream default). wal_keep_size minimum WAL size setting takes precedence over this.
+                            PostgreSQL maximum WAL size (MB) reserved for replication slots. If `-1` is specified, replication slots may retain an unlimited amount of WAL files. The default is `-1` (upstream default). wal_keep_size minimum WAL size setting takes precedence over this.
                           format: int64
                           type: integer
                         maxStackDepth:
                           description: |-
-                            (Number) Maximum depth of the stack in bytes.
-                            Maximum depth of the stack in bytes.
+                            (Number) Maximum depth of the stack in bytes. The default is 2097152 (upstream default).
+                            Maximum depth of the stack in bytes. The default is `2097152` (upstream default).
                           format: int64
                           type: integer
                         maxStandbyArchiveDelay:
                           description: |-
-                            (Number) Max standby archive delay in milliseconds.
-                            Max standby archive delay in milliseconds.
+                            (Number) Max standby archive delay in milliseconds. The default is 30000 (upstream default).
+                            Max standby archive delay in milliseconds. The default is `30000` (upstream default).
                           format: int64
                           type: integer
                         maxStandbyStreamingDelay:
                           description: |-
-                            (Number) Max standby streaming delay in milliseconds.
-                            Max standby streaming delay in milliseconds.
+                            (Number) Max standby streaming delay in milliseconds. The default is 30000 (upstream default).
+                            Max standby streaming delay in milliseconds. The default is `30000` (upstream default).
+                          format: int64
+                          type: integer
+                        maxSyncWorkersPerSubscription:
+                          description: |-
+                            (Number) Maximum number of synchronization workers per subscription. The default is 2.
+                            Maximum number of synchronization workers per subscription. The default is `2`.
                           format: int64
                           type: integer
                         maxWalSenders:
                           description: |-
-                            (Number) PostgreSQL maximum WAL senders.
-                            PostgreSQL maximum WAL senders.
+                            (Number) PostgreSQL maximum WAL senders. The default is 20. Changing this parameter causes a service restart.
+                            PostgreSQL maximum WAL senders. The default is `20`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         maxWorkerProcesses:
                           description: |-
-                            (Number) Sets the maximum number of background processes that the system can support.
-                            Sets the maximum number of background processes that the system can support.
+                            (Number) Sets the maximum number of background processes that the system can support. The default is 8. Changing this parameter causes a service restart.
+                            Sets the maximum number of background processes that the system can support. The default is `8`. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         migration:
@@ -2100,10 +2406,16 @@ spec:
                                 type: string
                             type: object
                           type: array
+                        nodeCount:
+                          description: |-
+                            (Number) Number of nodes for the service.
+                            Number of nodes for the service.
+                          format: int64
+                          type: integer
                         pgPartmanBgwInterval:
                           description: |-
-                            (Number) Sets the time interval to run pg_partman's scheduled tasks.
-                            Sets the time interval to run pg_partman's scheduled tasks.
+                            (Number) Sets the time interval in seconds to run pg_partman's scheduled tasks. The default is 3600.
+                            Sets the time interval in seconds to run pg_partman's scheduled tasks. The default is `3600`.
                           format: int64
                           type: integer
                         pgPartmanBgwRole:
@@ -2113,25 +2425,118 @@ spec:
                           type: string
                         pgStatMonitorEnable:
                           description: |-
-                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
-                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Enabling this extension will cause the cluster to be restarted.When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            (Boolean) Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Changing this parameter causes a service restart. When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
+                            Enable pg_stat_monitor extension if available for the current cluster. Enable the pg_stat_monitor extension. Changing this parameter causes a service restart. When this extension is enabled, pg_stat_statements results for utility commands are unreliable.
                           type: boolean
                         pgStatMonitorPgsmEnableQueryPlan:
                           description: |-
-                            (Boolean) Enables or disables query plan monitoring.
-                            Enables or disables query plan monitoring.
+                            (Boolean) Enables or disables query plan monitoring. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
+                            Enables or disables query plan monitoring. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
                           type: boolean
                         pgStatMonitorPgsmMaxBuckets:
                           description: |-
-                            (Number) Sets the maximum number of buckets.
-                            Sets the maximum number of buckets.
+                            (Number) Sets the maximum number of buckets. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
+                            Sets the maximum number of buckets. Changing this parameter causes a service restart. Only available for PostgreSQL 13+.
                           format: int64
                           type: integer
                         pgStatStatementsTrack:
                           description: |-
-                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
-                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default value is top.
+                            level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default is top.
+                            Controls which statements are counted. Specify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), or none to disable statement statistics collection. The default is `top`.
                           type: string
+                        pgaudit:
+                          description: |-
+                            wide settings for the pgaudit extension. (see below for nested schema)
+                            PGAudit settings. System-wide settings for the pgaudit extension.
+                          items:
+                            properties:
+                              featureEnabled:
+                                description: |-
+                                  (Boolean) Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                  Enable pgaudit extension. Enable pgaudit extension. When enabled, pgaudit extension will be automatically installed.Otherwise, extension will be uninstalled but auditing configurations will be preserved.
+                                type: boolean
+                              log:
+                                description: |-
+                                  (List of String) Log. Specifies which classes of statements will be logged by session audit logging.
+                                  Log. Specifies which classes of statements will be logged by session audit logging.
+                                items:
+                                  type: string
+                                type: array
+                              logCatalog:
+                                description: |-
+                                  (Boolean) Log Catalog. Specifies that session logging should be enabled in the case where all relations
+                                  in a statement are in pg_catalog.
+                                  Log Catalog. Specifies that session logging should be enabled in the case where all relations
+                                  in a statement are in pg_catalog.
+                                type: boolean
+                              logClient:
+                                description: |-
+                                  (Boolean) Log Client. Specifies whether log messages will be visible to a client process such as psql.
+                                  Log Client. Specifies whether log messages will be visible to a client process such as psql.
+                                type: boolean
+                              logLevel:
+                                description: |-
+                                  (String) Log level. Specifies the log level that will be used for log entries.
+                                  Log level. Specifies the log level that will be used for log entries.
+                                type: string
+                              logMaxStringLength:
+                                description: |-
+                                  1 disable the truncation.
+                                  Log Max String Length. Crop parameters representation and whole statements if they exceed this threshold.
+                                  A (default) value of -1 disable the truncation.
+                                format: int64
+                                type: integer
+                              logNestedStatements:
+                                description: |-
+                                  (Boolean) Log Nested Statements. This GUC allows to turn off logging nested statements, that is, statements that are
+                                  executed as part of another ExecutorRun.
+                                  Log Nested Statements. This GUC allows to turn off logging nested statements, that is, statements that are
+                                  executed as part of another ExecutorRun.
+                                type: boolean
+                              logParameter:
+                                description: |-
+                                  (Boolean) Log Parameter. Specifies that audit logging should include the parameters that were passed with the statement.
+                                  Log Parameter. Specifies that audit logging should include the parameters that were passed with the statement.
+                                type: boolean
+                              logParameterMaxSize:
+                                description: |-
+                                  (Number) Log Parameter Max Size. Specifies that parameter values longer than this setting (in bytes) should not be logged,
+                                  but replaced with .
+                                  Log Parameter Max Size. Specifies that parameter values longer than this setting (in bytes) should not be logged,
+                                  but replaced with <long param suppressed>.
+                                format: int64
+                                type: integer
+                              logRelation:
+                                description: |-
+                                  (Boolean) Log Relation. Specifies whether session audit logging should create a separate log entry
+                                  for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                  Log Relation. Specifies whether session audit logging should create a separate log entry
+                                  for each relation (TABLE, VIEW, etc.) referenced in a SELECT or DML statement.
+                                type: boolean
+                              logRows:
+                                description: |-
+                                  (Boolean) Log Rows.
+                                  Log Rows.
+                                type: boolean
+                              logStatement:
+                                description: |-
+                                  (Boolean) Log Statement. Specifies whether logging will include the statement text and parameters (if enabled).
+                                  Log Statement. Specifies whether logging will include the statement text and parameters (if enabled).
+                                type: boolean
+                              logStatementOnce:
+                                description: |-
+                                  (Boolean) Log Statement Once. Specifies whether logging will include the statement text and parameters with
+                                  the first log entry for a statement/substatement combination or with every entry.
+                                  Log Statement Once. Specifies whether logging will include the statement text and parameters with
+                                  the first log entry for a statement/substatement combination or with every entry.
+                                type: boolean
+                              role:
+                                description: |-
+                                  (String) Role. Specifies the master role to use for object audit logging.
+                                  Role. Specifies the master role to use for object audit logging.
+                                type: string
+                            type: object
+                          type: array
                         pgbouncer:
                           description: |-
                             wide settings for pgbouncer. (see below for nested schema)
@@ -2207,8 +2612,8 @@ spec:
                             properties:
                               maxFailoverReplicationTimeLag:
                                 description: |-
-                                  (Number) Number of seconds of master unavailability before triggering database failover to standby.
-                                  Number of seconds of master unavailability before triggering database failover to standby.
+                                  (Number) Max Failover Replication Time Lag. Number of seconds of master unavailability before triggering database failover to standby.
+                                  Max Failover Replication Time Lag. Number of seconds of master unavailability before triggering database failover to standby.
                                 format: int64
                                 type: integer
                             type: object
@@ -2225,8 +2630,8 @@ spec:
                           type: boolean
                         sharedBuffersPercentage:
                           description: |-
-                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
-                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value.
+                            60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value. Changing this parameter causes a service restart.
+                            Percentage of total RAM that the database server uses for shared memory buffers. Valid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the shared_buffers configuration value. Changing this parameter causes a service restart.
                           type: number
                         synchronousReplication:
                           description: |-
@@ -2247,8 +2652,8 @@ spec:
                             properties:
                               maxBackgroundWorkers:
                                 description: |-
-                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
-                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.
+                                  (Number) The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time. Changing this parameter causes a service restart.
+                                  The number of background workers for timescaledb operations. You should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time. Changing this parameter causes a service restart.
                                 format: int64
                                 type: integer
                             type: object
@@ -2260,14 +2665,14 @@ spec:
                           type: string
                         trackActivityQuerySize:
                           description: |-
-                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session.
-                            Specifies the number of bytes reserved to track the currently executing command for each active session.
+                            (Number) Specifies the number of bytes reserved to track the currently executing command for each active session. Changing this parameter causes a service restart.
+                            Specifies the number of bytes reserved to track the currently executing command for each active session. Changing this parameter causes a service restart.
                           format: int64
                           type: integer
                         trackCommitTimestamp:
                           description: |-
-                            (String) Record commit time of transactions.
-                            Record commit time of transactions.
+                            (String) Record commit time of transactions. Changing this parameter causes a service restart.
+                            Record commit time of transactions. Changing this parameter causes a service restart.
                           type: string
                         trackFunctions:
                           description: |-
@@ -2276,8 +2681,8 @@ spec:
                           type: string
                         trackIoTiming:
                           description: |-
-                            (String) Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
-                            Enables timing of database I/O calls. This parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            (String) Enables timing of database I/O calls. The default is off. When on, it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
+                            Enables timing of database I/O calls. The default is `off`. When on, it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.
                           type: string
                         variant:
                           description: |-
@@ -2297,14 +2702,14 @@ spec:
                           type: integer
                         walWriterDelay:
                           description: |-
-                            (Number) WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
-                            WAL flush interval in milliseconds. Note that setting this value to lower than the default 200ms may negatively impact performance.
+                            (Number) WAL flush interval in milliseconds. The default is 200. Setting this parameter to a lower value may negatively impact performance.
+                            WAL flush interval in milliseconds. The default is `200`. Setting this parameter to a lower value may negatively impact performance.
                           format: int64
                           type: integer
                         workMem:
                           description: |-
-                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
-                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. Default is 1MB + 0.075% of total RAM (up to 32MB).
+                            (Number) Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. The default is 1MB + 0.075% of total RAM (up to 32MB).
+                            Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, in MB. The default is 1MB + 0.075% of total RAM (up to 32MB).
                           format: int64
                           type: integer
                       type: object
@@ -2334,6 +2739,11 @@ spec:
                       (String) State of the service
                       State of the service
                     type: string
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
                   title:
                     description: |-
                       (String) Title of a managed database instance

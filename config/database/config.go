@@ -3,7 +3,7 @@ package database
 import (
 	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/groupversion"
 
-	"github.com/crossplane/upjet/pkg/config"
+	"github.com/crossplane/upjet/v2/pkg/config"
 )
 
 // SDKResources is a list of all supported database resources implemented with Terraform legacy SDKv2.
@@ -11,7 +11,7 @@ var SDKResources = []string{
 	"upcloud_managed_database_postgresql",
 	"upcloud_managed_database_mysql",
 	"upcloud_managed_database_opensearch",
-	"upcloud_managed_database_redis",
+	"upcloud_managed_database_valkey",
 	"upcloud_managed_database_logical_database",
 	"upcloud_managed_database_user",
 }
@@ -71,9 +71,9 @@ func Configure(p *config.Provider) {
 		}
 	})
 
-	p.AddResourceConfigurator("upcloud_managed_database_redis", func(r *config.Resource) {
+	p.AddResourceConfigurator("upcloud_managed_database_valkey", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider
-		r.Kind = "ManagedDatabaseRedis"
+		r.Kind = "ManagedDatabaseValkey"
 		r.UseAsync = true
 
 		r.References["network.uuid"] = config.Reference{
@@ -91,7 +91,7 @@ func Configure(p *config.Provider) {
 		r.Kind = "ManagedDatabaseLogicalDatabase"
 
 		// TODO: use generic reference type if that's ever implemented in upjet
-		// https://github.com/crossplane/upjet/issues/95
+		// https://github.com/crossplane/upjet/v2/issues/95
 		r.References["service"] = config.Reference{
 			TerraformName: "upcloud_managed_database_postgresql",
 		}

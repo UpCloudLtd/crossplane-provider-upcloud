@@ -3,7 +3,7 @@ package storage
 import (
 	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/groupversion"
 
-	"github.com/crossplane/upjet/pkg/config"
+	"github.com/crossplane/upjet/v2/pkg/config"
 )
 
 // SDKResources is a list of all supported storage resources implemented with Terraform legacy SDKv2.
@@ -23,6 +23,6 @@ func Configure(p *config.Provider) {
 
 	p.AddResourceConfigurator("upcloud_storage", func(r *config.Resource) {
 		r.ExternalName = config.IdentifierFromProvider
-		r.UseAsync = true
+		r.UseAsync = false
 	})
 }

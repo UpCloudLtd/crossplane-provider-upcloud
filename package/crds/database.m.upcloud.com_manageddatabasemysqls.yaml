@@ -1,0 +1,1706 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.18.0
+  name: manageddatabasemysqls.database.m.upcloud.com
+spec:
+  group: database.m.upcloud.com
+  names:
+    categories:
+    - crossplane
+    - managed
+    - upcloud
+    kind: ManagedDatabaseMysql
+    listKind: ManagedDatabaseMysqlList
+    plural: manageddatabasemysqls
+    singular: manageddatabasemysql
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ManagedDatabaseMysql is the Schema for the ManagedDatabaseMysqls
+          API. This resource represents MySQL managed database. See UpCloud Managed
+          Databases https://upcloud.com/products/managed-databases product page for
+          more details about the service.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ManagedDatabaseMysqlSpec defines the desired state of ManagedDatabaseMysql
+            properties:
+              forProvider:
+                properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                      Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                    format: int64
+                    type: integer
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                        uuidRef:
+                          description: Reference to a Network in network to populate
+                            uuid.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            namespace:
+                              description: Namespace of the referenced object
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        uuidSelector:
+                          description: Selector for a Network in network to populate
+                            uuid.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            namespace:
+                              description: Namespace for the selector
+                              type: string
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans mysql.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans mysql`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for MySQL (see below for nested schema)
+                      Database Engine properties for MySQL
+                    items:
+                      properties:
+                        adminPasswordSecretRef:
+                          description: |-
+                            (String, Sensitive) Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                            Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        adminUsername:
+                          description: |-
+                            (String) Custom username for admin user. This must be set only when a new service is being created.
+                            Custom username for admin user. This must be set only when a new service is being created.
+                          type: string
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        binlogRetentionPeriod:
+                          description: |-
+                            (Number) The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
+                            The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
+                          format: int64
+                          type: integer
+                        connectTimeout:
+                          description: |-
+                            (Number) The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
+                            The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
+                          format: int64
+                          type: integer
+                        defaultTimeZone:
+                          description: |-
+                            12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
+                            Default server time zone as an offset from UTC (from -12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
+                          type: string
+                        groupConcatMaxLen:
+                          description: |-
+                            (Number) The maximum permitted result length in bytes for the GROUP_CONCAT() function.
+                            The maximum permitted result length in bytes for the GROUP_CONCAT() function.
+                          format: int64
+                          type: integer
+                        informationSchemaStatsExpiry:
+                          description: |-
+                            (Number) The time, in seconds, before cached statistics expire.
+                            The time, in seconds, before cached statistics expire.
+                          format: int64
+                          type: integer
+                        innodbChangeBufferMaxSize:
+                          description: |-
+                            (Number) Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
+                            Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
+                          format: int64
+                          type: integer
+                        innodbFlushNeighbors:
+                          description: |-
+                            dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
+                            Specifies whether flushing a page from the InnoDB buffer pool also flushes other dirty pages in the same extent (default is 1): 0 - dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
+                          format: int64
+                          type: integer
+                        innodbFtMinTokenSize:
+                          description: |-
+                            (Number) Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
+                            Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        innodbFtServerStopwordTable:
+                          description: |-
+                            (String) This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
+                            This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
+                          type: string
+                        innodbLockWaitTimeout:
+                          description: |-
+                            (Number) The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
+                            The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
+                          format: int64
+                          type: integer
+                        innodbLogBufferSize:
+                          description: |-
+                            (Number) The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
+                            The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
+                          format: int64
+                          type: integer
+                        innodbOnlineAlterLogMaxSize:
+                          description: |-
+                            (Number) The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
+                            The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
+                          format: int64
+                          type: integer
+                        innodbPrintAllDeadlocks:
+                          description: |-
+                            (Boolean) When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
+                            When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
+                          type: boolean
+                        innodbReadIoThreads:
+                          description: |-
+                            (Number) The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                            The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        innodbRollbackOnTimeout:
+                          description: |-
+                            (Boolean) When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
+                            When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
+                          type: boolean
+                        innodbThreadConcurrency:
+                          description: |-
+                            no limit).
+                            Defines the maximum number of threads permitted inside of InnoDB. Default is 0 (infinite concurrency - no limit).
+                          format: int64
+                          type: integer
+                        innodbWriteIoThreads:
+                          description: |-
+                            (Number) The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                            The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        interactiveTimeout:
+                          description: |-
+                            (Number) The number of seconds the server waits for activity on an interactive connection before closing it.
+                            The number of seconds the server waits for activity on an interactive connection before closing it.
+                          format: int64
+                          type: integer
+                        internalTmpMemStorageEngine:
+                          description: |-
+                            memory internal temporary tables.
+                            The storage engine for in-memory internal temporary tables.
+                          type: string
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        logOutput:
+                          description: |-
+                            (String) The slow log output destination when slow_query_log is ON. To enable MySQL AI Insights, choose INSIGHTS. To use MySQL AI Insights and the mysql.slow_log table at the same time, choose INSIGHTS,TABLE. To only use the mysql.slow_log table, choose TABLE. To silence slow logs, choose NONE.
+                            The slow log output destination when slow_query_log is ON. To enable MySQL AI Insights, choose INSIGHTS. To use MySQL AI Insights and the mysql.slow_log table at the same time, choose INSIGHTS,TABLE. To only use the mysql.slow_log table, choose TABLE. To silence slow logs, choose NONE.
+                          type: string
+                        longQueryTime:
+                          description: |-
+                            (Number) The slow_query_logs work as SQL statements that take more than long_query_time seconds to execute.
+                            The slow_query_logs work as SQL statements that take more than long_query_time seconds to execute.
+                          type: number
+                        maxAllowedPacket:
+                          description: |-
+                            (Number) Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
+                            Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
+                          format: int64
+                          type: integer
+                        maxHeapTableSize:
+                          description: |-
+                            memory tables. Also set tmp_table_size. Default is 16777216 (16M).
+                            Limits the size of internal in-memory tables. Also set tmp_table_size. Default is 16777216 (16M).
+                          format: int64
+                          type: integer
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                type: object
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                format: int64
+                                type: integer
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        mysqlIncrementalBackup:
+                          description: |-
+                            (Block List, Max: 1) MySQL incremental backup configuration. (see below for nested schema)
+                            MySQL incremental backup configuration.
+                          items:
+                            properties:
+                              enabled:
+                                description: |-
+                                  efficient than full backups. This is particularly useful for large databases where daily full backups would be too time-consuming or expensive.
+                                  Enable incremental backups. Enable periodic incremental backups. When enabled, full_backup_week_schedule must be set. Incremental backups only store changes since the last backup, making them faster and more storage-efficient than full backups. This is particularly useful for large databases where daily full backups would be too time-consuming or expensive.
+                                type: boolean
+                              fullBackupWeekSchedule:
+                                description: |-
+                                  separated list of days of the week when full backups should be created. Valid values: mon, tue, wed, thu, fri, sat, sun.
+                                  Full backup week schedule. Comma-separated list of days of the week when full backups should be created. Valid values: mon, tue, wed, thu, fri, sat, sun.
+                                type: string
+                            type: object
+                          type: array
+                        netBufferLength:
+                          description: |-
+                            (Number) Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
+                            Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        netReadTimeout:
+                          description: |-
+                            (Number) The number of seconds to wait for more data from a connection before aborting the read.
+                            The number of seconds to wait for more data from a connection before aborting the read.
+                          format: int64
+                          type: integer
+                        netWriteTimeout:
+                          description: |-
+                            (Number) The number of seconds to wait for a block to be written to a connection before aborting the write.
+                            The number of seconds to wait for a block to be written to a connection before aborting the write.
+                          format: int64
+                          type: integer
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        slowQueryLog:
+                          description: |-
+                            (Boolean) Slow query log enables capturing of slow queries. Setting slow_query_log to false also truncates the mysql.slow_log table.
+                            Slow query log enables capturing of slow queries. Setting slow_query_log to false also truncates the mysql.slow_log table.
+                          type: boolean
+                        sortBufferSize:
+                          description: |-
+                            (Number) Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
+                            Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
+                          format: int64
+                          type: integer
+                        sqlMode:
+                          description: |-
+                            (String) Global SQL mode. Set to empty to use MySQL server defaults. When creating a new service and not setting this field Aiven default SQL mode (strict, SQL standard compliant) will be assigned.
+                            Global SQL mode. Set to empty to use MySQL server defaults. When creating a new service and not setting this field Aiven default SQL mode (strict, SQL standard compliant) will be assigned.
+                          type: string
+                        sqlRequirePrimaryKey:
+                          description: |-
+                            (Boolean) Require primary key to be defined for new tables or old tables modified with ALTER TABLE and fail if missing. It is recommended to always have primary keys because various functionality may break if any large table is missing them.
+                            Require primary key to be defined for new tables or old tables modified with ALTER TABLE and fail if missing. It is recommended to always have primary keys because various functionality may break if any large table is missing them.
+                          type: boolean
+                        tmpTableSize:
+                          description: |-
+                            memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
+                            Limits the size of internal in-memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
+                          format: int64
+                          type: integer
+                        version:
+                          description: |-
+                            (String) MySQL major version.
+                            MySQL major version.
+                          type: string
+                        waitTimeout:
+                          description: |-
+                            (Number) The number of seconds the server waits for activity on a noninteractive connection before closing it.
+                            The number of seconds the server waits for activity on a noninteractive connection before closing it.
+                          format: int64
+                          type: integer
+                      type: object
+                    type: array
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                      Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                    format: int64
+                    type: integer
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                        uuidRef:
+                          description: Reference to a Network in network to populate
+                            uuid.
+                          properties:
+                            name:
+                              description: Name of the referenced object.
+                              type: string
+                            namespace:
+                              description: Namespace of the referenced object
+                              type: string
+                            policy:
+                              description: Policies for referencing.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          required:
+                          - name
+                          type: object
+                        uuidSelector:
+                          description: Selector for a Network in network to populate
+                            uuid.
+                          properties:
+                            matchControllerRef:
+                              description: |-
+                                MatchControllerRef ensures an object with the same controller reference
+                                as the selecting object is selected.
+                              type: boolean
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: MatchLabels ensures an object with matching
+                                labels is selected.
+                              type: object
+                            namespace:
+                              description: Namespace for the selector
+                              type: string
+                            policy:
+                              description: Policies for selection.
+                              properties:
+                                resolution:
+                                  default: Required
+                                  description: |-
+                                    Resolution specifies whether resolution of this reference is required.
+                                    The default is 'Required', which means the reconcile will fail if the
+                                    reference cannot be resolved. 'Optional' means this reference will be
+                                    a no-op if it cannot be resolved.
+                                  enum:
+                                  - Required
+                                  - Optional
+                                  type: string
+                                resolve:
+                                  description: |-
+                                    Resolve specifies when this reference should be resolved. The default
+                                    is 'IfNotPresent', which will attempt to resolve the reference only when
+                                    the corresponding field is not present. Use 'Always' to resolve the
+                                    reference on every reconcile.
+                                  enum:
+                                  - Always
+                                  - IfNotPresent
+                                  type: string
+                              type: object
+                          type: object
+                      type: object
+                    type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans mysql.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans mysql`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for MySQL (see below for nested schema)
+                      Database Engine properties for MySQL
+                    items:
+                      properties:
+                        adminPasswordSecretRef:
+                          description: |-
+                            (String, Sensitive) Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                            Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
+                          properties:
+                            key:
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        adminUsername:
+                          description: |-
+                            (String) Custom username for admin user. This must be set only when a new service is being created.
+                            Custom username for admin user. This must be set only when a new service is being created.
+                          type: string
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        binlogRetentionPeriod:
+                          description: |-
+                            (Number) The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
+                            The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
+                          format: int64
+                          type: integer
+                        connectTimeout:
+                          description: |-
+                            (Number) The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
+                            The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
+                          format: int64
+                          type: integer
+                        defaultTimeZone:
+                          description: |-
+                            12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
+                            Default server time zone as an offset from UTC (from -12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
+                          type: string
+                        groupConcatMaxLen:
+                          description: |-
+                            (Number) The maximum permitted result length in bytes for the GROUP_CONCAT() function.
+                            The maximum permitted result length in bytes for the GROUP_CONCAT() function.
+                          format: int64
+                          type: integer
+                        informationSchemaStatsExpiry:
+                          description: |-
+                            (Number) The time, in seconds, before cached statistics expire.
+                            The time, in seconds, before cached statistics expire.
+                          format: int64
+                          type: integer
+                        innodbChangeBufferMaxSize:
+                          description: |-
+                            (Number) Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
+                            Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
+                          format: int64
+                          type: integer
+                        innodbFlushNeighbors:
+                          description: |-
+                            dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
+                            Specifies whether flushing a page from the InnoDB buffer pool also flushes other dirty pages in the same extent (default is 1): 0 - dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
+                          format: int64
+                          type: integer
+                        innodbFtMinTokenSize:
+                          description: |-
+                            (Number) Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
+                            Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        innodbFtServerStopwordTable:
+                          description: |-
+                            (String) This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
+                            This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
+                          type: string
+                        innodbLockWaitTimeout:
+                          description: |-
+                            (Number) The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
+                            The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
+                          format: int64
+                          type: integer
+                        innodbLogBufferSize:
+                          description: |-
+                            (Number) The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
+                            The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
+                          format: int64
+                          type: integer
+                        innodbOnlineAlterLogMaxSize:
+                          description: |-
+                            (Number) The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
+                            The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
+                          format: int64
+                          type: integer
+                        innodbPrintAllDeadlocks:
+                          description: |-
+                            (Boolean) When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
+                            When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
+                          type: boolean
+                        innodbReadIoThreads:
+                          description: |-
+                            (Number) The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                            The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        innodbRollbackOnTimeout:
+                          description: |-
+                            (Boolean) When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
+                            When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
+                          type: boolean
+                        innodbThreadConcurrency:
+                          description: |-
+                            no limit).
+                            Defines the maximum number of threads permitted inside of InnoDB. Default is 0 (infinite concurrency - no limit).
+                          format: int64
+                          type: integer
+                        innodbWriteIoThreads:
+                          description: |-
+                            (Number) The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                            The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        interactiveTimeout:
+                          description: |-
+                            (Number) The number of seconds the server waits for activity on an interactive connection before closing it.
+                            The number of seconds the server waits for activity on an interactive connection before closing it.
+                          format: int64
+                          type: integer
+                        internalTmpMemStorageEngine:
+                          description: |-
+                            memory internal temporary tables.
+                            The storage engine for in-memory internal temporary tables.
+                          type: string
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        logOutput:
+                          description: |-
+                            (String) The slow log output destination when slow_query_log is ON. To enable MySQL AI Insights, choose INSIGHTS. To use MySQL AI Insights and the mysql.slow_log table at the same time, choose INSIGHTS,TABLE. To only use the mysql.slow_log table, choose TABLE. To silence slow logs, choose NONE.
+                            The slow log output destination when slow_query_log is ON. To enable MySQL AI Insights, choose INSIGHTS. To use MySQL AI Insights and the mysql.slow_log table at the same time, choose INSIGHTS,TABLE. To only use the mysql.slow_log table, choose TABLE. To silence slow logs, choose NONE.
+                          type: string
+                        longQueryTime:
+                          description: |-
+                            (Number) The slow_query_logs work as SQL statements that take more than long_query_time seconds to execute.
+                            The slow_query_logs work as SQL statements that take more than long_query_time seconds to execute.
+                          type: number
+                        maxAllowedPacket:
+                          description: |-
+                            (Number) Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
+                            Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
+                          format: int64
+                          type: integer
+                        maxHeapTableSize:
+                          description: |-
+                            memory tables. Also set tmp_table_size. Default is 16777216 (16M).
+                            Limits the size of internal in-memory tables. Also set tmp_table_size. Default is 16777216 (16M).
+                          format: int64
+                          type: integer
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              passwordSecretRef:
+                                description: |-
+                                  (String, Sensitive) Password for authentication with the server where to migrate data from.
+                                  Password for authentication with the server where to migrate data from.
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    description: Name of the secret.
+                                    type: string
+                                required:
+                                - key
+                                - name
+                                type: object
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                format: int64
+                                type: integer
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        mysqlIncrementalBackup:
+                          description: |-
+                            (Block List, Max: 1) MySQL incremental backup configuration. (see below for nested schema)
+                            MySQL incremental backup configuration.
+                          items:
+                            properties:
+                              enabled:
+                                description: |-
+                                  efficient than full backups. This is particularly useful for large databases where daily full backups would be too time-consuming or expensive.
+                                  Enable incremental backups. Enable periodic incremental backups. When enabled, full_backup_week_schedule must be set. Incremental backups only store changes since the last backup, making them faster and more storage-efficient than full backups. This is particularly useful for large databases where daily full backups would be too time-consuming or expensive.
+                                type: boolean
+                              fullBackupWeekSchedule:
+                                description: |-
+                                  separated list of days of the week when full backups should be created. Valid values: mon, tue, wed, thu, fri, sat, sun.
+                                  Full backup week schedule. Comma-separated list of days of the week when full backups should be created. Valid values: mon, tue, wed, thu, fri, sat, sun.
+                                type: string
+                            type: object
+                          type: array
+                        netBufferLength:
+                          description: |-
+                            (Number) Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
+                            Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        netReadTimeout:
+                          description: |-
+                            (Number) The number of seconds to wait for more data from a connection before aborting the read.
+                            The number of seconds to wait for more data from a connection before aborting the read.
+                          format: int64
+                          type: integer
+                        netWriteTimeout:
+                          description: |-
+                            (Number) The number of seconds to wait for a block to be written to a connection before aborting the write.
+                            The number of seconds to wait for a block to be written to a connection before aborting the write.
+                          format: int64
+                          type: integer
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        slowQueryLog:
+                          description: |-
+                            (Boolean) Slow query log enables capturing of slow queries. Setting slow_query_log to false also truncates the mysql.slow_log table.
+                            Slow query log enables capturing of slow queries. Setting slow_query_log to false also truncates the mysql.slow_log table.
+                          type: boolean
+                        sortBufferSize:
+                          description: |-
+                            (Number) Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
+                            Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
+                          format: int64
+                          type: integer
+                        sqlMode:
+                          description: |-
+                            (String) Global SQL mode. Set to empty to use MySQL server defaults. When creating a new service and not setting this field Aiven default SQL mode (strict, SQL standard compliant) will be assigned.
+                            Global SQL mode. Set to empty to use MySQL server defaults. When creating a new service and not setting this field Aiven default SQL mode (strict, SQL standard compliant) will be assigned.
+                          type: string
+                        sqlRequirePrimaryKey:
+                          description: |-
+                            (Boolean) Require primary key to be defined for new tables or old tables modified with ALTER TABLE and fail if missing. It is recommended to always have primary keys because various functionality may break if any large table is missing them.
+                            Require primary key to be defined for new tables or old tables modified with ALTER TABLE and fail if missing. It is recommended to always have primary keys because various functionality may break if any large table is missing them.
+                          type: boolean
+                        tmpTableSize:
+                          description: |-
+                            memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
+                            Limits the size of internal in-memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
+                          format: int64
+                          type: integer
+                        version:
+                          description: |-
+                            (String) MySQL major version.
+                            MySQL major version.
+                          type: string
+                        waitTimeout:
+                          description: |-
+                            (Number) The number of seconds the server waits for activity on a noninteractive connection before closing it.
+                            The number of seconds the server waits for activity on a noninteractive connection before closing it.
+                          format: int64
+                          type: integer
+                      type: object
+                    type: array
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  kind: ClusterProviderConfig
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  kind:
+                    description: Kind of the referenced object.
+                    type: string
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.plan is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.plan)
+                || (has(self.initProvider) && has(self.initProvider.plan))'
+            - message: spec.forProvider.title is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.title)
+                || (has(self.initProvider) && has(self.initProvider.title))'
+            - message: spec.forProvider.zone is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.zone)
+                || (has(self.initProvider) && has(self.initProvider.zone))'
+          status:
+            description: ManagedDatabaseMysqlStatus defines the observed state of
+              ManagedDatabaseMysql.
+            properties:
+              atProvider:
+                properties:
+                  additionalDiskSpaceGib:
+                    description: |-
+                      (Number) Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                      Additional disk space in GiB. Note that changes in additional disk space might require disk maintenance. This pending maintenance blocks some operations, such as version upgrades, until the maintenance is completed.
+                    format: int64
+                    type: integer
+                  components:
+                    description: |-
+                      (List of Object) Service component information (see below for nested schema)
+                      Service component information
+                    items:
+                      properties:
+                        component:
+                          description: |-
+                            (String)
+                            Type of the component
+                          type: string
+                        host:
+                          description: |-
+                            (String) Hostname or IP address of the server where to migrate data from.
+                            Hostname of the component
+                          type: string
+                        port:
+                          description: |-
+                            (Number) Port number of the server where to migrate data from.
+                            Port number of the component
+                          format: int64
+                          type: integer
+                        route:
+                          description: |-
+                            (String)
+                            Component network route type
+                          type: string
+                        usage:
+                          description: |-
+                            (String)
+                            Usage of the component
+                          type: string
+                      type: object
+                    type: array
+                  id:
+                    description: (String) The ID of this resource.
+                    type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the managed database.
+                      User defined key-value pairs to classify the managed database.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  maintenanceWindowDow:
+                    description: |-
+                      (String) Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                      Maintenance window day of week. Lower case weekday name (monday, tuesday, ...)
+                    type: string
+                  maintenanceWindowTime:
+                    description: |-
+                      (String) Maintenance window UTC time in hh:mm:ss format
+                      Maintenance window UTC time in hh:mm:ss format
+                    type: string
+                  name:
+                    description: |-
+                      (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                      Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                    type: string
+                  network:
+                    description: |-
+                      (Block Set, Max: 8) Private networks attached to the managed database (see below for nested schema)
+                      Private networks attached to the managed database
+                    items:
+                      properties:
+                        family:
+                          description: |-
+                            (String) Network family. Currently only IPv4 is supported.
+                            Network family. Currently only `IPv4` is supported.
+                          type: string
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            The name of the network. Must be unique within the service.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the service
+                            The type of the network. Must be private.
+                          type: string
+                        uuid:
+                          description: |-
+                            (String) Private network UUID. Must reside in the same zone as the database.
+                            Private network UUID. Must reside in the same zone as the database.
+                          type: string
+                      type: object
+                    type: array
+                  nodeStates:
+                    description: |-
+                      (List of Object) Information about nodes providing the managed service (see below for nested schema)
+                      Information about nodes providing the managed service
+                    items:
+                      properties:
+                        name:
+                          description: |-
+                            (String) Name of the service. The name is used as a prefix for the logical hostname. Must be unique within an account
+                            Name plus a node iteration
+                          type: string
+                        role:
+                          description: |-
+                            (String)
+                            Role of the node
+                          type: string
+                        state:
+                          description: |-
+                            (String) State of the service
+                            State of the node
+                          type: string
+                      type: object
+                    type: array
+                  plan:
+                    description: |-
+                      (String) Service plan to use. This determines how much resources the instance will have. You can list available plans with upctl database plans mysql.
+                      Service plan to use. This determines how much resources the instance will have. You can list available plans with `upctl database plans mysql`.
+                    type: string
+                  powered:
+                    description: |-
+                      (Boolean) The administrative power state of the service
+                      The administrative power state of the service
+                    type: boolean
+                  primaryDatabase:
+                    description: |-
+                      (String) Primary database name
+                      Primary database name
+                    type: string
+                  properties:
+                    description: |-
+                      (Block List, Max: 1) Database Engine properties for MySQL (see below for nested schema)
+                      Database Engine properties for MySQL
+                    items:
+                      properties:
+                        adminUsername:
+                          description: |-
+                            (String) Custom username for admin user. This must be set only when a new service is being created.
+                            Custom username for admin user. This must be set only when a new service is being created.
+                          type: string
+                        automaticUtilityNetworkIpFilter:
+                          description: |-
+                            (Boolean) Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                            Automatic utility network IP Filter. Automatically allow connections from servers in the utility network within the same zone.
+                          type: boolean
+                        backupHour:
+                          description: |-
+                            (Number) The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The hour of day (in UTC) when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        backupMinute:
+                          description: |-
+                            (Number) The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                            The minute of an hour when backup for the service is started. New backup is only started if previous backup has already completed.
+                          format: int64
+                          type: integer
+                        binlogRetentionPeriod:
+                          description: |-
+                            (Number) The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
+                            The minimum amount of time in seconds to keep binlog entries before deletion. This may be extended for services that require binlog entries for longer than the default for example if using the MySQL Debezium Kafka connector.
+                          format: int64
+                          type: integer
+                        connectTimeout:
+                          description: |-
+                            (Number) The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
+                            The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake.
+                          format: int64
+                          type: integer
+                        defaultTimeZone:
+                          description: |-
+                            12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
+                            Default server time zone as an offset from UTC (from -12:00 to +12:00), a time zone name, or 'SYSTEM' to use the MySQL server default.
+                          type: string
+                        groupConcatMaxLen:
+                          description: |-
+                            (Number) The maximum permitted result length in bytes for the GROUP_CONCAT() function.
+                            The maximum permitted result length in bytes for the GROUP_CONCAT() function.
+                          format: int64
+                          type: integer
+                        informationSchemaStatsExpiry:
+                          description: |-
+                            (Number) The time, in seconds, before cached statistics expire.
+                            The time, in seconds, before cached statistics expire.
+                          format: int64
+                          type: integer
+                        innodbChangeBufferMaxSize:
+                          description: |-
+                            (Number) Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
+                            Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25.
+                          format: int64
+                          type: integer
+                        innodbFlushNeighbors:
+                          description: |-
+                            dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
+                            Specifies whether flushing a page from the InnoDB buffer pool also flushes other dirty pages in the same extent (default is 1): 0 - dirty pages in the same extent are not flushed, 1 - flush contiguous dirty pages in the same extent, 2 - flush dirty pages in the same extent.
+                          format: int64
+                          type: integer
+                        innodbFtMinTokenSize:
+                          description: |-
+                            (Number) Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
+                            Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        innodbFtServerStopwordTable:
+                          description: |-
+                            (String) This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
+                            This option is used to specify your own InnoDB FULLTEXT index stopword list for all InnoDB tables.
+                          type: string
+                        innodbLockWaitTimeout:
+                          description: |-
+                            (Number) The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
+                            The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
+                          format: int64
+                          type: integer
+                        innodbLogBufferSize:
+                          description: |-
+                            (Number) The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
+                            The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
+                          format: int64
+                          type: integer
+                        innodbOnlineAlterLogMaxSize:
+                          description: |-
+                            (Number) The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
+                            The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
+                          format: int64
+                          type: integer
+                        innodbPrintAllDeadlocks:
+                          description: |-
+                            (Boolean) When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
+                            When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.
+                          type: boolean
+                        innodbReadIoThreads:
+                          description: |-
+                            (Number) The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                            The number of I/O threads for read operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        innodbRollbackOnTimeout:
+                          description: |-
+                            (Boolean) When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
+                            When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction. Changing this parameter will lead to a restart of the MySQL service.
+                          type: boolean
+                        innodbThreadConcurrency:
+                          description: |-
+                            no limit).
+                            Defines the maximum number of threads permitted inside of InnoDB. Default is 0 (infinite concurrency - no limit).
+                          format: int64
+                          type: integer
+                        innodbWriteIoThreads:
+                          description: |-
+                            (Number) The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                            The number of I/O threads for write operations in InnoDB. Default is 4. Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        interactiveTimeout:
+                          description: |-
+                            (Number) The number of seconds the server waits for activity on an interactive connection before closing it.
+                            The number of seconds the server waits for activity on an interactive connection before closing it.
+                          format: int64
+                          type: integer
+                        internalTmpMemStorageEngine:
+                          description: |-
+                            memory internal temporary tables.
+                            The storage engine for in-memory internal temporary tables.
+                          type: string
+                        ipFilter:
+                          description: |-
+                            (List of String) IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                            IP filter. Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'.
+                          items:
+                            type: string
+                          type: array
+                        logOutput:
+                          description: |-
+                            (String) The slow log output destination when slow_query_log is ON. To enable MySQL AI Insights, choose INSIGHTS. To use MySQL AI Insights and the mysql.slow_log table at the same time, choose INSIGHTS,TABLE. To only use the mysql.slow_log table, choose TABLE. To silence slow logs, choose NONE.
+                            The slow log output destination when slow_query_log is ON. To enable MySQL AI Insights, choose INSIGHTS. To use MySQL AI Insights and the mysql.slow_log table at the same time, choose INSIGHTS,TABLE. To only use the mysql.slow_log table, choose TABLE. To silence slow logs, choose NONE.
+                          type: string
+                        longQueryTime:
+                          description: |-
+                            (Number) The slow_query_logs work as SQL statements that take more than long_query_time seconds to execute.
+                            The slow_query_logs work as SQL statements that take more than long_query_time seconds to execute.
+                          type: number
+                        maxAllowedPacket:
+                          description: |-
+                            (Number) Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
+                            Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M).
+                          format: int64
+                          type: integer
+                        maxHeapTableSize:
+                          description: |-
+                            memory tables. Also set tmp_table_size. Default is 16777216 (16M).
+                            Limits the size of internal in-memory tables. Also set tmp_table_size. Default is 16777216 (16M).
+                          format: int64
+                          type: integer
+                        migration:
+                          description: |-
+                            (Block List, Max: 1) Migrate data from existing server. (see below for nested schema)
+                            Migrate data from existing server.
+                          items:
+                            properties:
+                              dbname:
+                                description: |-
+                                  (String) Database name for bootstrapping the initial connection.
+                                  Database name for bootstrapping the initial connection.
+                                type: string
+                              host:
+                                description: |-
+                                  (String) Hostname or IP address of the server where to migrate data from.
+                                  Hostname or IP address of the server where to migrate data from.
+                                type: string
+                              ignoreDbs:
+                                description: |-
+                                  separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                  Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment).
+                                type: string
+                              ignoreRoles:
+                                description: |-
+                                  separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                  Comma-separated list of database roles, which should be ignored during migration (supported by PostgreSQL only at the moment).
+                                type: string
+                              method:
+                                description: |-
+                                  (String) The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                  The migration method to be used (currently supported only by Redis, Dragonfly, MySQL and PostgreSQL service types).
+                                type: string
+                              port:
+                                description: |-
+                                  (Number) Port number of the server where to migrate data from.
+                                  Port number of the server where to migrate data from.
+                                format: int64
+                                type: integer
+                              ssl:
+                                description: |-
+                                  (Boolean) The server where to migrate data from is secured with SSL.
+                                  The server where to migrate data from is secured with SSL.
+                                type: boolean
+                              username:
+                                description: |-
+                                  (String) User name for authentication with the server where to migrate data from.
+                                  User name for authentication with the server where to migrate data from.
+                                type: string
+                            type: object
+                          type: array
+                        mysqlIncrementalBackup:
+                          description: |-
+                            (Block List, Max: 1) MySQL incremental backup configuration. (see below for nested schema)
+                            MySQL incremental backup configuration.
+                          items:
+                            properties:
+                              enabled:
+                                description: |-
+                                  efficient than full backups. This is particularly useful for large databases where daily full backups would be too time-consuming or expensive.
+                                  Enable incremental backups. Enable periodic incremental backups. When enabled, full_backup_week_schedule must be set. Incremental backups only store changes since the last backup, making them faster and more storage-efficient than full backups. This is particularly useful for large databases where daily full backups would be too time-consuming or expensive.
+                                type: boolean
+                              fullBackupWeekSchedule:
+                                description: |-
+                                  separated list of days of the week when full backups should be created. Valid values: mon, tue, wed, thu, fri, sat, sun.
+                                  Full backup week schedule. Comma-separated list of days of the week when full backups should be created. Valid values: mon, tue, wed, thu, fri, sat, sun.
+                                type: string
+                            type: object
+                          type: array
+                        netBufferLength:
+                          description: |-
+                            (Number) Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
+                            Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
+                          format: int64
+                          type: integer
+                        netReadTimeout:
+                          description: |-
+                            (Number) The number of seconds to wait for more data from a connection before aborting the read.
+                            The number of seconds to wait for more data from a connection before aborting the read.
+                          format: int64
+                          type: integer
+                        netWriteTimeout:
+                          description: |-
+                            (Number) The number of seconds to wait for a block to be written to a connection before aborting the write.
+                            The number of seconds to wait for a block to be written to a connection before aborting the write.
+                          format: int64
+                          type: integer
+                        publicAccess:
+                          description: |-
+                            (Boolean) Public Access. Allow access to the service from the public Internet.
+                            Public Access. Allow access to the service from the public Internet.
+                          type: boolean
+                        serviceLog:
+                          description: |-
+                            (Boolean) Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                            Service logging. Store logs for the service so that they are available in the HTTP API and console.
+                          type: boolean
+                        slowQueryLog:
+                          description: |-
+                            (Boolean) Slow query log enables capturing of slow queries. Setting slow_query_log to false also truncates the mysql.slow_log table.
+                            Slow query log enables capturing of slow queries. Setting slow_query_log to false also truncates the mysql.slow_log table.
+                          type: boolean
+                        sortBufferSize:
+                          description: |-
+                            (Number) Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
+                            Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K).
+                          format: int64
+                          type: integer
+                        sqlMode:
+                          description: |-
+                            (String) Global SQL mode. Set to empty to use MySQL server defaults. When creating a new service and not setting this field Aiven default SQL mode (strict, SQL standard compliant) will be assigned.
+                            Global SQL mode. Set to empty to use MySQL server defaults. When creating a new service and not setting this field Aiven default SQL mode (strict, SQL standard compliant) will be assigned.
+                          type: string
+                        sqlRequirePrimaryKey:
+                          description: |-
+                            (Boolean) Require primary key to be defined for new tables or old tables modified with ALTER TABLE and fail if missing. It is recommended to always have primary keys because various functionality may break if any large table is missing them.
+                            Require primary key to be defined for new tables or old tables modified with ALTER TABLE and fail if missing. It is recommended to always have primary keys because various functionality may break if any large table is missing them.
+                          type: boolean
+                        tmpTableSize:
+                          description: |-
+                            memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
+                            Limits the size of internal in-memory tables. Also set max_heap_table_size. Default is 16777216 (16M).
+                          format: int64
+                          type: integer
+                        version:
+                          description: |-
+                            (String) MySQL major version.
+                            MySQL major version.
+                          type: string
+                        waitTimeout:
+                          description: |-
+                            (Number) The number of seconds the server waits for activity on a noninteractive connection before closing it.
+                            The number of seconds the server waits for activity on a noninteractive connection before closing it.
+                          format: int64
+                          type: integer
+                      type: object
+                    type: array
+                  serviceHost:
+                    description: |-
+                      (String) Hostname to the service instance
+                      Hostname to the service instance
+                    type: string
+                  servicePort:
+                    description: |-
+                      (String) Port to the service instance
+                      Port to the service instance
+                    type: string
+                  serviceUsername:
+                    description: |-
+                      (String) Primary username to the service instance
+                      Primary username to the service instance
+                    type: string
+                  state:
+                    description: |-
+                      (String) State of the service
+                      State of the service
+                    type: string
+                  terminationProtection:
+                    description: |-
+                      (Boolean) If set to true, prevents the managed service from being powered off, or deleted.
+                      If set to true, prevents the managed service from being powered off, or deleted.
+                    type: boolean
+                  title:
+                    description: |-
+                      (String) Title of a managed database instance
+                      Title of a managed database instance
+                    type: string
+                  type:
+                    description: |-
+                      (String) Type of the service
+                      Type of the service
+                    type: string
+                  zone:
+                    description: |-
+                      fra1. You can list available zones with upctl zone list.
+                      Zone where the instance resides, e.g. `de-fra1`. You can list available zones with `upctl zone list`.
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

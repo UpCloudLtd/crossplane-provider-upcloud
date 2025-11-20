@@ -1,0 +1,35 @@
+apiVersion: database.m.upcloud.com/v1alpha1
+kind: ManagedDatabaseUser
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabaseuser
+  labels:
+    testing.upbound.io/example-name: example_user
+  name: example-user
+  namespace: upbound-system
+spec:
+  forProvider:
+    passwordSecretRef:
+      key: example-key
+      name: example-secret
+    serviceSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+
+---
+
+apiVersion: database.m.upcloud.com/v1alpha1
+kind: ManagedDatabasePostgresql
+metadata:
+  annotations:
+    meta.upbound.io/example-id: database/v1alpha1/manageddatabaseuser
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: postgres
+    plan: 1x1xCPU-2GB-25GB
+    title: postgres
+    zone: fi-hel1

@@ -1,0 +1,67 @@
+apiVersion: server.m.upcloud.com/v1alpha1
+kind: Server
+metadata:
+  name: upcloud-crossplane-example-namespaced-server
+  namespace: upcloud-crossplane-example
+spec:
+  forProvider:
+    hostname: crossplane-example-namespaced-server
+    title: crossplane-example-namespaced-server
+    labels:
+      env: dev
+      production: "false"
+    login:
+    - user: example
+    networkInterface:
+    - type: public
+    - type: private
+      networkRef:
+        name: upcloud-crossplane-example-namespaced-network
+    plan: 1xCPU-1GB
+    template:
+    - size: 25
+      storage: Ubuntu Server 24.04 LTS (Noble Numbat)
+    metadata: true
+    storageDevices:
+    - storageRef:
+        name: upcloud-crossplane-example-namespaced-storage
+    zone: de-fra1
+    firewall: true
+  providerConfigRef:
+    name: upcloud-crossplane-example-providerconfig
+    kind: ProviderConfig
+---
+apiVersion: server.m.upcloud.com/v1alpha1
+kind: ServerGroup
+metadata:
+  name: upcloud-crossplane-example-namespaced-server-group
+  namespace: upcloud-crossplane-example
+spec:
+  forProvider:
+    membersRefs:
+    - name: upcloud-crossplane-example-namespaced-server
+    title: crossplane-example-namespaced-servergroup
+  providerConfigRef:
+    name: upcloud-crossplane-example-providerconfig
+    kind: ProviderConfig
+---
+apiVersion: server.m.upcloud.com/v1alpha1
+kind: FirewallRules
+metadata:
+  name: upcloud-crossplane-example-namespaced-firewall-rules
+  namespace: upcloud-crossplane-example
+spec:
+  forProvider:
+    serverIdRef:
+      name: upcloud-crossplane-example-namespaced-server
+    firewallRule:
+    - action: accept
+      direction: in
+      family: IPv4
+      protocol: tcp
+      destinationPortStart: "22"
+      destinationPortEnd: "22"
+      comment: "Allow SSH"
+  providerConfigRef:
+    name: upcloud-crossplane-example-providerconfig
+    kind: ProviderConfig

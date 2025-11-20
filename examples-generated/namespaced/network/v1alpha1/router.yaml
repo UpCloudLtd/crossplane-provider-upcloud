@@ -1,0 +1,12 @@
+apiVersion: network.m.upcloud.com/v1alpha1
+kind: Router
+metadata:
+  annotations:
+    meta.upbound.io/example-id: network/v1alpha1/router
+  labels:
+    testing.upbound.io/example-name: my_example_router
+  name: my-example-router
+  namespace: upbound-system
+spec:
+  forProvider:
+    name: My Example Router

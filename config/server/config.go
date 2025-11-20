@@ -3,17 +3,16 @@ package server
 import (
 	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/groupversion"
 
-	"github.com/crossplane/upjet/pkg/config"
+	"github.com/crossplane/upjet/v2/pkg/config"
 )
 
 // SDKResources is a list of all supported server resources implemented with Terraform legacy SDKv2.
-var SDKResources = []string{
-	"upcloud_server",
-	"upcloud_firewall_rules",
-}
+var SDKResources = []string{}
 
 // PluginFrameworkResources is a list of all supported server resources implemented with Terraform Plugin Framework.
 var PluginFrameworkResources = []string{
+	"upcloud_server",
+	"upcloud_firewall_rules",
 	"upcloud_server_group",
 }
 
@@ -43,7 +42,7 @@ func Configure(p *config.Provider) {
 		}
 
 		// TODO use r.SchemaElementOptions.SetEmbeddedObject("template") to flatten the yaml manifest from list to single embedded object
-		// see https://github.com/crossplane/upjet/blob/v1.2.4/pkg/config/resource.go#L550 for more info
+		// see https://github.com/crossplane/upjet/v2/blob/v1.2.4/pkg/config/resource.go#L550 for more info
 	})
 
 	p.AddResourceConfigurator("upcloud_server_group", func(r *config.Resource) {

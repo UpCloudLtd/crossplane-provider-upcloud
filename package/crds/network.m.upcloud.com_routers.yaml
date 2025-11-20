@@ -1,0 +1,366 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.18.0
+  name: routers.network.m.upcloud.com
+spec:
+  group: network.m.upcloud.com
+  names:
+    categories:
+    - crossplane
+    - managed
+    - upcloud
+    kind: Router
+    listKind: RouterList
+    plural: routers
+    singular: router
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Router is the Schema for the Routers API. Routers can be used
+          to connect multiple Private Networks. UpCloud Servers on any attached network
+          can communicate directly with each other.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: RouterSpec defines the desired state of Router
+            properties:
+              forProvider:
+                properties:
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  name:
+                    description: |-
+                      (String) Name of the router.
+                      Name of the router.
+                    type: string
+                  staticRoute:
+                    description: |-
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
+                    items:
+                      properties:
+                        name:
+                          description: |-
+                            (String) Name of the router.
+                            Name or description of the route.
+                          type: string
+                        nexthop:
+                          description: |-
+                            (String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                            Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                          type: string
+                        route:
+                          description: |-
+                            (String) Destination prefix of the route.
+                            Destination prefix of the route.
+                          type: string
+                      type: object
+                    type: array
+                type: object
+              initProvider:
+                description: |-
+                  THIS IS A BETA FIELD. It will be honored
+                  unless the Management Policies feature flag is disabled.
+                  InitProvider holds the same fields as ForProvider, with the exception
+                  of Identifier and other resource reference fields. The fields that are
+                  in InitProvider are merged into ForProvider when the resource is created.
+                  The same fields are also added to the terraform ignore_changes hook, to
+                  avoid updating them after creation. This is useful for fields that are
+                  required on creation, but we do not desire to update them after creation,
+                  for example because of an external controller is managing them, like an
+                  autoscaler.
+                properties:
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  name:
+                    description: |-
+                      (String) Name of the router.
+                      Name of the router.
+                    type: string
+                  staticRoute:
+                    description: |-
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
+                    items:
+                      properties:
+                        name:
+                          description: |-
+                            (String) Name of the router.
+                            Name or description of the route.
+                          type: string
+                        nexthop:
+                          description: |-
+                            (String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                            Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                          type: string
+                        route:
+                          description: |-
+                            (String) Destination prefix of the route.
+                            Destination prefix of the route.
+                          type: string
+                      type: object
+                    type: array
+                type: object
+              managementPolicies:
+                default:
+                - '*'
+                description: |-
+                  THIS IS A BETA FIELD. It is on by default but can be opted out
+                  through a Crossplane feature flag.
+                  ManagementPolicies specify the array of actions Crossplane is allowed to
+                  take on the managed and external resources.
+                  See the design doc for more information: https://github.com/crossplane/crossplane/blob/499895a25d1a1a0ba1604944ef98ac7a1a71f197/design/design-doc-observe-only-resources.md?plain=1#L223
+                  and this one: https://github.com/crossplane/crossplane/blob/444267e84783136daa93568b364a5f01228cacbe/design/one-pager-ignore-changes.md
+                items:
+                  description: |-
+                    A ManagementAction represents an action that the Crossplane controllers
+                    can take on an external resource.
+                  enum:
+                  - Observe
+                  - Create
+                  - Update
+                  - Delete
+                  - LateInitialize
+                  - '*'
+                  type: string
+                type: array
+              providerConfigRef:
+                default:
+                  kind: ClusterProviderConfig
+                  name: default
+                description: |-
+                  ProviderConfigReference specifies how the provider that will be used to
+                  create, observe, update, and delete this managed resource should be
+                  configured.
+                properties:
+                  kind:
+                    description: Kind of the referenced object.
+                    type: string
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - kind
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: |-
+                  WriteConnectionSecretToReference specifies the namespace and name of a
+                  Secret to which any connection details for this managed resource should
+                  be written. Connection details frequently include the endpoint, username,
+                  and password required to connect to the managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                required:
+                - name
+                type: object
+            required:
+            - forProvider
+            type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.labels is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.labels)
+                || (has(self.initProvider) && has(self.initProvider.labels))'
+            - message: spec.forProvider.name is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.name)
+                || (has(self.initProvider) && has(self.initProvider.name))'
+            - message: spec.forProvider.staticRoute is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.staticRoute)
+                || (has(self.initProvider) && has(self.initProvider.staticRoute))'
+          status:
+            description: RouterStatus defines the observed state of Router.
+            properties:
+              atProvider:
+                properties:
+                  attachedNetworks:
+                    description: |-
+                      (List of String) List of UUIDs representing networks attached to this router.
+                      List of UUIDs representing networks attached to this router.
+                    items:
+                      type: string
+                    type: array
+                  id:
+                    description: (String) UUID of the router.
+                    type: string
+                  labels:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      value pairs to classify the router.
+                      User defined key-value pairs to classify the router.
+                    type: object
+                    x-kubernetes-map-type: granular
+                  name:
+                    description: |-
+                      (String) Name of the router.
+                      Name of the router.
+                    type: string
+                  staticRoute:
+                    description: |-
+                      (Block Set) A collection of user managed static routes for this router. (see below for nested schema)
+                      A collection of user managed static routes for this router.
+                    items:
+                      properties:
+                        name:
+                          description: |-
+                            (String) Name of the router.
+                            Name or description of the route.
+                          type: string
+                        nexthop:
+                          description: |-
+                            (String) Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                            Next hop address. NOTE: For static route to be active the next hop has to be an address of a reachable running Cloud Server in one of the Private Networks attached to the router.
+                          type: string
+                        route:
+                          description: |-
+                            (String) Destination prefix of the route.
+                            Destination prefix of the route.
+                          type: string
+                        type:
+                          description: |-
+                            (String) Type of the router
+                            Type of the route.
+                          type: string
+                      type: object
+                    type: array
+                  staticRoutes:
+                    description: |-
+                      (Set of Object) A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as static_route blocks. (see below for nested schema)
+                      A collection of static routes for this router. This set includes both user and service defined static routes. The objects in this set use the same schema as `static_route` blocks.
+                    items:
+                      properties:
+                        name:
+                          description: (String) Name of the router.
+                          type: string
+                        nexthop:
+                          description: '(String) Next hop address. NOTE: For static
+                            route to be active the next hop has to be an address of
+                            a reachable running Cloud Server in one of the Private
+                            Networks attached to the router.'
+                          type: string
+                        route:
+                          description: (String) Destination prefix of the route.
+                          type: string
+                        type:
+                          description: (String) Type of the router
+                          type: string
+                      type: object
+                    type: array
+                  type:
+                    description: |-
+                      (String) Type of the router
+                      Type of the router
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        LastTransitionTime is the last time this condition transitioned from one
+                        status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        A Message containing details about this condition's last transition from
+                        one status to another, if any.
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        ObservedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      type: integer
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: |-
+                        Type of this condition. At most one of each condition type may apply to
+                        a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+                x-kubernetes-list-map-keys:
+                - type
+                x-kubernetes-list-type: map
+              observedGeneration:
+                description: |-
+                  ObservedGeneration is the latest metadata.generation
+                  which resulted in either a ready state, or stalled due to error
+                  it can not recover from without human intervention.
+                format: int64
+                type: integer
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

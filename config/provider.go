@@ -17,7 +17,7 @@ import (
 	"github.com/UpCloudLtd/crossplane-provider-upcloud/config/storage"
 
 	"github.com/UpCloudLtd/terraform-provider-upcloud/upcloud"
-	ujconfig "github.com/crossplane/upjet/pkg/config"
+	ujconfig "github.com/crossplane/upjet/v2/pkg/config"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -38,13 +38,46 @@ var providerMetadata string
 func GetProvider() *ujconfig.Provider {
 	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
 		ujconfig.WithRootGroup("upcloud.com"),
-		ujconfig.WithIncludeList([]string{}),
+		ujconfig.WithIncludeList(ExternalNameConfigured()),
 		ujconfig.WithTerraformPluginSDKIncludeList(sdkResourcesList()),
 		ujconfig.WithTerraformProvider(terraformProvider()),
 		ujconfig.WithTerraformPluginFrameworkIncludeList(pluginFrameworkResourcesList()),
 		ujconfig.WithTerraformPluginFrameworkProvider(terraformPluginFrameworkProvider()),
 		ujconfig.WithFeaturesPackage("internal/features"),
+		ujconfig.WithDefaultResourceOptions(
+			ExternalNameConfigurations(),
+		),
 	)
+
+	for _, configure := range []func(provider *ujconfig.Provider){
+		// add custom config functions
+		database.Configure,
+		kubernetes.Configure,
+		network.Configure,
+		objectstorage.Configure,
+		server.Configure,
+		storage.Configure,
+	} {
+		configure(pc)
+	}
+
+	pc.ConfigureResources()
+	return pc
+}
+
+// GetProviderNamespaced returns the namespaced provider configuration
+func GetProviderNamespaced() *ujconfig.Provider {
+	pc := ujconfig.NewProvider([]byte(providerSchema), resourcePrefix, modulePath, []byte(providerMetadata),
+		ujconfig.WithRootGroup("m.upcloud.com"),
+		ujconfig.WithIncludeList(ExternalNameConfigured()),
+		ujconfig.WithTerraformPluginSDKIncludeList(sdkResourcesList()),
+		ujconfig.WithTerraformProvider(terraformProvider()),
+		ujconfig.WithTerraformPluginFrameworkIncludeList(pluginFrameworkResourcesList()),
+		ujconfig.WithTerraformPluginFrameworkProvider(terraformPluginFrameworkProvider()),
+		ujconfig.WithFeaturesPackage("internal/features"),
+		ujconfig.WithDefaultResourceOptions(
+			ExternalNameConfigurations(),
+		))
 
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
