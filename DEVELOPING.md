@@ -132,6 +132,6 @@ Currently, the release process is entirely manual and goes as follows:
     ```
 5. Push the package to the repository with the same version as the tag from step 1. You need to have `crossplane.yaml` file in the directory you run the push command:
     ```
-    cd package && up xpkg push upcloud/provider-upcloud:v0.0.7 -f ../_output/xpkg/linux_amd64/provider-upcloud-vXX.XX.XX.xpkg
+    cd package && up xpkg push upcloud/provider-upcloud:v0.1.0 -f ../_output/xpkg/linux_amd64/provider-upcloud-vXX.XX.XX.xpkg
     ```
 6. Verify that it is published by going to [Upbound marketplace](https://marketplace.upbound.io/account/upcloud/provider-upcloud).

@@ -4,12 +4,12 @@ go 1.25.3
 
 require (
 	dario.cat/mergo v1.0.2
-	github.com/UpCloudLtd/terraform-provider-upcloud v0.0.0-20251118234524-d3a97f817e12
+	github.com/UpCloudLtd/terraform-provider-upcloud v0.0.0-20251120132208-2b00913fa255
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/crossplane/crossplane-runtime/v2 v2.0.0
 	github.com/crossplane/crossplane-tools v0.0.0-20251017183449-dd4517244339
 	github.com/crossplane/upjet/v2 v2.2.0
-	github.com/hashicorp/terraform-plugin-framework v1.15.1
+	github.com/hashicorp/terraform-plugin-framework v1.15.0
 	github.com/hashicorp/terraform-plugin-go v0.29.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.37.0
 	github.com/pkg/errors v0.9.1

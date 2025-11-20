@@ -23,12 +23,12 @@ Please note that this project is currently in early alpha version, we do not rec
     metadata:
       name: provider-upcloud
     spec:
-      package: xpkg.upbound.io/upcloud/provider-upcloud:v0.0.7
+      package: xpkg.upbound.io/upcloud/provider-upcloud:v0.1.0
     ```
 
  Make sure to change the version to the latest one.
 
-3. Next, you need to create a `Secret` with your UpCloud API credentials and a `ProviderConfig` that will use them to provision your infrastructure. Replace `ucat_TOKEN` with your UpCloud API token and apply this yaml (you can also use username and password instead of token for now, but we recommend using token instead):
+3. Next, you need to create a `Secret` with your UpCloud API credentials and a `ProviderConfig` that will use them to provision your infrastructure. Replace `ucat_TOKEN` with your UpCloud API token and apply this yaml (you can also use username and password, but we recommend using an API token):
     ```
     apiVersion: v1
     kind: Secret
