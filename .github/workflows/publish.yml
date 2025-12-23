@@ -21,7 +21,7 @@ jobs:
           make build
       - name: Install UpBound CLI
         run: |
-          curl -fsSLo /tmp/up --create-dirs 'https://cli.upbound.io/stable/v0.31.0/bin/linux_amd64/up' && \
+          curl -fsSLo /tmp/up --create-dirs 'https://cli.upbound.io/stable/v0.40.0/bin/linux_amd64/up' && \
           chmod +x /tmp/up
       - name: Login to UpBound Marketplace
         env:
@@ -29,5 +29,7 @@ jobs:
         run: /tmp/up login
       - name: Publish to UpBound Marketplace
         run: /tmp/up xpkg push upcloud/provider-upcloud:${{ steps.get_tag.outputs.tag }} -f ./_output/xpkg/linux_amd64/provider-upcloud-${{ steps.get_tag.outputs.tag }}.xpkg
+      - name: Append extensions to UpBound Marketplace
+        run: /tmp/up alpha xpkg append --extensions-root=./extensions xpkg.upbound.io/upcloud/provider-upcloud:${{ steps.get_tag.outputs.tag }}
       - name: Log out from UpBound Marketplace
         run: /tmp/up logout
