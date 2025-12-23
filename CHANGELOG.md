@@ -5,6 +5,12 @@ See updating [Changelog example here](https://keepachangelog.com/en/1.0.0/)
 
 ## [Unreleased]
 
+## [0.1.1] - 2025-12-23
+
+### Added
+
+- Add logo as extension to UpBound Marketplace package.
+
 ## [0.1.0] - 2025-11-20
 
 ### Added
