@@ -1,3 +1,6 @@
+> [!CAUTION]
+> This repository has been archived in favor of [crossplane-contrib/provider-upcloud](https://github.com/crossplane-contrib/provider-upcloud).
+
 # Crossplane Provider UpCloud
 
 `crossplane-provider-upcloud` is a [Crossplane](https://crossplane.io/) provider that
